@@ -7,6 +7,7 @@ This is a fan attempt at recreating Automagy for Thaumcraft 6. More general info
 
 Localization sources: 
 **[_Automagy 0.x_ for Minecraft 1.7.10 (Thaumcraft 4.2)](https://github.com/Tuhljin/Automagy).**
+
 **[_Automagy 2.x_ for Minecraft 1.8.9 (Thaumcraft 5)](https://github.com/Tuhljin/Automagy/tree/1.8.9).**
 
 ## Contributing

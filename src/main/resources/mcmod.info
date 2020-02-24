@@ -1,0 +1,17 @@
+[
+{
+  "modid": "automagy",
+  "name": "Automagy",
+  "description": "An addon for Thaumcraft 6 focused on automation and logistics, plus a few fun thaumic gadgets.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["Tuhljin"],
+  "authorList":  ["Tuhljin (programming, art)", "Draanor (art)"],
+  "credits": "Special thanks and much credit go to Azanor.",
+  "logoFile": "automagyLogo256.png",
+  "screenshots": [],
+  "dependencies": ["Thaumcraft"]
+}
+]

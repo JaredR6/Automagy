@@ -1,0 +1,407 @@
+Automagy
+
+The change log lists changes of particular note to users, not every change made.
+
+0.28.2
+- Fixed issue on servers where a requisition tome pointed to an input mirror could cause the client to crash and its "Mirrors" GUI would show incorrect information about mirror status.
+
+0.28.1
+- Fixed a crash that happened when a dispersing mirror tried to send an item to a melding mirror.
+- The dispersing mirror can now only send items to mirrors that are linked to another mirror (as intended).
+
+0.28
+- Added dispersing mirror. This gives multi-destination support to the Inventarium's delivery system.
+- Added a new type of runed obsidian: Light (for glowstone).
+- Fixed problem with background texture of Unseen Scribe's GUI.
+- Runed obsidian can now be used as a base for a beacon, but only for the first layer.
+- Added a config option to allow other blocks to be treated as bookshelves by the Inventarium.
+- Natura: Using the default Automagy config, the Inventarium can now use Natura bookshelves in the place of standard bookshelves.
+
+0.27.1
+- Inventarium: The Requisition Tome GUI's mirror input now works with melding mirrors.
+- Adjusted Entropic Refining recipe again to make it easier to use in the early game.
+- The golem's workbench now ceases crafting activity when an active golem fetter is found directly below it.
+- Fixed an issue where the oculo anima could not be attuned to villagers or other non-golem entities that react to being right-clicked.
+- Fixed just-crafted thirsty tanks not stacking with similar thirsty tanks that were previously placed into the world. (If you were using a previous version, you may need to place the latter into the world and break them again.)
+- Added localization: French (partial).
+
+0.27
+- Inventarium: You can now use the Requisition Tome GUI to input items. Use the "Mirrors" button and a crystalline eye to specify a nearby mirror. This will enable a new slot. Items placed there (shortcut: shift-click) will be transported through the specified mirror.
+- Thaumostatic Spire:
+-- The distribution area is now a cylinder with no vertical limit instead of a sphere.
+-- Adjusted distribution range. With two pylons, it is slightly smaller but additional pylons now increase the Potentia distribution range even without Aer essentia being piped in and the range with Aer essentia has been increased.
+-- Adjusted distribution rate. (Slower without Volatus piped in. Slightly faster with it.)
+-- Greatly reduced the rate at which Aer and Volatus are consumed (making their upgrade effects more efficient).
+- Fixed a crash on startup related to using a mouse button for the crafting focus keybinding.
+- Botania: Added a config option to put phial of enchanter's concentrate on the loonium blacklist. (Defaults to false.)
+
+0.26.3
+- Tenacious chests now split contained stacks more reliably.
+- Added special logic to the tenacious chest so sorting golems will deposit items when only one of that item is in the chest.
+
+0.26.2
+- Correct Essentia Locus's aspect overlay display having too few aspects per row in some cases.
+
+0.26.1
+- The scrivener's oculus can now be used to increase the range of the Unseen Scribe.
+- Improved the aspect overlay displayed when looking at the Essentia Locus. It is now sorted alphabetically, with primals first. If there are many aspects, more are shown per row.
+- Updated Inventarium entry in Thaumonomicon to be more specific about using additional bookshelves to increase maximum slots.
+- Fixed a crash that could occur when other mods attempt to access the thirsty tank before default milk or mushroom soup fluids have been assigned.
+- API: Added the IEssentiaDistillery interface to help mods integrate with the Alchemical Boiler.
+
+0.26
+- Added melding mirror and conflux disc.
+- Added tenacious chest.
+- Inventarium requisition: Golems fetching items now better handle the requested count being increased. Provided they haven't grabbed any items yet, the number they will try for can increase if the number requested has increased.
+- Runic whitelists/blacklists now support stack sizes up to 999.
+- Added a config option to disable Advanced Node Jarring research and the associated construct.
+- Fixed inability to activate a Nethermind with Dimensional Lure due to the presence of certain blocks classified as "air" (e.g. glimmers of light from arcane lamps).
+- Fixed a rendering glitch involving some blocks with overlays interacting poorly with certain other blocks (e.g. leaves).
+- Forestry: Thirsty tanks using the Glyph of the Bovine can now create milk from the Forestry mod if it is installed. Can be disabled in the Automagy config.
+- Forestry: Automagy will now assign Aspects to Forestry milk. Can be disabled in the Automagy config.
+
+0.25
+- Added soul stone, jar of enchanter's concentrate, and phial of enchanter's concentrate.
+- Added Advanced Node Jarring research and an accompanying mystical construct, allowing nodes to be jarred without damage.
+- The items an Amnesiac's Stone can drain experience from are now configurable.
+- Experience orbs generated by the Amnesiac's Stone now have a cap in size. The total XP value will be the same but more orbs will be generated when draining many levels at once. This partially mitigates "lost" XP due to the brain in a jar's behavior where it will consume an orb even if the amount of XP gained would put it over its cap (wasting the additional XP).
+- Added phial of enchanter's concentrate to loot tables. (Configurable.)
+- Hungry hand mirror now properly requires the Magical Hand Mirror research.
+- Adjusted Entropic Refining recipe.
+- The Inventarium GUI's search text field now automatically receives focus when the GUI appears.
+- Fixed empty thirsty tanks sometimes removing the wrong source block when different types of fluid blocks are adjacent to each other.
+- Fixed Inventarium GUI showing no items after another GUI was temporarily shown while it was open (e.g. NEI recipe GUI).
+- Fixed inability to place blocks like torches or redstone on Siren's Lure and Dimensional Lure.
+- Fixed a potential issue with Unseen Scribes on a server ignoring the wrong blocks. (Related to the Inventarium container blacklist config option.)
+- Tinkers' Construct: Using the default Automagy config, the Amnesiac's Stone will now turn concentrated essence berries into experience orbs. (As with bottles o' enchanting, the value is slightly above average.)
+- Waila: Brains in jars now show how many levels and how much experience they contain. This can be disabled with the Automagy config.
+
+0.24.2
+- "Workbench Upgrades" research (golem's workbench) now requires all six primal golem upgrades (Air, Earth, etc.) rather than requiring "Advanced Golems" research.
+- Adjusted recipes for runic whitelists/blacklists and Workbench Upgrade: Fire.
+- Adjusted aspects required for "Slivers for Travel" and "Slivers for Warding" researches.
+- NEI + ThaumcraftNEIPlugin integration: NEI's "?" button can now be used to populate arcane recipes into the crafting focus's GUI. (Only works to move items. No overlay.)
+- Fixed crash that sometimes occurred when NEI was used to populate the crafting focus's GUI when items were already in some of its slots.
+- Fixed crash when tally box (no lens) is pointed at certain invalid targets.
+
+0.24.1
+- Creatures will no longer ignore the Siren's Lure effect due to having an attack target unless they have actually been engaged in combat recently.
+- Clarified Siren's Lure entry in the Thaumonomicon.
+- Storage Drawers integration: Fixed an issue where the Inventarium ignored compacting drawers.
+- If the mod Storage Drawers is installed, then STORAGE DRAWERS VERSION 1.5.3 OR HIGHER IS REQUIRED.
+
+0.24
+- Added the Dimensional Lure and creature-specifying variants of runed obsidian. The Automagy config file controls time and essentia costs involved with operation.
+- Added Nether Spire world generation. Generation frequency can be adjusted with the config file.
+- Added hellfire wisps. (They do not spawn naturally.)
+- You can now see scanned items' aspects in the Inventarium GUI.
+- Added infusion enchantment recipes for Lure and Luck of the Sea.
+- Added Entropic Refining research, allowing infused stone to be turned into a large number of slivers. Adjustable in the config.
+- Golem's Workbench:
+-- Advanced golem research is no longer a prerequisite. (Advanced golems are still needed to craft some recipes.)
+-- The Order upgrade on an attached golem now causes leftover items to be placed in the workbench instead of being thrown into the air.
+-- The Entropy upgrade on an attached golem now affects which items it will attempt to craft.
+-- The Forge ItemCraftedEvent is now fired when an item is crafted to allow the possible preservation of items that allows. (E.g., essentia phials aren't consumed when assigning an aspect to a jar label.)
+- The recipe for aqueous admixture now uses the ore dictionary for black dye.
+- Adjusted recipes for the Nethermind, runed obsidian, Siren's Lure, and golemic inhibitor.
+- Resonating Redcrystal research no longer required for golemic inhibitor. (Reduces the research barrier for the Amnesiac's Stone.)
+- Fixed crafting focus with Transposing upgrade getting placed on crafting sceptres when the keybinding is used.
+- Fixed alchemical boiler GUI failing to indicate that certain liquids cannot be processed. (This happened when the liquid had no associated fluid block.)
+- Updated several Thaumonomicon entries to improve clarity.
+- Updated the Automagy API so creature-specifying runes are supported.
+- The Inventarium is now more compatible with the mod Storage Drawers. (Implemented using the API.)
+- The Inventarium now respects the limitations set by sided inventories to determine which items should be seen.
+
+0.23
+- Added Scrivener's Oculus.
+- Added golem's workbench upgrades: air, fire, earth, and entropy.
+- An Inventarium Core that is right-clicked with a wand will temporarily be marked as preferred for links. This allows you to link an Unseen Scribe or other device to a specific core even if another is closer.
+- The Amnesiac's Stone will now drain experience from bottles o' enchanting.
+- Added "Aspect Count" mode to the vis reader and Capacity option for 16.
+- Adjusted recipes for vis reader and tally box.
+- Adjusted crafting speed of golem's workbench.
+- The Signum Entia can now output a signal strength over 15, though redcrystal is required to read it.
+- Added a config option to control how much water a water bottle is worth when used to fill/empty tanks.
+- Added a config option that can make thirsty tanks consume water source blocks even when one is next to them. (This could be useful when another mod alters the way infinite water works.)
+- Added a config option controlling the cooldown required by the Glyph of the Bovine to milk cows.
+- Added a page to mercurial redcrystal's Thaumonomicon entry that appears when essentia mirrors are researched to make it clear they can be used instead of regular magic mirrors.
+- Fixed golems with Use cores not being returned empty container items (e.g. buckets) when they fill an Automagy tank using liquid-containing items (e.g. buckets of milk).
+- Added localization: Russian.
+
+0.22.2
+- Unseen Scribes and Requisition Tomes now remember players' sorting preferences and Unseen Scribes remember the contents source preference. These settings are saved per player and per block.
+- NEI integration: NEI's "?" button can now be used to populate standard recipes into the crafting focus's GUI.
+- Fixed a crash involving liquid containers from some mods and the thirsty tank's envy glyph functionality.
+
+0.22.1
+- Attempt to fix an issue where the thirsty tank could sometimes destroy certain source blocks without gathering their contents.
+
+0.22
+- Added the alchemical boiler.
+- Added an upgrade system for the thirsty tank in the form of glyphs. The following glyphs are included: Void, Consumption, Siphoning, Envy, Temperance, Preservation, Guzzler, Reservoir, and Bovine.
+- Added aqueous admixture (for crafting glyphs).
+- Added vishroom soup. First you want to eat it, now you want to swim in it? Are you mad??
+- Added mushroom soup and milk (liquids). Config options exist to have Automagy use the mod MineFactory Reloaded's equivalent liquids instead when possible (enabled by default).
+- The research for vishroom soup requires scanning vishroom stew. If you have already scanned it using a previous version, you MIGHT need to use knowledge fragments or op commands to unlock it. (This research is informational only at this time. It doesn't unlock any crafting recipes.)
+- Added a new op command: /automagy (alias /tca). Use it to remove a specified item from a player's list of scanned items or to empty that list entirely.
+- The recipes that turn a runic whitelist into a runic blacklist and vice versa now preserve the filter data of the original list.
+- Recipes were added to copy filter data from one runic whitelist/blacklist to another. Simply place the two of them in an arcane crafting table. The first's data is copied to the second.
+- Fixed thirsty tank not returning empty buckets when filled using certain items such as a bucket of liquid death or a bucket of purifying fluid.
+- Thirsty tank operates slightly slower than before but can be upgraded to be much faster.
+- If the thirsty tank hasn't found a source block it can fill itself with for some time, it will check less frequently until it finds one.
+- Hungry/finical maw is no longer knocked down by liquids like water.
+- Fixed some rendering issues with the thirsty tank and other blocks with transparent/translucent elements.
+- Fixed an issue where the version checker message could include incorrect information if the site it checks can be reached but is having problems.
+- API: Added interfaces to help mods integrate better with the Vis Reader and the Essentia Locus. (IAspectContainerWithMax and IEssentiaLocusReadable, respectively.)
+
+0.21
+- Added tally box lenses. Attach one to a tally box to change the way it detects items.
+- Redcrystal now uses multiple hitboxes so it should be easier to toggle connections.
+- The Inventarium is now more compatible with other mods' blocks that use the deep storage unit interface (such as Jabba barrels).
+- The greedy chest config GUI now has tooltips for each checkbox that display the name of the block in the associated direction.
+- You can now shift-click on a (non-blank) jar label to put it into or remove it from a slot in the vis reader GUI.
+- Fixed shift-clicking on wands deleting them when the crafting focus's GUI was opened by using a staff.
+
+0.20.2
+- Adjusted vis cost of crafting focus usage. Without the gratis upgrade, crafting arcane items consumes a small amount of ordo in addition to the normal cost.
+- The Thaumostatic Spire will now use the controller's location to drain vis when it fails to do so from the top of the spire.
+- Removed machina from redcrystal's research requirements.
+- Fixed a crash when attempting to see the Inventarium's contents if the Core is in a chunk that isn't loaded on the client.
+- Fixed the Inventarium's miscounting of items in crates from the mod BetterStorage under certain situations.
+
+0.20.1
+- Fix a crash on dedicated server startup.
+
+0.20
+- VERSION 4.2.3.5 OR HIGHER OF THAUMCRAFT IS NOW REQUIRED.
+- Added Wand Focus: Crafting and three related upgrades.
+- Pechs now place a higher value on mercatus amalgam, resulting in better trades.
+- Vis Reader now reads the maximum capacity of amulets of vis storage and related items on wand recharge pedestals.
+- Fixed tooltip for crystalline eyes that are linked to certain blocks (including aura nodes).
+- Thirsty tanks shouldn't gather precipitation through glass or in biomes without rain or snow (such as deserts).
+- Fixed an issue where an aspect completely drained from a node would sometimes still be considered by the Vis Reader.
+- Adjusted the way greedy chests handle item stacks with sizes over the normal limits.
+- Fixed an issue where glowing amber and glowing amber bricks were invisible in-world if using Thaumcraft 4.2.3.5.
+- Attempt to fix a crash involving certain locales when the config file doesn't exist yet or isn't fully populated.
+
+0.19.3
+- Tally boxes pointed at a requisition tome now output redstone signals based on what is currently requested.
+- Tally boxes now count enchanting bookshelves and ensorcelled bookshelves as bookshelves when determining whether to read from a nearby Inventarium Core.
+- Fixed a crash that could sometimes occur when using a golem linking bell to clear a device's connections.
+
+0.19.2
+- The Inventarium and Unseen Scribes now ignore tally boxes when looking for containers.
+- Added a blacklist in the config file to allow other blocks to be ignored by the Inventarium and Unseen Scribes.
+- An API is now available for modders to control how the Inventarium will handle their containers.
+- The API can also be used to designate blocks for the Nethermind to treat as Runed Obsidian. The blocks to be conjured and the essentia cost can be customized.
+- The Inventarium is now more compatible with the mod BetterStorage's crates, chests, and lockers. (Implemented using the API.)
+- Magic hourglasses placed in the world before v0.19 should now use the correct default settings for redstone signal reactions. (This fix does not affect those that were already loaded in v0.19 or v0.19.1. It'd be best to check their settings if you used one of those versions before this release.)
+- Thirsty tanks like rain.
+
+0.19.1
+- Fixed a crash that could occur if looking at the Unseen Scribe GUI while its local contents are updated.
+
+0.19
+- Added golemic taskmaster, requisition tome, and memory block.
+- Added enchanting bookshelf and ensorcelled bookshelf.
+- Added glowing amber and glowing amber bricks.
+- Unseen Scribe GUI can now be opened while holding a wand if the clicked Unseen Scribe is already linked and powered.
+- Unseen Scribe GUI should now properly sort its contents when switching between Inventarium and Local modes.
+- Added "Constant" and "Negative Pulse" modes to the magic hourglass.
+- Added options to magic hourglass to make it react differently to redstone signals. (Standard flip hourglass mode, require signal to operate, require no signal, or ignore signals.)
+- Adjusted recipe for magic hourglass.
+- Added alternate recipe for bound enchanting paper.
+- If mirrors are disabled in Thaumcraft's config, Automagy researches that require them are now disabled as well.
+- Added lesser version of the Ring of Ender Disjunction as dungeon loot. (Config option exists to set how common it is or prevent it from being found at all.)
+- Wearing multiple Rings of Ender Disjunction now results in additional damage being dealt to teleporting entities (but with diminishing returns). (Previously, there was little reason to wear more than one.)
+- Multiple players' Rings of Ender Disjunction can now be triggered by a single teleport. (Previously, only one player's damage would be dealt.)
+- Golem linking bells should no longer stack.
+- Adjusted recipe for Amnesiac's Stone.
+- NEI integration: If you look up a recipe while the Golem's Workbench GUI is open, you can now use NEI's "?" button to populate the workbench's recipe slots.
+- NEI integration: The Inventarium GUI uses NEI tooltips when available and recipes can be looked up using NEI keybindings when the cursor is over its items.
+
+0.18
+- The Unseen Scribe now has a GUI that displays the items stored in containers linked to the Inventarium.
+- If an Unseen Scribe failed to relay a container's contents to the Inventarium, black particles now appear above it. (This should make it easier to tell when you've reached the Inventarium's slot cap.)
+- Added bound enchanting paper (used for crafting).
+- Adjusted recipe for Unseen Scribe.
+- Signum Entia: "Replaceable" blocks like water and tall grass no longer count as an obstruction when calculating the entity detection area.
+- The Signum Entia now outputs to a comparator in addition to outputting its redstone signal directly.
+- Added a config option to disable light being emitted by redcrystal when it has a redstone signal.
+- Fixed an issue where an Unseen Scribe that was placed where another used to be sometimes couldn't be linked to an Inventarium.
+- Fixed an issue where the tooltip shown in the runic whitelist/blacklist GUI appeared beneath NEI's list of items on the right.
+- Baby animals charmed by the Siren's Lure will no longer attempt to follow adult animals.
+- Made compatible with mods that break blocks in certain ways that previously resulted in a crash.
+
+0.17.1
+- Fixed crash when using a version of Thaumcraft prior to 4.2.1.2. (However, new textures for the Infinity Jar won't display properly if using older versions.)
+- Updated wand focus detection (used in hungry maw crafting) to be compatible with Thaumcraft 4.2.2.
+- Fixed a crash that sometimes occurred when crafting the hungry maw.
+
+0.17
+- Added Essentia Aggregator.
+- Added the thinking cap, for creative mode testing and custom maps. Craft it with a golem to get an advanced golem. Its visibility in the Creative Tab and NEI is controlled by the Automagy config file. The recipe it is used in can also be disabled there.
+- Siren's Lure now uses a lure strength system to determine which lure entities will be attracted to when multiple lures are in range.
+- Corrected bug that gave Siren's Lure extra range.
+- Prevented endermen from teleporting too far downward when redirected by a Siren's Lure.
+- Adjusted the range of the Thaumostatic Spire.
+- The rate that the Thaumostatic Spire consumes essentia used for optional upgrades was decreased (making upgrades a bit easier to maintain).
+- Reduced the internal buffer of the Thaumostatic Spire. (This means less upgrade essentia will be wasted when using a design that cuts off the supply when no player is nearby.)
+- You can now fill glass bottles from a thirsty tank that contains water as well as empty them into one. This does not change the amount of water stored.
+- Made buckets stack with other buckets in the inventory when possible after emptying them into a thirsty tank.
+- Fixed issue where, under some circumstances, buckets filled from a thirsty tank weren't immediately displayed in the inventory.
+- Fixed missing/wrong textures shown when some researches are completed.
+- Fixed issue where a duplicate crystalline eye appeared to drop from the Essentia Locus (but couldn't be picked up) when the eye became invalid due to a crystal cluster being removed.
+- The Infinity Jar has a new texture and it is no longer hidden from the Creative Tab and NEI by default. (It may still be hidden if using a pre-existing config file.)
+
+0.16
+- Added the hungry hand mirror.
+- The oculo anima can now be attuned to players and the signum entia can use it to either look for players in general or a specific player.
+- Fixed a bug where the vertical detection range of the signum entia could be much larger than intended.
+- You can now use a comparator with the Amnesiac's Stone to see how full of experience the Brain in a Jar above it is.
+- Experience orbs created by clicking on an Amnesiac's Stone should be less likely to appear inside a block (which caused them to fling themselves farther away than desired).
+- The thirsty tank operates significantly faster than before.
+
+0.15
+- Added Siren's Lure.
+- "Brain in a Jar" research is no longer required to unlock "Crystalline Brain".
+- Greedy and eager chests can now be opened when a solid block is above them.
+
+0.14
+- Added Amnesiac's Stone.
+- Changed recipe for mercurial redcrystal. It no longer requires infusion crafting.
+- Fixed a bug where mercurial redcrystal sometimes didn't update its signal strength when the strength on the other side of the mirror was cut to zero.
+- Added a chat log message for failed activation of the Nethermind due to its Y position being too low.
+- Fixed bug where hungry maws could be created from portable holes that weren't displacing obsidian blocks.
+- Newly created hungry maws won't fly as far away as they could before.
+
+0.13
+- Added the Nethermind and runed obsidian (basic, Rock, Sea, Crystal, Soul, Celerity). The Automagy config file controls time and essentia costs involved with operation.
+- Added the Ember Heart. By default, it drops from blaze spawners in the Nether. This can be disabled in the Automagy config file.
+- Warp whispers can now be heard upon consuming vishroom stew.
+- Added localization: Czech (Czech Republic) (partial).
+
+0.12.2
+- Fixed a crash involving the hungry/finical maw and Thaumcraft version 4.2.1.4.
+
+0.12.1
+- A tally box that points to another tally box (directly or by remote comparator) will now read from the ultimate target of all such boxes, allowing reads over long distances if chained together.
+- Backward compatibility: Fixed crash involving checks for the essentia reservoir when using an older version of Thaumcraft that doesn't include one.
+- Fixed crash resulting from unnecessary redcrystal update calls when using amplified redcrystal and branching lines.
+- Made the redstone comparator reading from a thirsty tank consistent with other Automagy (and basic Minecraft) containers: 0 only if completely empty, 15 only if completely full.
+
+0.12
+- Added the thirsty tank.
+- Added the Infinity Jar, for creative mode testing and custom maps. Its visibility in the Creative Tab and NEI is controlled by the Automagy config file. It is hidden by default.
+- Hungry/Finical Maw no longer has a collision box. This makes "drop sorting" easier.
+- Vis Reader now recognizes the essentia reservoir's maximum capacity.
+- The Essentia Locus now reads the essentia reservoir similarly to how it reads warded jars.
+- Adjusted recipe for mercurial redcrystal, making it cheaper overall. Takes double the essentia and a couple extra components but crafts two at a time.
+- Adjusted instability of Thaumostatic Controller recipe.
+- Added localization: Simplified Chinese. (Thanks to Mrkwtkr!)
+
+0.11
+- Added the Thaumostatic Spire and related blocks.
+- Added Crystalline Brain: Air.
+- The Ring of Ender Disjunction now deals 50% more damage.
+- Fixed an issue where endermen killed by the Ring of Ender Disjunction that were teleporting toward the player would drop their items where they teleported from instead of their destination (nearer the player).
+- Fixed a crash involving spawn checks in certain custom biomes.
+- Adjusted the rarity levels of Essentia Locus, Inventarium Core, and golem linking bell.
+
+0.10.2
+- Golem's Workbench: Non-advanced golems can now be used if the recipe fits in a 2x2 grid or all components are the same.
+- Golem's Workbench recipe tweaked.
+- Fixed issue where the particles that fly from an Unseen Scribe to an Inventarium Core when they are linked weren't shown if the scribe is some distance from the core.
+- Updated Thaumonomicon entries "Inventarium" and "Structured Avarice" to improve clarity and legibility.
+
+0.10.1
+- Fixed an issue where the version checker's message wouldn't be visible if logging into a server.
+
+0.10
+- Added the Golem's Workbench.
+- Improved the look of the Unseen Scribe in the inventory (size and position) and when powered in the world (animation).
+- Fixed an issue where the version checker's message wouldn't be visible in some situations.
+
+0.9
+- Added Inventarium Core and Unseen Scribe.
+- Added Crystalline Brain: Order.
+- Added version checker. Can be disabled through Automagy config file.
+- Changed the particle effect showing mercurial redcrystals' connection to mirrors since the previous ones apparently broke with TC 4.2.
+
+0.8.1
+- Fixed a crash involving certain settings of the greedy chest when it didn't contain a whitelist or blacklist.
+
+0.8
+- Added Essentia Locus.
+- Added Crystalline Brain: Water.
+- Added vishroom stew. Use at own risk.
+
+0.7
+- Updated for Minecraft 1.7.10 and Thaumcraft 4.2.
+- Added the tally box, for more item-specific measurements of containers' contents.
+- Waila: Golem HUD now shows which block the golem is linked to.
+- New icon for Thaumonomicon tab.
+- New textures for inversion torch (to match new order shard colors).
+
+0.6.2
+- Fixed a potential problem with the entity detector when many entities are around.
+
+0.6.1
+- Reduced the extra spawn rate of endermen that the shattered avarice pearl provides.
+- Made enderman spawning from the shattered avarice pearl respect biomes' mob spawn lists.
+- Recipe for shards now requires only 4 slivers and some additional vis.
+- Fixed a formatting error in the chat message that is shown when the "Structured Avarice" research is found.
+- Fixed a formatting/localization issue causing some entity names to be displayed incorrectly in the entity detection system's GUI.
+
+0.6
+- Added Ring of Ender Disjunction.
+- Added new block and item to allow detection and counting of entities (animals, monsters, etc.).
+- Added Crystalline Brain: Earth.
+- Having a shattered avarice pearl in your inventory now makes enderman spawns more likely wherever skeletons, zombies, spiders, or creepers naturally spawn.
+- Research progression hint made more blatant in Greedy Chest's Thaumonomicon entry.
+- Made hungry/finical maw a little faster to remove with a pickaxe.
+- Adjusted recipe for golem linking bell.
+
+0.5
+- Added the golemic inhibitor and golem linking bell.
+- Added Crystalline Brain: Entropy.
+- Added alternative recipes for Paving Stone of Travel and Paving Stone of Warding. (More uses for slivers of magic.)
+
+0.4.1
+- Fixed compatibility issue with the addon Forbidden Magic that prevented crafting of the hungry maw.
+
+0.4
+- Added the hungry maw and finical maw.
+- Moved mod items/blocks to a new creative tab.
+- You can now shift-click on a populated runic whitelist/blacklist to put it into or remove it from a slot in the relevant GUIs.
+- You can now right-click with a populated runic whitelist/blacklist instead of a wand to open GUIs where those items can be inserted.
+- Fixed a bug where mercurial redcrystal didn't send its signal through the mirror if it received redstone power immediately upon being placed.
+- Fixed a crash on dedicated servers related to the configuration GUI of greedy and eager chests.
+
+0.3.1
+- Fixed a bug where redstone signals weren't properly sent by Vis Reader.
+
+0.3
+- Added resonating redcrystal.
+- Added mercurial redcrystal.
+- Fixed an issue where a linked Crystalline Eye could appear as "Unnamed".
+
+0.2.2
+- Fixed a crash related to dedicated servers.
+
+0.2.1
+- Fixed a crash that prevented play on dedicated servers.
+
+0.2
+- Added eager chest.
+- Added Miser's Pearl.
+- Added mercatus amalgam.
+- Can now turn a runic blacklist into a runic whitelist and vice versa (substituting for the enchanted paper in the recipe).
+- The avarice pearl now becomes a shattered avarice pearl (new item) when it breaks and can no longer drop an ender pearl.
+- Updated avarice pearl's Thaumonomicon entry.
+- Avarice pearl should no longer disappear once it makes impact if the player that threw it has disconnected from the server. It will instead teleport to the location where it was thrown.
+- Avarice pearl is now usable in creative mode. (The item never leaves your inventory, though.)
+- Fixed some issues where "Ignore Metadata" and "Ignore NBT" filter options weren't being respected.
+
+0.1
+- Initial public release.

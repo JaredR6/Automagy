@@ -22,19 +22,19 @@ public class RedstoneCalc {
     }
 
     public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos) {
-        return getRedstonePowerAt(world, pos, EnumFacing.UP, false, (EnumFacing)null, false, 15, EnumFacing.VALUES);
+        return getRedstonePowerAt(world, pos, EnumFacing.UP, false, (EnumFacing)null, false, MAX_POWER, EnumFacing.VALUES);
     }
 
     public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing... directions) {
-        return getRedstonePowerAt(world, pos, EnumFacing.UP, false, (EnumFacing)null, false, 15, directions);
+        return getRedstonePowerAt(world, pos, EnumFacing.UP, false, (EnumFacing)null, false, MAX_POWER, directions);
     }
 
     public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower) {
-        return getRedstonePowerAt(world, pos, attachedToSide, isWire, excludeRedstoneWireDir, allowAmplifiedPower, 15, EnumFacing.VALUES);
+        return getRedstonePowerAt(world, pos, attachedToSide, isWire, excludeRedstoneWireDir, allowAmplifiedPower, MAX_POWER, EnumFacing.VALUES);
     }
 
     public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower, EnumFacing... directions) {
-        return getRedstonePowerAt(world, pos, attachedToSide, isWire, excludeRedstoneWireDir, allowAmplifiedPower, 15, directions);
+        return getRedstonePowerAt(world, pos, attachedToSide, isWire, excludeRedstoneWireDir, allowAmplifiedPower, MAX_POWER, directions);
     }
 
     public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower, int maxPower, EnumFacing... directions) {
@@ -110,7 +110,7 @@ public class RedstoneCalc {
                 }
             }
 
-            if (strength >= (allowAmplifiedPower ? 99 : maxPower)) {
+            if (strength >= (allowAmplifiedPower ? MAX_POWER_AMPLIFIED : maxPower)) {
                 break;
             }
         }
@@ -131,7 +131,7 @@ public class RedstoneCalc {
         EnumFacing subdir = attachedToSide.getOpposite();
         if (dir != attachedToSide && subdir != attachedToSide) {
             BlockPos pos3 = pos2.offset(subdir);
-            Block block2 = blockaccess.getBlockState(pos3).getBlock();
+            Block block2 = TjUtil.getBlock(blockaccess, pos3);
             if (block2 instanceof IOrientableRedstoneConductor) {
                 EnumFacing otherside = ((IOrientableRedstoneConductor)block2).getOrientation(blockaccess, pos3);
                 if (TjUtil.getNextSideOnBlockFromDir(attachedToSide, dir) == otherside) {
@@ -144,17 +144,17 @@ public class RedstoneCalc {
     }
 
     public static LinkedHashMap<BlockPos, EnumFacing> getConnectedWireAwayFromSource(IBlockAccess blockaccess, BlockPos bc) {
-        LinkedHashMap<BlockPos, EnumFacing> wiring = new LinkedHashMap();
+        LinkedHashMap<BlockPos, EnumFacing> wiring = new LinkedHashMap<>();
         BlockPos bcCopy = new BlockPos(bc);
-        buildWiringSet(wiring, blockaccess, bc, (EnumFacing)null, 2);
+        buildWiringSet(wiring, blockaccess, bc, null, 2);
         wiring.remove(bcCopy);
         return wiring;
     }
 
     public static LinkedHashMap<BlockPos, EnumFacing> getConnectedWireAwayFromSourceWithNoInputPoint(IBlockAccess blockaccess, BlockPos bc) {
-        LinkedHashMap<BlockPos, EnumFacing> wiring = new LinkedHashMap();
+        LinkedHashMap<BlockPos, EnumFacing> wiring = new LinkedHashMap<>();
         BlockPos bcCopy = new BlockPos(bc);
-        boolean ret = buildWiringSet(wiring, blockaccess, bc, (EnumFacing)null, -1);
+        boolean ret = buildWiringSet(wiring, blockaccess, bc, null, -1);
         if (ret) {
             return null;
         } else {
@@ -227,10 +227,9 @@ public class RedstoneCalc {
     public static int getRedstoneSignalStrengthFromValues(int amt, int capacity) {
         if (amt >= 1 && capacity >= 1) {
             if (amt >= capacity) {
-                return 15;
+                return MAX_POWER;
             } else {
-                int strength = MathHelper.floor(1.0F + (float)amt / (float)capacity * 14.0F);
-                return strength;
+                return MathHelper.floor(1.0F + (float)amt / (float)capacity * 14.0F);
             }
         } else {
             return 0;

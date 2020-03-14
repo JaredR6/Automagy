@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +46,7 @@ public class TjUtil {
     }
 
     public static void sendChatToPlayer(EntityPlayer player, String message) {
-        message = StatCollector.func_74838_a(message);
+        message = I18n.format(message);
         sendRawChatToPlayer(player, message, EnumChatFormatting.DARK_AQUA);
     }
 
@@ -66,26 +67,21 @@ public class TjUtil {
         List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 
         for (EntityPlayerMP player : players) {
-            if (player.getName() == name)
+            if (player.getName().equals(name))
                 return true;
         }
         return false;
     }
 
-    /*
     public static ArrayList<String> getMultiLineLocalizedString(String message) {
-        message = StatCollector.func_74838_a(message);
+        message = I18n.format(message);
         String[] s = message.split("\\\\n");
-        ArrayList<String> lines = new ArrayList(Arrays.asList(s));
-        return lines;
+        return new ArrayList<>(Arrays.asList(s));
+     }
+
+    public static Block getBlock(IBlockAccess blockAccess, BlockPos pos) {
+        return blockAccess.getBlockState(pos).getBlock();
     }
-     */
-    /*
-    public static Block getBlock(IBlockAccess worldAccess, BlockPos pos) {
-        IBlockState state = worldAccess.getBlockState(pos);
-        return state == null ? null : state.getBlock();
-    }
-    */
 
     public static EnumFacing getNextSideOnBlockFromDir(EnumFacing side, EnumFacing dir) {
         switch(side) {
@@ -180,11 +176,11 @@ public class TjUtil {
                     }
                     /*
                     String temp = name + ".name";
-                    String name2 = StatCollector.func_74838_a(temp);
+                    String name2 = I18n.format(temp);
                     if (temp.equals(name2)) {
                         int meta = block.func_176201_c(state);
                         temp = name + "." + meta + ".name";
-                        name2 = StatCollector.func_74838_a(temp);
+                        name2 = I18n.format(temp);
                         if (temp.equals(name2)) {
                             if (name.substring(0, 5).equals("tile.")) {
                                 name = name.substring(5);
@@ -211,7 +207,7 @@ public class TjUtil {
             return true;
         } else {
             if (allowGlowstone || allowGlass || allowPedestal) {
-                Block block = world.getBlockState(pos).getBlock();
+                Block block = TjUtil.getBlock(world, pos);
                 if (allowGlowstone && block == Blocks.GLOWSTONE) {
                     return true;
                 }
@@ -222,9 +218,7 @@ public class TjUtil {
 
                 if (allowPedestal) {
                     TileEntity tile = world.getTileEntity(pos);
-                    if (tile instanceof TilePedestal) {
-                        return true;
-                    }
+                    return tile instanceof TilePedestal;
                 }
             }
 
@@ -241,7 +235,7 @@ public class TjUtil {
         List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, fortune);
         if (includeSilkDrops) {
             ItemStack stack = getStackFromBlock(state.getBlock(), world, pos);
-            if (stack != null) {
+            if (!stack.isEmpty()) {
                 boolean found = false;
                 for (ItemStack drop : drops) {
                     if (areItemsEqualIgnoringSize(stack, drop)) {
@@ -259,7 +253,7 @@ public class TjUtil {
     }
 
     public static ItemStack getStackFromBlock(World world, BlockPos pos) {
-        return getStackFromBlock(world.getBlockState(pos).getBlock(), world, pos);
+        return getStackFromBlock(TjUtil.getBlock(world, pos), world, pos);
     }
 
     public static ItemStack getStackFromBlock(Block block, World world, BlockPos pos) {

@@ -63,7 +63,7 @@ public class TileRedcrystalMerc extends TileRedcrystal implements ITickable {
             this.mirrorValid = false;
         } else if (this.mirrorDim == this.world.provider.getDimension()) {
             double distance = this.pos.getDistance(x, y, z);
-            if (distance <= 8.0D) {
+            if (distance <= MAX_DISTANCE) {
                 TileEntity te = this.world.getTileEntity(new BlockPos(this.mirrorX, this.mirrorY, this.mirrorZ));
                 if (ThaumcraftExtension.tileIsMirror(te)) {
                     this.mirrorValid = true;
@@ -117,7 +117,7 @@ public class TileRedcrystalMerc extends TileRedcrystal implements ITickable {
 
             adj += this.clientRenderGoingUp ? 5.0E-4D : -5.0E-4D;
             if (powered) {
-                adj *= (double)(this.clientRenderFloatingDistance < clientRenderFloatingBtm_powered ? 12 : 3);
+                adj *= this.clientRenderFloatingDistance < clientRenderFloatingBtm_powered ? 12 : 3;
             } else if (this.clientRenderFloatingDistance > clientRenderFloatingTop_unpowered) {
                 adj *= 7.0D;
             }
@@ -188,7 +188,7 @@ public class TileRedcrystalMerc extends TileRedcrystal implements ITickable {
     }
 
     protected void updateBlock() {
-        Block block = this.world.getBlockState(this.getPos()).getBlock();
+        Block block = TjUtil.getBlock(world, this.getPos());
         if (block instanceof BlockRedcrystalMerc) {
             ((BlockRedcrystalMerc)block).updateAndPropagateChanges(this.world, this.getPos(), true, false, false, false);
         }

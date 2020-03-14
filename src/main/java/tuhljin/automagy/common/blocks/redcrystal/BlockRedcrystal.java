@@ -39,11 +39,8 @@ import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.blocks.IRedcrystalPowerConductor;
 import tuhljin.automagy.common.blocks.ItemBlockRedcrystal;
 import tuhljin.automagy.common.blocks.ModTileRenderedBlock;
-import tuhljin.automagy.common.lib.AutomagyConfig;
-import tuhljin.automagy.common.lib.IOrientableRedstoneConductor;
-import tuhljin.automagy.common.lib.RedstoneCalc;
+import tuhljin.automagy.common.lib.*;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
-import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.struct.BlockWithPos;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
 
@@ -52,20 +49,20 @@ import javax.annotation.Nullable;
 
 public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientableRedstoneConductor, IRedcrystalPowerConductor {
 
-    private AxisAlignedBB AABB_BASIC_DOWN = new AxisAlignedBB(0.25F, 0.8F, 0.25F, 0.75F, 1.0F, 0.75F);
-    private AxisAlignedBB AABB_BASIC_NORTH = new AxisAlignedBB(0.25F, 0.25F, 0.8F, 0.75F, 0.75F, 1.0F);
-    private AxisAlignedBB AABB_BASIC_SOUTH = new AxisAlignedBB(0.25F, 0.25F, 0.0F, 0.75F, 0.75F, 0.2F);
-    private AxisAlignedBB AABB_BASIC_WEST = new AxisAlignedBB(0.8F, 0.25F, 0.25F, 1.0F, 0.75F, 0.75F);
-    private AxisAlignedBB AABB_BASIC_EAST = new AxisAlignedBB(0.0F, 0.25F, 0.25F, 0.2F, 0.75F, 0.75F);
-    private AxisAlignedBB AABB_BASIC_UP = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 0.2F, 0.75F);
+    private static AxisAlignedBB AABB_BASIC_DOWN = new AxisAlignedBB(0.25F, 0.8F, 0.25F, 0.75F, 1.0F, 0.75F);
+    private static AxisAlignedBB AABB_BASIC_NORTH = new AxisAlignedBB(0.25F, 0.25F, 0.8F, 0.75F, 0.75F, 1.0F);
+    private static AxisAlignedBB AABB_BASIC_SOUTH = new AxisAlignedBB(0.25F, 0.25F, 0.0F, 0.75F, 0.75F, 0.2F);
+    private static AxisAlignedBB AABB_BASIC_WEST = new AxisAlignedBB(0.8F, 0.25F, 0.25F, 1.0F, 0.75F, 0.75F);
+    private static AxisAlignedBB AABB_BASIC_EAST = new AxisAlignedBB(0.0F, 0.25F, 0.25F, 0.2F, 0.75F, 0.75F);
+    private static AxisAlignedBB AABB_BASIC_UP = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 0.2F, 0.75F);
 
     public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
     protected final boolean CONNECT_REDSTONE_REL_TOP = false;
     protected static final int MAX_POWER = 15;
     private boolean simplePowerCheck = true;
     protected static boolean resettingPowerLevels = false;
-    private HashSet<BlockPos> newPrimaryPowerInputLocations = new HashSet();
-    private HashMap<Integer, LinkedHashSet<BlockPos>> queuedBlockUpdateLocations = new HashMap();
+    private HashSet<BlockPos> newPrimaryPowerInputLocations = new HashSet<>();
+    private HashMap<Integer, LinkedHashSet<BlockPos>> queuedBlockUpdateLocations = new HashMap<>();
     private Field redstonedustAllowingPowerCheck;
     public EnumFacing nextTEOrientation = null;
     public boolean nextTENoConnections = false;
@@ -116,8 +113,8 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         if (!AutomagyConfig.redcrystalEmitsLight) {
             return super.getLightValue(state);
         } else {
-            double strength = (double)(Integer)state.getValue(POWER);
-            strength = Math.floor(strength * 0.6666666666666666D);
+            double strength = state.getValue(POWER);
+            strength = Math.floor(strength * 2/3);
             return (int)strength;
         }
     }
@@ -148,21 +145,21 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     @Override
     public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
         BlockPos pos2 = pos.offset(side.getOpposite());
-        return world.isSideSolid(pos2, side) || world.getBlockState(pos).getBlock() == Blocks.GLOWSTONE;
+        return world.isSideSolid(pos2, side) || TjUtil.getBlock(world, pos) == Blocks.GLOWSTONE;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-        int strength = (Integer)state.getValue(POWER);
+        int strength = state.getValue(POWER);
         if (strength > 0) {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
-            double d0 = (double)x + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
-            double d1 = (double)((float)y + 0.1625F);
-            double d2 = (double)z + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
-            float f = (float)strength / 15.0F;
+            double d0 =x + 0.5D + (rand.nextFloat() - 0.5D) * 0.2D;
+            double d1 = y + 0.1625D;
+            double d2 = z + 0.5D + (rand.nextFloat() - 0.5D) * 0.2D;
+            float f = strength / MAX_POWER;
             float f1 = f * 0.6F + 0.4F;
 
             float f2 = f * f * 0.7F - 0.5F;
@@ -203,7 +200,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                     d1 += 0.28D;
             }
 
-            world.spawnParticle(EnumParticleTypes.REDSTONE, d0, d1, d2, (double)f1, (double)f2, (double)f3);
+            world.spawnParticle(EnumParticleTypes.REDSTONE, d0, d1, d2, f1, f2, f3);
         }
 
     }
@@ -262,7 +259,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         } else {
             EnumFacing orientation = this.getOrientation(blockAccess, pos);
             if (orientation != null && side != this.getOrientation(blockAccess, pos).getOpposite()) {
-                int strength = (Integer)blockState.getValue(POWER);
+                int strength = blockState.getValue(POWER);
                 if (strength > 0) {
                     if (!this.canSendRedstoneSignalInDirection(blockAccess, pos, side.getOpposite())) {
                         return 0;
@@ -297,7 +294,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                     side = EnumFacing.UP;
                 }
                 if (this.canPlaceBlockOnSide((World)world, pos, side)) {
-                    if (!(world.getBlockState(neighbor).getBlock() instanceof IRedcrystalPowerConductor)) {
+                    if (!(TjUtil.getBlock(world, neighbor) instanceof IRedcrystalPowerConductor)) {
                         this.updateAndPropagateChanges((World)world, pos, true, false, false, false);
                     }
                 } else {
@@ -364,13 +361,13 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                     IBlockState state = world.getBlockState(pos);
                     int power = state.getValue(POWER);
                     int amp = 0;
-                    if (power == 15) {
+                    if (power == MAX_POWER) {
                         amp = te.powerStability;
                     }
 
                     if (strength != power + amp) {
-                        if (strength > 15) {
-                            power = 15;
+                        if (strength > MAX_POWER) {
+                            power = MAX_POWER;
                             te.powerStability = (short)(strength - power);
                         } else {
                             power = strength;
@@ -403,7 +400,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                     if (wireTrace != null) {
                         for (Entry<BlockPos, EnumFacing> entry : wireTrace.entrySet()) {
                             BlockPos bc = entry.getKey();
-                            orc = (IOrientableRedstoneConductor)world.getBlockState(bc).getBlock();
+                            orc = (IOrientableRedstoneConductor)TjUtil.getBlock(world, bc);
                             if (orc.getRedstoneSignalStrength(world, bc, true) > 0) {
                                 resettingPowerLevels = true;
                                 orc.onNeighborRedstoneConductorUpdate(world, bc, entry.getValue(), 100);
@@ -412,7 +409,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                         }
 
                         for (BlockPos bc : this.newPrimaryPowerInputLocations) {
-                            Block block = world.getBlockState(bc).getBlock();
+                            Block block = TjUtil.getBlock(world, bc);
                             if (block instanceof BlockRedcrystal) {
                                 ((BlockRedcrystal)block).updateAndPropagateChanges(world, bc, true, false, true, false);
                             }
@@ -426,7 +423,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
                 for (Entry<BlockPos, EnumFacing> entry : wireTrace.entrySet()) {
                     BlockPos bc = entry.getKey();
-                    orc = (IOrientableRedstoneConductor)world.getBlockState(bc).getBlock();
+                    orc = (IOrientableRedstoneConductor)TjUtil.getBlock(world, bc);
                     orc.onNeighborRedstoneConductorUpdate(world, bc, entry.getValue(), strength);
 
                 }
@@ -449,7 +446,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
             return 0;
         } else {
             int power = this.internalGetMetadata(blockaccess, pos);
-            if (power == 15 && allowAmplifiedPower) {
+            if (power == MAX_POWER && allowAmplifiedPower) {
                 TileRedcrystal te = (TileRedcrystal)blockaccess.getTileEntity(pos);
                 return power + te.powerStability;
             } else {
@@ -947,7 +944,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                 }
             } else if (dir != side) {
                 BlockPos pos3 = pos.offset(side);
-                block = world.getBlockState(pos3).getBlock();
+                block = TjUtil.getBlock(world, pos3);
                 if (block instanceof BlockRedcrystal) {
                     connectedPos = pos3;
                 }

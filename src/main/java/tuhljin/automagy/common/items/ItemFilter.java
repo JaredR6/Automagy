@@ -2,7 +2,6 @@ package tuhljin.automagy.common.items;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
@@ -33,8 +32,9 @@ public class ItemFilter extends ModVariantItem {
         this.setMaxStackSize(1);
     }
 
+    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
         if (!world.isRemote) {
             if (stackIsWhitelist(player.getHeldItem(hand))) {
                 AutomagyGUIHandler.openGUI(2, player, world, player.getPosition());
@@ -51,12 +51,12 @@ public class ItemFilter extends ModVariantItem {
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
         if (!ItemStack.areItemStacksEqual(stack, examinedStack)) {
             examinedStack = stack;
-            examinedStackResults = new ArrayList();
+            examinedStackResults = new ArrayList<>();
             InventoryWithFilterOptions inv = getFilterInventory(stack);
             if (!inv.isNull()) {
                 int count = 0;
 
-                for(int i = 0; i < 9; i++) {
+                for(int i = 0; i < NUM_SLOTS; i++) {
                     ItemStack slotStack = inv.getStackInSlot(i);
                     if (!slotStack.isEmpty()) {
                         String s = slotStack.getDisplayName();
@@ -91,7 +91,7 @@ public class ItemFilter extends ModVariantItem {
 
     @Nonnull
     public static InventoryWithFilterOptions getFilterInventory(ItemStack stack) {
-        return stackIsFilter(stack) ? new InventoryWithFilterOptions(stack, "Filter Inventory", 9, 999) : InventoryWithFilterOptions.NULL_FILTER;
+        return stackIsFilter(stack) ? new InventoryWithFilterOptions(stack, "Filter Inventory", NUM_SLOTS, STACK_LIMIT) : InventoryWithFilterOptions.NULL_FILTER;
     }
 
     public static boolean stackIsFilter(ItemStack stack) {

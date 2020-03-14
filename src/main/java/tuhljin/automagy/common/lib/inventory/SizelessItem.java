@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+// TODO: Consider removing this entire class
 public class SizelessItem {
     public final int damage;
     public final NBTTagCompound tagCompound;

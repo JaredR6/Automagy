@@ -18,7 +18,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
     protected String nameFilter;
     protected Pattern pattern;
     protected boolean patternCompiled = false;
-    public static final InventoryWithFilterOptions NULL_FILTER = new InventoryWithFilterOptions(ItemStack.EMPTY, (String)null, 0, 1);
+    public static final InventoryWithFilterOptions NULL_FILTER = new InventoryWithFilterOptions(ItemStack.EMPTY, null, 0, 1);
 
 
     public InventoryWithFilterOptions(ItemStack containerStack, String inventoryName, int numSlots, int limit) {

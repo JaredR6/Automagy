@@ -1,12 +1,13 @@
 package tuhljin.automagy.common.tiles;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
@@ -15,6 +16,8 @@ import tuhljin.automagy.common.items.IAutomagyLocationLink;
 import tuhljin.automagy.common.lib.NeighborNotifier;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.struct.WorldSpecificCoordinates;
+
+import javax.annotation.Nonnull;
 
 public class TileRemoteComparator extends ModTileEntityWithInventory implements ITickable {
     protected static final int MAX_DISTANCE = 20;
@@ -30,33 +33,33 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         super("remoteComparator", 1, true, true);
     }
 
-    public static boolean isValidContainerForReading(Block block, World world, BlockPos posIn) {
-        if (block.func_149740_M()) {
+    public static boolean isValidContainerForReading(Block block, World world, BlockPos pos) {
+        if (block.hasComparatorInputOverride(world.getBlockState(pos))) {
             return true;
         } else {
-            TileEntity te = world.func_175625_s(posIn);
+            TileEntity te = world.getTileEntity(pos);
             return te instanceof IInventory;
         }
     }
 
-    public static int getComparatorReading(Block block, World world, BlockPos posIn) {
-        if (block.func_149740_M()) {
-            return block.func_180641_l(world, posIn);
+    public static int getComparatorReading(Block block, World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        if (block.hasComparatorInputOverride(state)) {
+            return block.getComparatorInputOverride(state, world, pos);
         } else {
-            TileEntity te = world.func_175625_s(posIn);
-            return te instanceof IInventory ? Container.func_94526_b((IInventory)te) : 0;
+            TileEntity te = world.getTileEntity(pos);
+            return te instanceof IInventory ? Container.calcRedstoneFromInventory((IInventory)te) : 0;
         }
     }
 
     public WorldSpecificCoordinates getLinkLocation() {
-        ItemStack stack = this.func_70301_a(0);
-        return stack != null && stack.func_77973_b() instanceof IAutomagyLocationLink ? ((IAutomagyLocationLink)stack.func_77973_b()).getLinkLocation(stack) : null;
+        ItemStack stack = this.getStackInSlot(0);
+        return stack.getItem() instanceof IAutomagyLocationLink ? ((IAutomagyLocationLink)stack.getItem()).getLinkLocation(stack) : null;
     }
 
     public boolean coordinatesAreInRange(WorldSpecificCoordinates coord) {
-        if (coord != null && coord.dim == this.field_145850_b.field_73011_w.func_177502_q()) {
-            float distance = TjUtil.getDistanceBetweenPoints(this.field_174879_c.func_177958_n(), this.field_174879_c.func_177956_o(), this.field_174879_c.func_177952_p(), coord.x, coord.y, coord.z);
-            return distance <= 20.0F;
+        if (coord != null && coord.dim == this.world.provider.getDimension()) {
+            return this.pos.distanceSq(coord.x, coord.y, coord.z) <= MAX_DISTANCE;
         } else {
             return false;
         }
@@ -68,10 +71,10 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
 
     public Block getBlockAtLinkedLocationIfValid() {
         WorldSpecificCoordinates coord = this.getLinkLocation();
-        if (coord != null && coord.dim == this.field_145850_b.field_73011_w.func_177502_q()) {
+        if (coord != null && coord.dim == this.world.provider.getDimension()) {
             BlockPos linkPos = coord.toBlockPos();
-            Block block = TjUtil.getBlock(this.field_145850_b, linkPos);
-            if (isValidContainerForReading(block, this.field_145850_b, linkPos)) {
+            Block block = TjUtil.getBlock(this.world, linkPos);
+            if (isValidContainerForReading(block, this.world, linkPos)) {
                 return block;
             }
         }
@@ -80,19 +83,19 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
     }
 
     public ItemStack getFloatingDisplayItem() {
-        return this.func_70301_a(0);
+        return this.getStackInSlot(0);
     }
 
     public boolean isRedstoneSignalBeingSent() {
         if (this.linkMode == -2) {
-            BlockPos downPos = this.field_174879_c.func_177972_a(EnumFacing.DOWN);
-            Block block = TjUtil.getBlock(this.field_145850_b, downPos);
-            if (block == null) {
+            BlockPos downPos = this.pos.offset(EnumFacing.DOWN);
+            Block block = TjUtil.getBlock(this.world, downPos);
+            if (this.world.isAirBlock(downPos)) {
                 return false;
             } else if (block instanceof IRemoteComparatorOverride) {
-                return ((IRemoteComparatorOverride)block).hasActiveRedstoneSignal(this.field_145850_b, downPos, this);
+                return ((IRemoteComparatorOverride)block).hasActiveRedstoneSignal(this.world, downPos, this);
             } else {
-                return block.func_180656_a(this.field_145850_b, downPos, this.field_145850_b.func_180495_p(downPos), EnumFacing.NORTH) > 0;
+                return block.getWeakPower(this.world.getBlockState(downPos), this.world, downPos, EnumFacing.NORTH) > 0;
             }
         } else {
             return this.getRedstoneSignalStrength() > 0;
@@ -122,13 +125,14 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         if (this.redstoneSignalStrength != strength) {
             this.redstoneSignalStrength = strength;
             this.markForUpdate();
-            NeighborNotifier.notifyBlocksOfExtendedNeighborChange(this.field_145850_b, this.field_174879_c, this.func_145838_q());
+            NeighborNotifier.notifyBlocksOfExtendedNeighborChange(this.world, this.pos);
         }
 
     }
 
-    public void func_73660_a() {
-        if (!this.field_145850_b.field_72995_K && this.linkMode >= 0) {
+    @Override
+    public void update() {
+        if (!this.world.isRemote && this.linkMode >= 0) {
             if (this.linkMode == 0) {
                 WorldSpecificCoordinates coord = this.getLinkLocation();
                 if (!this.coordinatesAreInRange(coord)) {
@@ -150,30 +154,26 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
                     return;
                 }
 
-                this.cooldown = 4;
+                this.cooldown = COOLDOWN_TIME;
             }
 
             Block block = this.getBlockAtLinkedLocationIfValid();
             if (block == null) {
                 this.setRedstoneSignalStrength(0);
             } else {
-                int strength = 0;
-
-                try {
-                    strength = getComparatorReading(block, this.field_145850_b, new BlockPos(this.linkX, this.linkY, this.linkZ));
-                } catch (Exception var4) {
-                }
-
+                int strength = getComparatorReading(block, this.world, new BlockPos(this.linkX, this.linkY, this.linkZ));
                 this.setRedstoneSignalStrength(strength);
             }
 
         }
     }
 
-    public ItemStack func_70298_a(int slot, int num) {
-        ItemStack stack = super.func_70298_a(slot, num);
+    @Nonnull
+    @Override
+    public ItemStack decrStackSize(int slot, int num) {
+        ItemStack stack = super.decrStackSize(slot, num);
         if (this.linkMode == -2) {
-            this.field_145850_b.func_180496_d(this.field_174879_c.func_177972_a(EnumFacing.DOWN), this.func_145838_q());
+            this.world.notifyBlockUpdate(this.pos.offset(EnumFacing.DOWN), this.world.getBlockState(pos), this.world.getBlockState(pos), 3);
         } else {
             this.linkMode = 0;
             this.markForUpdate();
@@ -182,10 +182,11 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         return stack;
     }
 
-    public void func_70299_a(int slot, ItemStack stack) {
-        super.func_70299_a(slot, stack);
+    @Override
+    public void setInventorySlotContents(int slot, @Nonnull ItemStack stack) {
+        super.setInventorySlotContents(slot, stack);
         if (this.linkMode == -2) {
-            this.field_145850_b.func_180496_d(this.field_174879_c.func_177972_a(EnumFacing.DOWN), this.func_145838_q());
+            this.world.notifyBlockUpdate(this.pos.offset(EnumFacing.DOWN), this.world.getBlockState(pos), this.world.getBlockState(pos), 3);
         } else {
             this.linkMode = 0;
             this.markForUpdate();
@@ -193,29 +194,33 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
 
     }
 
-    public int func_70297_j_() {
+    @Override
+    public int getInventoryStackLimit() {
         return 1;
     }
 
-    public boolean func_94041_b(int slot, ItemStack stack) {
-        return stack != null && stack.func_77973_b() instanceof IAutomagyLocationLink && ((IAutomagyLocationLink)stack.func_77973_b()).getLinkLocation(stack) != null;
+    @Override
+    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
+        return stack.getItem() instanceof IAutomagyLocationLink && ((IAutomagyLocationLink)stack.getItem()).getLinkLocation(stack) != null;
     }
 
+    @Override
     public void readCommonNBT(NBTTagCompound nbttagcompound) {
         super.readCommonNBT(nbttagcompound);
-        this.redstoneSignalStrength = nbttagcompound.func_74765_d("strength");
-        this.linkMode = nbttagcompound.func_74765_d("linkMode");
-        this.linkX = nbttagcompound.func_74762_e("linkX");
-        this.linkY = nbttagcompound.func_74762_e("linkY");
-        this.linkZ = nbttagcompound.func_74762_e("linkZ");
+        this.redstoneSignalStrength = nbttagcompound.getShort("strength");
+        this.linkMode = nbttagcompound.getShort("linkMode");
+        this.linkX = nbttagcompound.getInteger("linkX");
+        this.linkY = nbttagcompound.getInteger("linkY");
+        this.linkZ = nbttagcompound.getInteger("linkZ");
     }
 
+    @Override
     public void writeCommonNBT(NBTTagCompound nbttagcompound) {
         super.writeCommonNBT(nbttagcompound);
-        nbttagcompound.func_74777_a("strength", (short)this.redstoneSignalStrength);
-        nbttagcompound.func_74777_a("linkMode", (short)this.linkMode);
-        nbttagcompound.func_74768_a("linkX", this.linkX);
-        nbttagcompound.func_74768_a("linkY", this.linkY);
-        nbttagcompound.func_74768_a("linkZ", this.linkZ);
+        nbttagcompound.setShort("strength", (short)this.redstoneSignalStrength);
+        nbttagcompound.setShort("linkMode", (short)this.linkMode);
+        nbttagcompound.setInteger("linkX", this.linkX);
+        nbttagcompound.setInteger("linkY", this.linkY);
+        nbttagcompound.setInteger("linkZ", this.linkZ);
     }
 }

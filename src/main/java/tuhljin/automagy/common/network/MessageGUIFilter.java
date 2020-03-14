@@ -1,0 +1,46 @@
+package tuhljin.automagy.common.network;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import tuhljin.automagy.common.gui.ContainerFilter;
+
+public class MessageGUIFilter implements IMessage, IMessageHandler<MessageGUIFilter, IMessage> {
+    private int type;
+    private String data;
+
+    public MessageGUIFilter(int type, String data) {
+        this.type = type;
+        this.data = data;
+    }
+
+    public void fromBytes(ByteBuf buf) {
+        this.type = buf.readByte();
+        this.data = ByteBufUtils.readUTF8String(buf);
+    }
+
+    public void toBytes(ByteBuf buf) {
+        buf.writeByte(this.type);
+        ByteBufUtils.writeUTF8String(buf, this.data);
+    }
+
+    public IMessage onMessage(MessageGUIFilter message, MessageContext ctx) {
+        EntityPlayer player = ctx.getServerHandler().player;
+        if (player != null) {
+            Container container = player.openContainer;
+            if (container instanceof ContainerFilter) {
+                ((ContainerFilter)container).receiveMessageFromClient(message.type, message.data);
+            }
+        }
+
+        return null;
+    }
+
+    public static void sendToServer(int type, String data) {
+        PacketHandler.INSTANCE.sendToServer(new MessageGUIFilter(type, data));
+    }
+}

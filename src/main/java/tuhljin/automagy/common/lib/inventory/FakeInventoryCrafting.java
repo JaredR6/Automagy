@@ -1,0 +1,22 @@
+package tuhljin.automagy.common.lib.inventory;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
+import tuhljin.automagy.common.gui.ContainerEmpty;
+
+public class FakeInventoryCrafting extends InventoryCrafting {
+    public FakeInventoryCrafting() {
+        super(new ContainerEmpty(), 3, 3);
+    }
+
+    public FakeInventoryCrafting(IInventory copyInv) {
+        this();
+
+        assert copyInv.getSizeInventory() >= 9;
+
+        for(int i = 0; i < 9; ++i) {
+            this.setInventorySlotContents(i, copyInv.getStackInSlot(i));
+        }
+
+    }
+}

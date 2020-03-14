@@ -15,6 +15,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ModTileEntityWithInventory extends ModTileEntity implements ISidedInventory {
     protected NonNullList<ItemStack> inventorySlots;
@@ -65,11 +66,13 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
         return true;
     }
 
+    @Nonnull
     @Override
     public ItemStack getStackInSlot(int slot) {
         return this.inventorySlots.get(slot);
     }
 
+    @Nonnull
     @Override
     public ItemStack decrStackSize(int slot, int num) {
         if (!this.inventorySlots.get(slot).isEmpty()) {
@@ -81,7 +84,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
                 if (this.notifyOnInventoryChanged) {
                     this.inventorySlots.get(slot).copy();
                 } else {
-                    Object var10000 = null;
+                    //Object var10000 = null;
                 }
 
                 stack = this.inventorySlots.get(slot).splitStack(num);
@@ -93,10 +96,11 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
             }
             return stack;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
+    @Nonnull
     @Override
     public ItemStack removeStackFromSlot(int slot) {
         ItemStack stack = this.getStackInSlot(slot);
@@ -105,7 +109,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
+    public void setInventorySlotContents(int slot, @Nonnull ItemStack stack) {
         if (stack != this.inventorySlots.get(slot)) {
             ItemStack var10000;
             if (this.notifyOnInventoryChanged) {
@@ -133,38 +137,40 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(@Nonnull EntityPlayer player) {
         return this.world.getTileEntity(this.pos) == this && player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(@Nonnull EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(@Nonnull EntityPlayer player) {
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
         return true;
     }
 
+    @Nonnull
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
         return this.accessibleSlots;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing direction) {
+    public boolean canInsertItem(int slot, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
         return this.isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int slot, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
         return true;
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return I18n.format("tile." + this.inventoryName + ".name");
@@ -219,7 +225,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
             for(int i = 0; i < this.numSlots; ++i) {
                 NBTTagCompound tagList = nbttaglist.getCompoundTagAt(i);
                 byte slot = tagList.getByte("Slot");
-                if (slot >= 0 && slot < this.numSlots && this.inventorySlots.get(slot) == null) {
+                if (slot >= 0 && slot < this.numSlots && this.inventorySlots.get(slot).isEmpty()) {
                     this.inventorySlots.set(slot, new ItemStack(tagList));
                 }
             }
@@ -231,7 +237,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
         NBTTagList nbttaglist = new NBTTagList();
 
         for(int i = 0; i < this.numSlots; ++i) {
-            if (this.inventorySlots.get(i) != null) {
+            if (!this.inventorySlots.get(i).isEmpty()) {
                 NBTTagCompound tagList = new NBTTagCompound();
                 tagList.setByte("Slot", (byte)i);
                 this.inventorySlots.get(i).writeToNBT(tagList);
@@ -278,7 +284,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? true : super.hasCapability(capability, facing);
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Override

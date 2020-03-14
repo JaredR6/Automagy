@@ -51,7 +51,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
 
     @Override
     public boolean canPlaceBlockAt(World world, @Nonnull BlockPos pos) {
-        return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, false) && world.getBlockState(pos).getBlock().isReplaceable(world, pos);
+        return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, false) && TjUtil.getBlock(world, pos).isReplaceable(world, pos);
     }
 
     @Override

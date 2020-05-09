@@ -13,12 +13,13 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import tuhljin.automagy.common.blocks.ModBlock;
 import tuhljin.automagy.common.blocks.ModBlocks;
+import tuhljin.automagy.common.gui.AutomagyGUIHandler;
 import tuhljin.automagy.common.items.ModItems;
 import tuhljin.automagy.common.lib.AutomagyConfig;
 import tuhljin.automagy.common.network.PacketHandler;
 
 public class ProxyCommon {
-    //public AutomagyWandTriggerManager wandTriggerManager;
+    public AutomagyTriggerManager wandTriggerManager;
 
     public void preInit(FMLPreInitializationEvent event) {
         AutomagyConfig.load(event.getSuggestedConfigurationFile());

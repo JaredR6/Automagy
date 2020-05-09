@@ -6,6 +6,7 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import thaumcraft.common.container.slot.SlotGhost;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.items.ItemRecipe;
@@ -85,14 +86,14 @@ public class ContainerRecipe extends Container {
 
     }
 
-    public void receiveMessageFromClient(ItemStack[] stacks) {
-        if (stacks.length != 9) {
+    public void receiveMessageFromClient(NonNullList<ItemStack> stacks) {
+        if (stacks.size() != 9) {
             Automagy.logError("ContainerFilter received invalid packet data. Ignoring.");
         } else {
             int i = 0;
 
             for(int slot = this.productSlotID - 9; slot < this.productSlotID; ++slot) {
-                this.getSlot(slot).putStack(stacks[i]);
+                this.getSlot(slot).putStack(stacks.get(i));
                 ++i;
             }
 

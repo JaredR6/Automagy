@@ -62,7 +62,7 @@ public class GuiFilter extends ModGuiContainer {
         this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.ignoreMetadata"), this.guiLeft + 91, this.guiTop + 29.5F, color);
         this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.ignoreNBT"), this.guiLeft + 91, this.guiTop + 39, color);
         this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.byName"), this.guiLeft + 81, this.guiTop + 50.5F, color);
-        this.drawStringScaledNoShadow(this.fontRenderer, "[?]", this.guiLeft + 145, this.guiTop + 50.5F, this.blacklist ? '쳿' : 0x0066FF);
+        this.drawStringScaledNoShadow(this.fontRenderer, "[?]", this.guiLeft + 145, this.guiTop + 50.5F, this.blacklist ? 0x0000B3 : 0x0066FF);
         GL11.glPopMatrix();
         super.drawGuiContainerBackgroundLayer(var1, var2, var3);
     }

@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -42,8 +43,6 @@ import thaumcraft.common.tiles.crafting.TilePedestal;
 import tuhljin.automagy.common.Automagy;
 
 public class TjUtil {
-    public TjUtil() {
-    }
 
     public static void sendChatToPlayer(EntityPlayer player, String message) {
         message = I18n.format(message);
@@ -230,9 +229,10 @@ public class TjUtil {
         return isAcceptableSurfaceAtPos(world, pos.offset(EnumFacing.DOWN), allowGlowstone, allowGlass, allowPedestal);
     }
 
-    public static List<ItemStack> getDropsFromBlock(World world, BlockPos pos, boolean includeSilkDrops, int fortune) {
+    public static NonNullList<ItemStack> getDropsFromBlock(World world, BlockPos pos, boolean includeSilkDrops, int fortune) {
         IBlockState state = world.getBlockState(pos);
-        List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, fortune);
+        NonNullList<ItemStack> drops = NonNullList.create();
+        state.getBlock().getDrops(drops, world, pos, state, fortune);
         if (includeSilkDrops) {
             ItemStack stack = getStackFromBlock(state.getBlock(), world, pos);
             if (!stack.isEmpty()) {

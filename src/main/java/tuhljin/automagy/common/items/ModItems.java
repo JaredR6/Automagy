@@ -24,9 +24,9 @@ public class ModItems {
     public static Item crystalEye;
     public static Item avaricePearl;
     public static Item tallyLens;
-    //public static ItemGlyph tankGlyph;
-    //public static ItemBucketCustom bucketMushroom;
-    //public static ItemBucketCustom bucketVishroom;
+    public static ItemGlyph tankGlyph;
+    public static ItemBucketCustom bucketMushroom;
+    public static ItemBucketCustom bucketVishroom;
 
     public ModItems() {
     }

@@ -9,6 +9,9 @@ buildscript {
 }
 
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
     maven {
         name 'Curseforge Maven'
         url 'http://minecraft.curseforge.com/api/maven/'
@@ -64,6 +67,8 @@ dependencies {
     
     compile "thaumcraft:Thaumcraft:${thaumcraft_version}"
     compile "baubles:Baubles:${baubles_version}"
+    compile "jei:jei_1.12.2:4.15.0.291"
+    provided (name:'Botania r1.10-363', ext:'jar')
 
 }
 

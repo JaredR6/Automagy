@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.blocks.BlocksTC;
@@ -73,12 +74,11 @@ public class ThaumcraftExtension {
         return ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT);
     }
 
-    // Not sure what this does yet
-    /*
     public static void resetWarpCounter(EntityPlayer player) {
-        Thaumcraft.proxy.getPlayerKnowledge().setWarpCounter(player.getName(), Thaumcraft.proxy.getPlayerKnowledge().getWarpTotal(player.getName()));
+        IPlayerWarp wc = ThaumcraftCapabilities.getWarp(player);
+        int total = wc.get(IPlayerWarp.EnumWarpType.TEMPORARY) + wc.get(IPlayerWarp.EnumWarpType.NORMAL) + wc.get(IPlayerWarp.EnumWarpType.PERMANENT);
+        wc.setCounter(total);
     }
-     */
 
     // Not disabled, maybe
     /*
@@ -217,12 +217,12 @@ public class ThaumcraftExtension {
         FXDispatcher.INSTANCE.arcLightning(sx, sy, sz, dx, dy, dz, r, g, b, 0.5F);
     }
 
-    // TODO: function takes an entity
-    /*
+
+    // TODO: Figure out correct FX
     public static void taintSplash(BlockPos pos) {
-        Thaumcraft.proxy.getFX().fluxRainSplashFX(pos);
+        FXDispatcher.INSTANCE.drawPollutionParticles(pos);
+        // FXDispatcher.INSTANCE.fluxRainSplashFX(pos);
     }
-    */
 
     public static void bamf(World world, double x, double y, double z) {
         bamf(world, x, y, z, 5770890, true, false, null);

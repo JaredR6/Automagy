@@ -40,7 +40,7 @@ public class BlockBookshelfEnchanted extends ModBlockMetaStates {
         return v == BlockBookshelfEnchanted.BookshelfVariants.SILVERWOOD ? ENCHANTPOWER_SILVERWOOD : ENCHANTPOWER_GREATWOOD;
     }
 
-    public static enum BookshelfVariants implements IStringSerializable, IEnumWithMetadata {
+    public enum BookshelfVariants implements IStringSerializable, IEnumWithMetadata {
         GREATWOOD(0),
         SILVERWOOD(1);
 

@@ -2,17 +2,13 @@ package tuhljin.automagy.common.tiles;
 
 import com.mojang.authlib.GameProfile;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
-import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
@@ -175,7 +171,7 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
     public InventoryForRecipe getRecipeInventory(int i) {
         if (this.cacheRecipeInventories[i] == null) {
             ItemStack recipeStack = this.getRecipeStack(i);
-            if (recipeStack == null) {
+            if (recipeStack.isEmpty()) {
                 return null;
             }
 
@@ -247,15 +243,18 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         }
     }
 
+    @Nonnull
     public ItemStack getRecipeStack(int i) {
         return this.getStackInSlot(i + 9);
     }
 
+    @Nonnull
     public ItemStack getRecipeGoal(int i) {
         InventoryForRecipe rec = this.getRecipeInventory(i);
-        return rec == null ? null : rec.getCraftingResult();
+        return rec == null ? ItemStack.EMPTY : rec.getCraftingResult();
     }
 
+    @Nonnull
     public ItemStack insertItemIntoLastAvailableSlot(ItemStack stack) {
         return TjUtil.addToInventory(stack, this, this.getSizeInventory() - NUM_RECIPES - 1, 0);
     }

@@ -83,17 +83,17 @@ public class ItemRecipe extends Item {
 
     }
 
-    public static InventoryForRecipe getRecipeInventory(ItemStack stack, World worldObj) {
-        return stackIsRecipe(stack) ? new InventoryForRecipe(stack, "Recipe Inventory", 9, worldObj) : null;
+    public static InventoryForRecipe getRecipeInventory(ItemStack stack, World world) {
+        return stackIsRecipe(stack) ? new InventoryForRecipe(stack, "Recipe Inventory", 9, world) : null;
     }
 
     public static boolean stackIsRecipe(ItemStack stack) {
         return !stack.isEmpty() && stack.getItem() instanceof ItemRecipe;
     }
 
-    public static boolean isItemPopulatedRecipe(ItemStack stack, World worldObj) {
+    public static boolean isItemPopulatedRecipe(ItemStack stack, World world) {
         if (!stack.isEmpty()) {
-            InventoryForRecipe inv = getRecipeInventory(stack, worldObj);
+            InventoryForRecipe inv = getRecipeInventory(stack, world);
             if (inv != null) {
                 return inv.getCraftingResult() != null;
             }

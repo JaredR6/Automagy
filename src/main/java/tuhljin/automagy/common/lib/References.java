@@ -1,9 +1,11 @@
 package tuhljin.automagy.common.lib;
 
+import net.minecraft.util.ResourceLocation;
+
 import java.util.Locale;
 
 public class References {
-    public static final String MOD_ID = "Automagy";
+    public static final String MOD_ID = "automagy";
     public static final String MOD_NAME = "Automagy";
     public static final String VERSION = "3.0.0";
     public static final String MOD_DOMAIN;
@@ -50,7 +52,7 @@ public class References {
     public static final String FLUIDTEXTURE_MUSHROOMSOUP;
     public static final String FLUID_VISHROOMSOUP = "vishroomsoup";
     public static final String FLUIDTEXTURE_VISHROOMSOUP;
-    public static final String ENTITY_AVARICEPEARL = "AvaricePearl";
+    public static final String ENTITY_AVARICEPEARL;
     public static final String SEAL_CRAFT = "craft";
     public static final String SEAL_CRAFT_PROVIDE = "craft_provide";
     public static final String SEAL_SHEAR = "shear";
@@ -85,6 +87,7 @@ public class References {
     public static final String WAILA_HOURGLASS_COUNTDOWN = "wailaTip.hourglassTimerCountdown";
     public static final String WAILA_FLUIDDATA = "wailaTip.tankFluidData";
     public static final String WAILA_FLUIDDATA_EMPTY = "wailaTip.tankFluidDataEmpty";
+    public static final ResourceLocation ENTITY_AVARICEPEARL_REGISTRY;
 
     public References() {
     }
@@ -104,5 +107,7 @@ public class References {
         GUI_GOLEMWORKBENCH = PREFIX_GUI + "golemWorkbench.png";
         GUI_RESEARCH_ICON = PREFIX_GUI + "researchIcon.png";
         GUI_RESEARCH_BACKGROUND_OVER = PREFIX_GUI + "gui_research_back_over_red.png";
+        ENTITY_AVARICEPEARL = MOD_DOMAIN + ":avaricePearl";
+        ENTITY_AVARICEPEARL_REGISTRY = new ResourceLocation(MOD_DOMAIN, "avarice_pearl");
     }
 }

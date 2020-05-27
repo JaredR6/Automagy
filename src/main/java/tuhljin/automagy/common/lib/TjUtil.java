@@ -42,6 +42,8 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import thaumcraft.common.tiles.crafting.TilePedestal;
 import tuhljin.automagy.common.Automagy;
 
+import javax.annotation.Nonnull;
+
 public class TjUtil {
 
     public static void sendChatToPlayer(EntityPlayer player, String message) {
@@ -274,11 +276,11 @@ public class TjUtil {
     }
 
     public static boolean areItemsEqualIgnoringSize(ItemStack stack1, ItemStack stack2) {
-        return stack1 != null && stack2 != null && stack1.isItemEqual(stack2) && ItemStack.areItemStackTagsEqual(stack2, stack1);
+        return !stack1.isEmpty() && !stack2.isEmpty() && stack1.isItemEqual(stack2) && ItemStack.areItemStackTagsEqual(stack2, stack1);
     }
 
     public static boolean canItemsStack(ItemStack stack1, ItemStack stack2) {
-        return (stack1 == null || stack2 == null || areItemsEqualIgnoringSize(stack1, stack2)) && stack1.isStackable();
+        return (stack1.isEmpty() || stack2.isEmpty() || areItemsEqualIgnoringSize(stack1, stack2)) && stack1.isStackable();
     }
 
     public static NBTTagCompound writeLargeItemStackToNBT(ItemStack stack, NBTTagCompound nbt) {
@@ -294,18 +296,14 @@ public class TjUtil {
 
     public static ItemStack readLargeItemStackFromNBT(NBTTagCompound nbt) {
         Item item = Item.getItemById(nbt.getShort("id"));
-        if (item == null) {
-            return null;
-        } else {
-            int damage = Math.max(nbt.getShort("Damage"), 0);
-            ItemStack stack = new ItemStack(item, nbt.getInteger("Count"), damage);
-            if (nbt.hasKey("tag", 10)) {
-                stack.setTagCompound(nbt.getCompoundTag("tag"));
-                item.updateItemStackNBT(stack.getTagCompound());
-            }
-
-            return stack;
+        int damage = Math.max(nbt.getShort("Damage"), 0);
+        ItemStack stack = new ItemStack(item, nbt.getInteger("Count"), damage);
+        if (nbt.hasKey("tag", 10)) {
+            stack.setTagCompound(nbt.getCompoundTag("tag"));
+            item.updateItemStackNBT(stack.getTagCompound());
         }
+
+        return stack;
     }
 
     public static boolean playerHasPartialStackedItem(EntityPlayer player, ItemStack stack) {
@@ -320,7 +318,7 @@ public class TjUtil {
 
                 for(int i = 0; i < inv.mainInventory.size(); ++i) {
                     ItemStack invStack = inv.mainInventory.get(i);
-                    if (invStack != null && invStack.isItemEqual(stack) && invStack.getCount() < max) {
+                    if (!invStack.isEmpty() && invStack.isItemEqual(stack) && invStack.getCount() < max) {
                         return true;
                     }
                 }
@@ -473,6 +471,7 @@ public class TjUtil {
         }
     }
 
+    @Nonnull
     public static ItemStack addToInventory(ItemStack stack, IInventory inv, int firstSlot, int lastSlot) {
         stack = stack.copy();
         boolean reverse = firstSlot > lastSlot;
@@ -493,7 +492,7 @@ public class TjUtil {
                             newStack = slottedStack.copy();
                             newStack.setCount(newSize);
                             inv.setInventorySlotContents(slot, newStack);
-                            return null;
+                            return ItemStack.EMPTY;
                         }
 
                         if (slottedStack.getCount() < stacksTo) {
@@ -521,7 +520,7 @@ public class TjUtil {
                 if (slottedStack.isEmpty()) {
                     if (stack.getCount() <= stacksTo) {
                         inv.setInventorySlotContents(slot, stack.copy());
-                        return null;
+                        return ItemStack.EMPTY;
                     }
 
                     ItemStack newStack = stack.splitStack(stacksTo);

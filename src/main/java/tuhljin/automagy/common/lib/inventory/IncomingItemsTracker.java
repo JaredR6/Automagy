@@ -1,6 +1,5 @@
 package tuhljin.automagy.common.lib.inventory;
 
-import java.util.Iterator;
 import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;

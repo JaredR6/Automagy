@@ -13,13 +13,17 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import tuhljin.automagy.common.blocks.ModBlock;
 import tuhljin.automagy.common.blocks.ModBlocks;
+import tuhljin.automagy.common.entities.ModEntities;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
 import tuhljin.automagy.common.items.ModItems;
 import tuhljin.automagy.common.lib.AutomagyConfig;
+import tuhljin.automagy.common.lib.compat.CompatibilityManager;
+import tuhljin.automagy.common.lib.events.AutomagyCasterTriggerManager;
+import tuhljin.automagy.common.lib.events.AutomagyEventHandler;
 import tuhljin.automagy.common.network.PacketHandler;
 
 public class ProxyCommon {
-    public AutomagyTriggerManager wandTriggerManager;
+    public AutomagyCasterTriggerManager casterTriggerManager;
 
     public void preInit(FMLPreInitializationEvent event) {
         AutomagyConfig.load(event.getSuggestedConfigurationFile());
@@ -28,10 +32,10 @@ public class ProxyCommon {
         ModItems.initFluidContainers();
         ModItems.registerDispenserBehaviors();
         ModBlocks.registerTileEntities();
-        //ModEntities.registerSeals();
+        ModEntities.registerSeals();
         PacketHandler.registerMessages();
         MinecraftForge.EVENT_BUS.register(new AutomagyEventHandler());
-        this.wandTriggerManager = new AutomagyWandTriggerManager();
+        this.casterTriggerManager = new AutomagyCasterTriggerManager();
     }
 
     public void init(FMLInitializationEvent event) {
@@ -54,9 +58,9 @@ public class ProxyCommon {
     }
 
     public Block initializeBlock(Block block, String name, boolean showInTab) {
-        block.func_149663_c("Automagy".toLowerCase() + "." + name);
+        block.setUnlocalizedName("Automagy".toLowerCase() + "." + name);
         if (showInTab)
-            block.func_149647_a(Automagy.creativeTab);
+            block.setCreativeTab(Automagy.creativeTab);
         Class clazz = (block instanceof ModBlock) ? ((ModBlock)block).getItemBlockClass() : null;
         if (clazz == null) {
             GameRegistry.registerBlock(block, name);

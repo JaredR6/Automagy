@@ -2,6 +2,9 @@ package tuhljin.automagy.common.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystal;
@@ -28,6 +31,7 @@ import tuhljin.automagy.common.tiles.TileTallyWorld;
 import tuhljin.automagy.common.tiles.TileTankThirsty;
 import tuhljin.automagy.common.tiles.TileTorchInversion;
 
+@Mod.EventBusSubscriber(modid = References.MOD_ID)
 public class ModBlocks {
     public static Material materialWaterproofCircuit = new MaterialWaterproofCircuit();
     public static Block redcrystal;
@@ -58,7 +62,8 @@ public class ModBlocks {
     public ModBlocks() {
     }
 
-    public static void initBlocks() {
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> evt) {
         redcrystal = initializeBlock(new BlockRedcrystal(), "redcrystal");
         redcrystalAmp = initializeBlock(new BlockRedcrystalAmp(), "redcrystalAmp");
         redcrystalDim = initializeBlock(new BlockRedcrystalDim(), "redcrystalDim");

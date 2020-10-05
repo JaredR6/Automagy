@@ -7,6 +7,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tuhljin.automagy.common.tiles.TileHourglassMagic;
 
+import javax.annotation.Nonnull;
+
 public class ContainerHourglassMagic extends ModContainerAttached<TileHourglassMagic> {
     private int oldModeSignal = -1;
     private int oldModeSandFlip = -1;
@@ -29,7 +31,7 @@ public class ContainerHourglassMagic extends ModContainerAttached<TileHourglassM
     }
 
     @Override
-    public void addListener(IContainerListener player) {
+    public void addListener(@Nonnull IContainerListener player) {
         super.addListener(player);
         player.sendWindowProperty(this, SIGNAL_INC, this.tile.modeSignal);
         player.sendWindowProperty(this, FLIP_INC, this.tile.modeSandFlip);

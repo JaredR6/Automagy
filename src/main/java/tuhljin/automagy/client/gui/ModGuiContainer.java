@@ -11,12 +11,15 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 public abstract class ModGuiContainer extends GuiContainer {
     protected float scaleFactor = 0.75F;
     protected float scaleFactorTextField = 0.75F;
+    @Nonnull
     protected List<GuiTextField> textFieldList = new ArrayList<>();
 
-    public ModGuiContainer(Container inventorySlotsIn) {
+    public ModGuiContainer(@Nonnull Container inventorySlotsIn) {
         super(inventorySlotsIn);
     }
 
@@ -34,19 +37,19 @@ public abstract class ModGuiContainer extends GuiContainer {
         this.mc.playerController.sendEnchantPacket(this.inventorySlots.windowId, id);
     }
 
-    public void drawStringScaled(FontRenderer renderer, String str, float x, float y, int color) {
+    public void drawStringScaled(@Nonnull FontRenderer renderer, @Nonnull String str, float x, float y, int color) {
         this.drawString(renderer, str, (int)(x / this.scaleFactor), (int)(y / this.scaleFactor), color);
     }
 
-    public void drawStringScaledNoShadow(FontRenderer renderer, String text, float x, float y, int color) {
+    public void drawStringScaledNoShadow(@Nonnull FontRenderer renderer, @Nonnull String text, float x, float y, int color) {
         renderer.drawString(text, (int)(x / this.scaleFactor), (int)(y / this.scaleFactor), color);
     }
 
-    public void drawCenteredStringScaled(FontRenderer renderer, String text, int x, int y, int color) {
+    public void drawCenteredStringScaled(@Nonnull FontRenderer renderer, @Nonnull String text, int x, int y, int color) {
         this.drawCenteredString(renderer, text, (int)(x / this.scaleFactor), (int)(y / this.scaleFactor), color);
     }
 
-    public void drawCenteredStringScaledMultiLine(FontRenderer renderer, List<String> lines, int x, int y, int color) {
+    public void drawCenteredStringScaledMultiLine(@Nonnull FontRenderer renderer, @Nonnull List<String> lines, int x, int y, int color) {
         for (String line : lines) {
             this.drawCenteredStringScaled(renderer, line, x, y, color);
             y += 6;
@@ -54,13 +57,13 @@ public abstract class ModGuiContainer extends GuiContainer {
 
     }
 
-    public void drawCenteredStringScaledNoShadow(FontRenderer renderer, String text, int x, int y, int color) {
+    public void drawCenteredStringScaledNoShadow(@Nonnull FontRenderer renderer, @Nonnull String text, int x, int y, int color) {
         x = (int)(x / this.scaleFactor);
         y = (int)(y / this.scaleFactor);
         renderer.drawString(text, x - renderer.getStringWidth(text) / 2, y, color);
     }
 
-    protected void drawScaledHoveringText(List<String> list, int x, int y, FontRenderer font) {
+    protected void drawScaledHoveringText(@Nonnull List<String> list, int x, int y, @Nonnull FontRenderer font) {
         this.drawHoveringText(list, (int)(x / this.scaleFactor), (int)(y / this.scaleFactor), font);
     }
 

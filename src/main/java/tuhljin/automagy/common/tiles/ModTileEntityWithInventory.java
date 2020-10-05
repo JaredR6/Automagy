@@ -1,6 +1,5 @@
 package tuhljin.automagy.common.tiles;
 
-import com.sun.istack.internal.NotNull;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -15,7 +14,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ModTileEntityWithInventory extends ModTileEntity implements ISidedInventory {
     protected NonNullList<ItemStack> inventorySlots;
@@ -187,7 +185,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
     }
 
     @Override
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         if (!this.sendInvToClient) {
             this.readInventoryFromNBT(nbttagcompound);
         }
@@ -195,7 +193,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
     }
 
     @Override
-    public void writeServerNBT(NBTTagCompound nbttagcompound) {
+    public void writeServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         if (!this.sendInvToClient) {
             this.writeInventoryToNBT(nbttagcompound);
         }
@@ -203,7 +201,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         if (this.sendInvToClient) {
             this.readInventoryFromNBT(nbttagcompound);
         }
@@ -211,14 +209,14 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         if (this.sendInvToClient) {
             this.writeInventoryToNBT(nbttagcompound);
         }
 
     }
 
-    protected void readInventoryFromNBT(NBTTagCompound nbttagcompound) {
+    protected void readInventoryFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = nbttagcompound.getTagList("Items", 10);
         this.inventorySlots = NonNullList.withSize(this.numSlots, ItemStack.EMPTY);
         if (nbttaglist.tagCount() > 0) {
@@ -233,7 +231,7 @@ public class ModTileEntityWithInventory extends ModTileEntity implements ISidedI
 
     }
 
-    protected void writeInventoryToNBT(NBTTagCompound nbttagcompound) {
+    protected void writeInventoryToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = new NBTTagList();
 
         for(int i = 0; i < this.numSlots; ++i) {

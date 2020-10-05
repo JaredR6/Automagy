@@ -17,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.lib.NeighborNotifier;
@@ -43,22 +44,23 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
         this.setSoundType(SoundType.WOOD);
     }
 
+    @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World world, int meta) {
         return new TileHourglass();
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, @Nonnull BlockPos pos) {
+    public boolean canPlaceBlockAt(@Nonnull World world, @Nonnull BlockPos pos) {
         return this.canBlockStay(world, pos) && super.canPlaceBlockAt(world, pos);
     }
 
-    public boolean canBlockStay(World world, BlockPos pos) {
+    public boolean canBlockStay(@Nonnull World world, @Nonnull BlockPos pos) {
         return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, true);
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         TileHourglass te = (TileHourglass)world.getTileEntity(pos);
         PowerResult result = RedstoneCalc.getRedstonePowerAt(world, pos, this.getRedstoneInputDirections(world, pos, state));
         if (result != null) {
@@ -69,7 +71,7 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (!this.canBlockStay(world, pos)) {
             this.dropBlockAsItem(world, pos, state, 0);
             world.setBlockToAir(pos);
@@ -96,7 +98,7 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             TileHourglass te = null;
 
@@ -120,7 +122,7 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
                     }
 
                     te.setTargetTimeSeconds(target);
-                    TjUtil.sendFormattedChatToPlayer(player, "Automagy.chat.hourglass.setTimer", target);
+                    TjUtil.sendFormattedChatToPlayer(player, "automagy.chat.hourglass.setTimer", target);
                     world.playSound(player, pos, SoundsTC.key, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return true;
                 }
@@ -135,7 +137,7 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
     }
 
     @Override
-    public int getWeakPower(IBlockState state, IBlockAccess blockaccess, BlockPos pos, EnumFacing side) {
+    public int getWeakPower(@Nonnull IBlockState state, @Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, EnumFacing side) {
         EnumFacing orientation = state.getValue(this.FACING);
         if (side != orientation && side != orientation.getOpposite()) {
             TileHourglass te = null;
@@ -162,7 +164,7 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
     }
 
     @Override
-    public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+    public int getComparatorInputOverride(IBlockState blockState, @Nonnull World world, @Nonnull BlockPos pos) {
         TileHourglass te = null;
 
         try {
@@ -173,7 +175,8 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
         return te == null ? 0 : te.getComparatorSignalStrength();
     }
 
-    public EnumFacing[] getRedstoneInputDirections(IBlockAccess blockaccess, BlockPos pos, IBlockState state) {
+    @Nonnull
+    public EnumFacing[] getRedstoneInputDirections(IBlockAccess blockaccess, BlockPos pos, @Nonnull IBlockState state) {
         EnumFacing orientation = (EnumFacing)state.getValue(this.FACING);
         return orientation != EnumFacing.NORTH && orientation != EnumFacing.SOUTH ? new EnumFacing[]{EnumFacing.EAST, EnumFacing.WEST, EnumFacing.DOWN, EnumFacing.UP} : new EnumFacing[]{EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.DOWN, EnumFacing.UP};
     }

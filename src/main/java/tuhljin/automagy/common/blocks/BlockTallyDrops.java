@@ -38,7 +38,7 @@ public class BlockTallyDrops extends BlockTallyBase {
     }
 
     @Override
-    public int getRemoteComparatorParticleColor(World world, BlockPos pos, TileRemoteComparator teRC) {
+    public int getRemoteComparatorParticleColor(@Nonnull World world, @Nonnull BlockPos pos, TileRemoteComparator teRC) {
         int ret = super.getRemoteComparatorParticleColor(world, pos, teRC);
         if (ret != -1 && world.rand.nextInt(3) == 0) {
             ret = 4;

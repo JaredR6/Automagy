@@ -27,7 +27,7 @@ public class GuiTallyBox extends GuiWithSingleFilter<TileTallyBase> {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         GL11.glPushMatrix();
         GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-        this.drawStringScaled(this.fontRenderer, I18n.format("Automagy.gui.tallyBox.allowPartialMatch"), (float)(this.guiLeft + 117), (float)(this.guiTop + 34), 0xFFFFFF);
+        this.drawStringScaled(this.fontRenderer, I18n.format("automagy.gui.tallyBox.allowPartialMatch"), (float)(this.guiLeft + 117), (float)(this.guiTop + 34), 0xFFFFFF);
         GL11.glPopMatrix();
         if (this.listInstalled) {
             float old = this.scaleFactor;
@@ -36,10 +36,10 @@ public class GuiTallyBox extends GuiWithSingleFilter<TileTallyBase> {
             GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
             int x = this.guiLeft + 88;
             int y = this.guiTop + 51;
-            this.drawCenteredStringScaled(this.fontRenderer, I18n.format("Automagy.gui.tallyBox.desc." + (this.filterIsBlacklist ? "black" : "white")), x, y, 0xFFFFFF);
-            this.drawCenteredStringScaled(this.fontRenderer, I18n.format("Automagy.gui.tallyBox.desc." + (this.checkboxMatchAll.checked ? "any" : "all")), x, y + 6, 0xFFFFFF);
+            this.drawCenteredStringScaled(this.fontRenderer, I18n.format("automagy.gui.tallyBox.desc." + (this.filterIsBlacklist ? "black" : "white")), x, y, 0xFFFFFF);
+            this.drawCenteredStringScaled(this.fontRenderer, I18n.format("automagy.gui.tallyBox.desc." + (this.checkboxMatchAll.checked ? "any" : "all")), x, y + 6, 0xFFFFFF);
             if (this.filterUseItemCount) {
-                this.drawCenteredStringScaled(this.fontRenderer, I18n.format("Automagy.gui.tallyBox.quantityResult." + (this.filterIsBlacklist ? "black" : "white")), x, y + 15, 0xFFFFFF);
+                this.drawCenteredStringScaled(this.fontRenderer, I18n.format("automagy.gui.tallyBox.quantityResult." + (this.filterIsBlacklist ? "black" : "white")), x, y + 15, 0xFFFFFF);
             }
 
             GL11.glPopMatrix();

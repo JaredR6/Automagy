@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileRedcrystalMerc;
@@ -19,12 +20,14 @@ import tuhljin.automagy.common.tiles.TileRedcrystalMerc;
 import javax.annotation.Nonnull;
 
 public class RedstoneMirrorNetwork extends WorldSavedData {
+    @Nonnull
     protected Map<BlockPos, Integer> highestPower = new HashMap<>();
+    @Nonnull
     protected Map<BlockPos, HashMap<BlockPos, Integer>> powerLevels = new HashMap<>();
     private static final int NEEDS_POWER_RECALC = -1;
     private int dimensionID = -9909;
 
-    public RedstoneMirrorNetwork(String dataMapName) {
+    public RedstoneMirrorNetwork(@Nonnull String dataMapName) {
         super(dataMapName);
     }
 
@@ -37,7 +40,7 @@ public class RedstoneMirrorNetwork extends WorldSavedData {
         return this.getSignalGoingIn(new BlockPos(x, y, z));
     }
 
-    public void contributeToSignalInto(int x, int y, int z, TileEntity te, int strength) {
+    public void contributeToSignalInto(int x, int y, int z, @Nonnull TileEntity te, int strength) {
         this.dimensionID = te.getWorld().provider.getDimension();
         BlockPos mirrorPos = new BlockPos(x, y, z);
         Integer currentStrength = this.highestPower.get(mirrorPos);
@@ -121,15 +124,15 @@ public class RedstoneMirrorNetwork extends WorldSavedData {
 
     }
 
-    public void removeContributor(int x, int y, int z, TileEntity te) {
+    public void removeContributor(int x, int y, int z, @Nonnull TileEntity te) {
         this.removeContributor(x, y, z, new BlockPos(te.getPos()));
     }
 
-    public void cleanEntries(World world, int x, int y, int z) {
+    public void cleanEntries(@Nonnull World world, int x, int y, int z) {
         this.cleanEntries(world, new BlockPos(x, y, z));
     }
 
-    public void cleanEntries(World world, BlockPos mirrorPos) {
+    public void cleanEntries(@Nonnull World world, @Nonnull BlockPos mirrorPos) {
         HashMap<BlockPos, Integer> submap = this.powerLevels.get(mirrorPos);
         if (submap != null) {
             boolean anyInvalid = false;
@@ -180,7 +183,7 @@ public class RedstoneMirrorNetwork extends WorldSavedData {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.highestPower.clear();
         this.powerLevels.clear();
         int errors = 0;
@@ -255,20 +258,22 @@ public class RedstoneMirrorNetwork extends WorldSavedData {
         return nbttagcompound;
     }
 
+    @Nullable
     public static RedstoneMirrorNetwork getData(int dimensionID) {
         World worldSave = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimensionID);
 
-        RedstoneMirrorNetwork data = (RedstoneMirrorNetwork)worldSave.loadData(RedstoneMirrorNetwork.class, "AutomagyUniversalRedstone");
+        RedstoneMirrorNetwork data = (RedstoneMirrorNetwork)worldSave.loadData(RedstoneMirrorNetwork.class, "automagyUniversalRedstone");
         if (data == null) {
-            data = new RedstoneMirrorNetwork("AutomagyUniversalRedstone");
+            data = new RedstoneMirrorNetwork("automagyUniversalRedstone");
             data.dimensionID = dimensionID;
-            worldSave.setData("AutomagyUniversalRedstone", data);
+            worldSave.setData("automagyUniversalRedstone", data);
         }
 
         return data;
     }
 
-    public static RedstoneMirrorNetwork getData(World world) {
+    @Nonnull
+    public static RedstoneMirrorNetwork getData(@Nonnull World world) {
         return getData(world.provider.getDimension());
     }
 }

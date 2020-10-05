@@ -16,6 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.lib.inventory.ItemHandlerUtil;
 import tuhljin.automagy.common.tiles.TileMawHungry;
@@ -23,11 +24,17 @@ import tuhljin.automagy.common.tiles.TileMawHungry;
 import javax.annotation.Nonnull;
 
 public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
+    @Nonnull
     private static AxisAlignedBB AABB_DOWN = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 0.0625F, 0.75F);
+    @Nonnull
     private static AxisAlignedBB AABB_UP = new AxisAlignedBB(0.25F, 0.9375F, 0.25F, 0.75F, 1.0F, 0.75F);
+    @Nonnull
     private static AxisAlignedBB AABB_SOUTH = new AxisAlignedBB(0.25F, 0.25F, 0.9375F, 0.75F, 0.75F, 1.0F);
+    @Nonnull
     private static AxisAlignedBB AABB_NORTH = new AxisAlignedBB(0.25F, 0.25F, 0.0625F, 0.75F, 0.75F, 0.0F);
+    @Nonnull
     private static AxisAlignedBB AABB_EAST = new AxisAlignedBB(0.9375F, 0.25F, 0.25F, 1.0F, 0.75F, 0.75F);
+    @Nonnull
     private static AxisAlignedBB AABB_WEST = new AxisAlignedBB(0.0F, 0.25F, 0.25F, 0.0625F, 0.75F, 0.75F);
 
     public BlockMawHungry() {
@@ -36,6 +43,7 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
         this.setResistance(2000.0F);
     }
 
+    @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World world, int meta) {
         return new TileMawHungry();
@@ -49,13 +57,13 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
 
     @Nonnull
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(this.FACING, facing.getOpposite());
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (rand.nextInt(4) <= 0) {
             EnumFacing facing = state.getValue(this.FACING);
             int r = pos.getX();
@@ -139,7 +147,7 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
 
     @Nonnull
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, @Nonnull IBlockAccess source, BlockPos pos) {
         EnumFacing facing = this.getFacing(source, pos);
         switch(facing) {
             default:
@@ -159,7 +167,7 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
 
     }
 
-    public boolean locationIsValid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean locationIsValid(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         BlockPos pos2 = pos.offset(side);
         if (!world.isAirBlock(pos2)) {
             TileEntity te = world.getTileEntity(pos2);
@@ -170,12 +178,12 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
     }
 
     @Override
-    public boolean canPlaceBlockOnSide(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
+    public boolean canPlaceBlockOnSide(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         return this.locationIsValid(world, pos, side.getOpposite());
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, BlockPos neighbor) {
         IBlockState state = world.getBlockState(pos);
         if (!this.locationIsValid(world, pos, state.getValue(this.FACING))) {
             ((World) world).destroyBlock(pos, true);
@@ -184,7 +192,7 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, Entity entity) {
         if (!world.isRemote && entity instanceof EntityItem && !entity.isDead) {
             EntityItem item = (EntityItem)entity;
             TileEntity te = world.getTileEntity(pos);

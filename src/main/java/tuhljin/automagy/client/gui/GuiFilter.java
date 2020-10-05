@@ -12,8 +12,11 @@ import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.network.MessageGUIFilter;
 
+import javax.annotation.Nonnull;
+
 public class GuiFilter extends ModGuiContainer {
     public final boolean blacklist;
+    @Nonnull
     public final ResourceLocation texture;
     private ContainerFilter container;
     private GuiTextFieldWithReporting textFieldNameFilter;
@@ -28,7 +31,7 @@ public class GuiFilter extends ModGuiContainer {
         this.ySize = 180;
     }
 
-    public GuiFilter(boolean isBlacklist, EntityPlayer player) {
+    public GuiFilter(boolean isBlacklist, @Nonnull EntityPlayer player) {
         this(new ContainerFilter(isBlacklist, player), isBlacklist, player);
     }
 
@@ -58,22 +61,22 @@ public class GuiFilter extends ModGuiContainer {
         GL11.glPushMatrix();
         GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         int color = this.blacklist ? 0xFFFFFF : 0;
-        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.ignoreQuantity"), this.guiLeft + 91,this.guiTop + 20, color);
-        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.ignoreMetadata"), this.guiLeft + 91, this.guiTop + 29.5F, color);
-        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.ignoreNBT"), this.guiLeft + 91, this.guiTop + 39, color);
-        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("Automagy.gui.filter.byName"), this.guiLeft + 81, this.guiTop + 50.5F, color);
+        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("automagy.gui.filter.ignoreQuantity"), this.guiLeft + 91,this.guiTop + 20, color);
+        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("automagy.gui.filter.ignoreMetadata"), this.guiLeft + 91, this.guiTop + 29.5F, color);
+        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("automagy.gui.filter.ignoreNBT"), this.guiLeft + 91, this.guiTop + 39, color);
+        this.drawStringScaledNoShadow(this.fontRenderer, I18n.format("automagy.gui.filter.byName"), this.guiLeft + 81, this.guiTop + 50.5F, color);
         this.drawStringScaledNoShadow(this.fontRenderer, "[?]", this.guiLeft + 145, this.guiTop + 50.5F, this.blacklist ? 0x0000B3 : 0x0066FF);
         GL11.glPopMatrix();
         super.drawGuiContainerBackgroundLayer(var1, var2, var3);
     }
 
     @Override
-    public void drawScreen(int x, int y, float p_73863_3_) {
-        super.drawScreen(x, y, p_73863_3_);
+    public void drawScreen(int x, int y, float partialTicks) {
+        super.drawScreen(x, y, partialTicks);
         GL11.glPushMatrix();
         GL11.glTranslatef((float)this.guiLeft, (float)this.guiTop, 0.0F);
         if (x >= this.guiLeft + 145 && x < this.guiLeft + 155 && y >= this.guiTop + 50 && y < this.guiTop + 56) {
-            ArrayList<String> lines = TjUtil.getMultiLineLocalizedString("Automagy.gui.filter.textFilterTooltip");
+            ArrayList<String> lines = TjUtil.getMultiLineLocalizedString("automagy.gui.filter.textFilterTooltip");
             GL11.glPushMatrix();
             GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
             this.drawScaledHoveringText(lines, x - this.guiLeft - 20, y - this.guiTop + 20, this.fontRenderer);
@@ -92,7 +95,7 @@ public class GuiFilter extends ModGuiContainer {
 
     }
 
-    public void onTextFieldLostFocus(GuiTextFieldWithReporting textField) {
+    public void onTextFieldLostFocus(@Nonnull GuiTextFieldWithReporting textField) {
         String text = textField.getText();
         if (!text.equals(this.prevText)) {
             this.prevText = text;

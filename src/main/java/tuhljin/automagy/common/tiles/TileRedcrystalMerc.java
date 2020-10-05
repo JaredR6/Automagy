@@ -196,7 +196,7 @@ public class TileRedcrystalMerc extends TileRedcrystal implements ITickable {
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeCommonNBT(nbttagcompound);
         if (this.mirrorY != -1) {
             nbttagcompound.setInteger("mirrorX", this.mirrorX);
@@ -217,7 +217,7 @@ public class TileRedcrystalMerc extends TileRedcrystal implements ITickable {
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readCommonNBT(nbttagcompound);
         this.mirrorX = nbttagcompound.getInteger("mirrorX");
         this.mirrorY = nbttagcompound.hasKey("mirrorY") ? nbttagcompound.getInteger("mirrorY") : -1;

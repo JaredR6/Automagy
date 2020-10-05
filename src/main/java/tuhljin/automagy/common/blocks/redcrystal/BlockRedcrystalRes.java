@@ -5,10 +5,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.lib.struct.BlockWithPos;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
+
+import javax.annotation.Nonnull;
 
 public class BlockRedcrystalRes extends BlockRedcrystalLarge {
     public static final int MAX_MINIMUM = 15;
@@ -18,8 +21,9 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
     public BlockRedcrystalRes() {
     }
 
+    @Nullable
     @Override
-    protected PowerResult calculateRedstonePowerAt(World world, BlockPos pos, EnumFacing orientation) {
+    protected PowerResult calculateRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing orientation) {
         int receivingStrength = 0;
 
         TileRedcrystal te;
@@ -44,7 +48,8 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
         }
     }
 
-    public BlockWithPos findSignalConnection(World world, BlockPos pos, boolean reverse) {
+    @Nullable
+    public BlockWithPos findSignalConnection(@Nonnull World world, @Nonnull BlockPos pos, boolean reverse) {
         EnumFacing orientation = this.getOrientation(world, pos);
         if (orientation != null) {
             EnumFacing opp = orientation.getOpposite();
@@ -79,7 +84,7 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
         return null;
     }
 
-    public void receiveWirelessSignal(World world, BlockPos pos, int strength) {
+    public void receiveWirelessSignal(@Nonnull World world, @Nonnull BlockPos pos, int strength) {
         TileRedcrystal te;
         try {
             te = (TileRedcrystal)world.getTileEntity(pos);
@@ -106,7 +111,7 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
     }
 
     @Override
-    public void scheduleAreaUpdateNotification(World world, BlockPos pos, boolean immediate) {
+    public void scheduleAreaUpdateNotification(@Nonnull World world, @Nonnull BlockPos pos, boolean immediate) {
         super.scheduleAreaUpdateNotification(world, pos, immediate);
         if (!world.isRemote) {
             BlockWithPos target = this.findSignalConnection(world, pos, false);
@@ -119,7 +124,7 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+    public void breakBlock(@Nonnull World world, BlockPos pos, IBlockState state) {
         BlockWithPos target = null;
         if (!world.isRemote) {
             target = this.findSignalConnection(world, pos, false);
@@ -133,7 +138,7 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state) {
         if (!world.isRemote) {
             TileRedcrystal te;
             try {

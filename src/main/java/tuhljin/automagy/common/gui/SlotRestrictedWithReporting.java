@@ -2,14 +2,16 @@ package tuhljin.automagy.common.gui;
 
 import net.minecraft.inventory.IInventory;
 
+import javax.annotation.Nonnull;
+
 public class SlotRestrictedWithReporting extends SlotRestricted {
     public IReporteeForSlot reportTo;
 
-    public SlotRestrictedWithReporting(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+    public SlotRestrictedWithReporting(@Nonnull IInventory inventoryIn, int index, int xPosition, int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
     }
 
-    public SlotRestrictedWithReporting(IInventory inventoryIn, int index, int xPosition, int yPosition, IReporteeForSlot parent) {
+    public SlotRestrictedWithReporting(@Nonnull IInventory inventoryIn, int index, int xPosition, int yPosition, IReporteeForSlot parent) {
         this(inventoryIn, index, xPosition, yPosition);
         this.setReportee(parent);
     }

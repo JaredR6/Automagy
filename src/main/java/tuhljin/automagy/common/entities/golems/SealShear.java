@@ -24,6 +24,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import javax.annotation.Nullable;
 import thaumcraft.api.golems.EnumGolemTrait;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.IGolemAPI;
@@ -35,15 +36,18 @@ import thaumcraft.common.lib.network.FakeNetHandlerPlayServer;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 
+import javax.annotation.Nonnull;
+
 public class SealShear extends ModSealFiltered implements ISealConfigToggles, ISealConfigArea {
     protected SealToggle[] props;
     protected int delay = (new Random(System.nanoTime())).nextInt(50);
     protected FakePlayer fp;
+    @Nonnull
     protected HashMap<Integer, Long> cacheBlocks = new HashMap<>();
 
     public SealShear() {
         super("shear");
-        this.props = new SealToggle[]{new SealToggle(true, "saveShears", "Automagy.golem.saveShears"), new SealToggle(false, "ppro", "golem.prop.provision.wl")};
+        this.props = new SealToggle[]{new SealToggle(true, "saveShears", "automagy.golem.saveShears"), new SealToggle(false, "ppro", "golem.prop.provision.wl")};
     }
 
     public SealShear(String key, SealToggle[] toggles) {
@@ -51,7 +55,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         this.props = toggles;
     }
 
-    public void tickSeal(World world, ISealEntity seal) {
+    public void tickSeal(@Nonnull World world, @Nonnull ISealEntity seal) {
         if (this.delay % 100 == 0) {
             Iterator<Integer> it = this.cacheBlocks.keySet().iterator();
 
@@ -95,17 +99,17 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
 
     }
 
-    private boolean isValidTarget(Entity target, ItemStack shears) {
+    private boolean isValidTarget(Entity target, @Nonnull ItemStack shears) {
         return target instanceof IShearable && ((IShearable) target).isShearable(shears, target.getEntityWorld(), new BlockPos(target.posX, target.posY, target.posZ));
     }
 
-    private boolean isValidBlock(World world, BlockPos pos, ItemStack shears) {
+    private boolean isValidBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull ItemStack shears) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         return block instanceof IShearable && ((IShearable) block).isShearable(shears, world, pos);
     }
 
-    public void onTaskStarted(World world, IGolemAPI golem, Task task) {
+    public void onTaskStarted(@Nonnull World world, @Nonnull IGolemAPI golem, @Nonnull Task task) {
         switch(task.getType()) {
             case 0:
                 if (!this.isValidBlock(world, task.getPos(), this.canGolemShearWithoutItem(golem) ? new ItemStack(Items.SHEARS) : golem.getCarrying().get(0))) {
@@ -129,7 +133,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
 
     }
 
-    public boolean onTaskCompletion(World world, IGolemAPI golem, Task task) {
+    public boolean onTaskCompletion(@Nonnull World world, @Nonnull IGolemAPI golem, @Nonnull Task task) {
         byte type = task.getType();
         if (type == 0) {
             this.cacheBlocks.remove(task.getId());
@@ -194,14 +198,14 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         return true;
     }
 
-    public void onTaskSuspension(World world, Task task) {
+    public void onTaskSuspension(World world, @Nonnull Task task) {
         if (task.getType() == 0) {
             this.cacheBlocks.remove(task.getId());
         }
 
     }
 
-    public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
+    public boolean canGolemPerformTask(@Nonnull IGolemAPI golem, @Nonnull Task task) {
         ItemStack carrying = golem.getCarrying().get(0);
         if (carrying.isEmpty() && this.canGolemShearWithoutItem(golem)) {
             return true;
@@ -224,7 +228,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         }
     }
 
-    protected boolean canShearWith(ItemStack stack) {
+    protected boolean canShearWith(@Nonnull ItemStack stack) {
         if (stack.getItem() instanceof ItemShears) {
             if (this.getInv().get(0).isEmpty()) {
                 return this.isBlacklist();
@@ -249,6 +253,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         return 1;
     }
 
+    @Nullable
     public EnumGolemTrait[] getRequiredTags() {
         return null;
     }
@@ -257,6 +262,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         return new EnumGolemTrait[]{EnumGolemTrait.CLUMSY};
     }
 
+    @Nonnull
     public int[] getGuiCategories() {
         return new int[]{2, 1, 3, 0, 4};
     }
@@ -285,7 +291,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         return this.getToggles()[1].getValue();
     }
 
-    public void setFilterSlot(int i, ItemStack stack) {
+    public void setFilterSlot(int i, @Nonnull ItemStack stack) {
         if (stack.isEmpty() || stack.getItem() instanceof ItemShears) {
             super.setFilterSlot(i, stack);
         }

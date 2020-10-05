@@ -14,6 +14,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.entities.golems.ISuppliedBySeal;
 import tuhljin.automagy.common.items.ItemRecipe;
@@ -31,11 +32,15 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
     public static final int RESERVATIONS_IGNORE = Integer.MIN_VALUE+1;
     public static final int RESERVATIONS_NEWTASK = Integer.MIN_VALUE;
     public static final int NUM_RECIPES = 4;
+    @Nonnull
     protected InventoryForRecipe[] cacheRecipeInventories = new InventoryForRecipe[4];
+    @Nullable
     protected FilteringItemList cacheContained = null;
+    @Nonnull
     protected Map<Integer, FilteringItemList> reservedItems = new HashMap<>();
     protected IncomingItemsTracker supplyTracker;
     protected FakePlayer fakePlayer;
+    @Nullable
     protected static final InventoryForRecipe NullRecipeInventory = new InventoryForRecipe(ItemStack.EMPTY, "", 0, null);
 
     public TileGolemWorkbench() {
@@ -67,11 +72,12 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         return slot < 9;
     }
 
-    public boolean hasCraftingComponents(ItemStack stack, boolean requireExtra, int availableToTask) {
+    public boolean hasCraftingComponents(@Nonnull ItemStack stack, boolean requireExtra, int availableToTask) {
         return this.whichRecipeIndexHasCraftingComponents(stack, requireExtra, availableToTask) != null;
     }
 
-    public Integer whichRecipeIndexHasCraftingComponents(ItemStack stack, boolean requireExtra, int availableToTask) {
+    @Nullable
+    public Integer whichRecipeIndexHasCraftingComponents(@Nonnull ItemStack stack, boolean requireExtra, int availableToTask) {
         FilteringItemList contained = this.getContainedItems(availableToTask);
         if (contained.isEmpty()) {
             return null;
@@ -90,7 +96,8 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         }
     }
 
-    public Map<Integer, IItemMap> getPossibleIngredients(ItemStack stack) {
+    @Nullable
+    public Map<Integer, IItemMap> getPossibleIngredients(@Nonnull ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         } else {
@@ -111,13 +118,15 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         }
     }
 
-    public IItemMap getMissingIngredients(ItemStack stack, boolean requireExtra) {
+    @Nullable
+    public IItemMap getMissingIngredients(@Nonnull ItemStack stack, boolean requireExtra) {
         FilteringItemList contained = this.getContainedItems(RESERVATIONS_NEWTASK);
         IItemMap ingredients = this.getFirstIngredients(stack);
         return ingredients == null ? null : contained.getMissingFrom(ingredients, requireExtra ? 1 : 0);
     }
 
-    public IItemMap getFirstIngredients(ItemStack stack) {
+    @Nullable
+    public IItemMap getFirstIngredients(@Nonnull ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         } else {
@@ -132,6 +141,7 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         }
     }
 
+    @Nullable
     public FilteringItemList getContainedItems(int availableToTask) {
         if (this.cacheContained == null) {
             this.cacheContained = (new FilteringItemList()).populateFromInventory(this, false, 0, 8);
@@ -168,6 +178,7 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
 
     }
 
+    @Nullable
     public InventoryForRecipe getRecipeInventory(int i) {
         if (this.cacheRecipeInventories[i] == null) {
             ItemStack recipeStack = this.getRecipeStack(i);
@@ -189,7 +200,8 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         return this.cacheRecipeInventories[i];
     }
 
-    public ItemStack consumeComponentsAndCraft(ItemStack goal, boolean requireExtra) {
+    @Nullable
+    public ItemStack consumeComponentsAndCraft(@Nonnull ItemStack goal, boolean requireExtra) {
         Integer recipeIndex = this.whichRecipeIndexHasCraftingComponents(goal, requireExtra, RESERVATIONS_IGNORE);
         if (recipeIndex == null) {
             return null;
@@ -267,11 +279,12 @@ public class TileGolemWorkbench extends ModTileEntityWithInventory implements IS
         return this.supplyTracker;
     }
 
+    @Nonnull
     public ItemStack receiveSupplyFromTracker(ItemStack stack) {
         return TjUtil.addToInventory(stack, this, 0, this.getSizeInventory() - NUM_RECIPES - 1);
     }
 
-    public boolean hasInventorySpaceFor(ItemStack stack) {
+    public boolean hasInventorySpaceFor(@Nonnull ItemStack stack) {
         return TjUtil.canFitInInventory(stack, this, 0, this.getSizeInventory() - NUM_RECIPES - 1);
     }
 }

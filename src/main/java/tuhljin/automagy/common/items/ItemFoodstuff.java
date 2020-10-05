@@ -2,7 +2,7 @@ package tuhljin.automagy.common.items;
 
 import java.util.List;
 
-import com.sun.org.apache.xml.internal.security.utils.I18n;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.common.lib.potions.PotionBlurredVision;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,8 @@ import javax.annotation.Nullable;
 public class ItemFoodstuff extends ItemFood {
     public ItemFoodstuff() {
         super(6, false);
+        setRegistryName(References.MOD_ID, References.BLOCK_VISHROOMSOUP);
+        setUnlocalizedName(References.BLOCK_VISHROOMSOUP);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         this.setAlwaysEdible();
@@ -37,13 +40,13 @@ public class ItemFoodstuff extends ItemFood {
 
     @Nonnull
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, @Nonnull World world, EntityLivingBase entityLiving) {
+    public ItemStack onItemUseFinish(@Nonnull ItemStack stack, @Nonnull World world, EntityLivingBase entityLiving) {
         super.onItemUseFinish(stack, world, entityLiving);
         return new ItemStack(Items.BOWL);
     }
 
     @Override
-    protected void onFoodEaten(ItemStack stack, World world, @Nonnull EntityPlayer player) {
+    protected void onFoodEaten(ItemStack stack, @Nonnull World world, @Nonnull EntityPlayer player) {
         if (!world.isRemote) {
             if (ThaumcraftExtension.isWarpEnabled()) {
                 ThaumcraftExtension.addTemporaryWarpToPlayer(player, world.rand.nextInt(10) + 8, true);
@@ -62,7 +65,7 @@ public class ItemFoodstuff extends ItemFood {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-        tooltip.add(I18n.translate("Automagy.tip.foodstuff.0"));
+    public void addInformation(ItemStack stack, @Nullable World world, @Nonnull List<String> tooltip, ITooltipFlag flag) {
+        tooltip.add(I18n.format("automagy.tip.foodstuff.0"));
     }
 }

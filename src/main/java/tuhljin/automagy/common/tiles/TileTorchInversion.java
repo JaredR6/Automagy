@@ -2,6 +2,8 @@ package tuhljin.automagy.common.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
+
 public class TileTorchInversion extends ModTileEntity {
     public int redstoneSignalStrength = 0;
 
@@ -15,12 +17,12 @@ public class TileTorchInversion extends ModTileEntity {
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         nbttagcompound.setInteger("redstoneSignalStrength", this.redstoneSignalStrength);
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.redstoneSignalStrength = nbttagcompound.getInteger("redstoneSignalStrength");
     }
 }

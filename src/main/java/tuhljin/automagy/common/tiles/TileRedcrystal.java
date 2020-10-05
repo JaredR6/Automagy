@@ -4,96 +4,170 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import javax.annotation.Nullable;
 import thaumcraft.codechicken.lib.raytracer.IndexedCuboid6;
 import thaumcraft.codechicken.lib.vec.Cuboid6;
 import thaumcraft.codechicken.lib.vec.Vector3;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class TileRedcrystal extends ModTileEntity {
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_DOWN = new Cuboid6(new AxisAlignedBB( 0.4D, 0.8D, 0.4D, 0.6D, 1.0D, 0.6D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_DOWN = new Cuboid6(new AxisAlignedBB( 0.45D, 0.9D, 0.25D, 0.55D, 1.0D, 0.35D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_DOWN = new Cuboid6(new AxisAlignedBB(0.45D, 0.9D, 0.65D, 0.55D, 1.0D, 0.75D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_DOWN = new Cuboid6(new AxisAlignedBB(0.65D, 0.9D, 0.45D, 0.75D, 1.0D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_DOWN = new Cuboid6(new AxisAlignedBB(0.25D, 0.9D, 0.45D, 0.35D, 1.0D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_DOWN = new Cuboid6(new AxisAlignedBB(0.25D, 0.995D, 0.25D, 0.75D, 1.0D, 0.75D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_UP = new Cuboid6(new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.2D, 0.6D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_UP = new Cuboid6(new AxisAlignedBB(0.45D, 0.0D, 0.25D, 0.55D, 0.1D, 0.35D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_UP = new Cuboid6(new AxisAlignedBB(0.45D, 0.0D, 0.65D, 0.55D, 0.1D, 0.75D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_UP = new Cuboid6(new AxisAlignedBB(0.65D, 0.0D, 0.45D, 0.75D, 0.1D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_UP = new Cuboid6(new AxisAlignedBB(0.25D, 0.0D, 0.45D, 0.35D, 0.1D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_UP = new Cuboid6(new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.005D, 0.75D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_SOUTH = new Cuboid6(new AxisAlignedBB(0.4D, 0.4D, 0.8D, 0.6D, 0.6D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_SOUTH = new Cuboid6(new AxisAlignedBB(0.45D, 0.65D, 0.9D, 0.55D, 0.75D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_SOUTH = new Cuboid6(new AxisAlignedBB(0.45D, 0.25D, 0.9D, 0.55D, 0.35D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_SOUTH = new Cuboid6(new AxisAlignedBB(0.25D, 0.45D, 0.9D, 0.35D, 0.55D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_SOUTH = new Cuboid6(new AxisAlignedBB(0.65D, 0.45D, 0.9D, 0.75D, 0.55D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_SOUTH = new Cuboid6(new AxisAlignedBB(0.25D, 0.25D, 0.995D, 0.75D, 0.75D, 1.0D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_NORTH = new Cuboid6(new AxisAlignedBB(0.4D, 0.4D, 0.0D, 0.6D, 0.6D, 0.2D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_NORTH = new Cuboid6(new AxisAlignedBB(0.45D, 0.65D, 0.0D, 0.55D, 0.75D, 0.1D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_NORTH = new Cuboid6(new AxisAlignedBB(0.45D, 0.25D, 0.0D, 0.55D, 0.35D, 0.1D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_NORTH = new Cuboid6(new AxisAlignedBB(0.25D, 0.45D, 0.0D, 0.35D, 0.55D, 0.1D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_NORTH = new Cuboid6(new AxisAlignedBB(0.65D, 0.45D, 0.0D, 0.75D, 0.55D, 0.1D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_NORTH = new Cuboid6(new AxisAlignedBB(0.25D, 0.25D, 0.0D, 0.75D, 0.75D, 0.005D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_EAST = new Cuboid6(new AxisAlignedBB(0.8D, 0.4D, 0.4D, 1.0D, 0.6D, 0.6D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_EAST = new Cuboid6(new AxisAlignedBB(0.9D, 0.65D, 0.45D, 1.0D, 0.75D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_EAST = new Cuboid6(new AxisAlignedBB(0.9D, 0.25D, 0.45D, 1.0D, 0.35D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_EAST = new Cuboid6(new AxisAlignedBB(0.9D, 0.45D, 0.25D, 1.0D, 0.55D, 0.35D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_EAST = new Cuboid6(new AxisAlignedBB( 0.9D, 0.45D, 0.65D, 1.0D, 0.55D, 0.75D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_EAST = new Cuboid6(new AxisAlignedBB(0.995D, 0.25D, 0.25D, 1.0D, 0.75D, 0.75D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_WEST = new Cuboid6(new AxisAlignedBB(0.0D, 0.4D, 0.4D, 0.2D, 0.6D, 0.6D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_WEST = new Cuboid6(new AxisAlignedBB(0.0D, 0.65D, 0.45D, 0.1D, 0.75D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_WEST = new Cuboid6(new AxisAlignedBB(0.0D, 0.25D, 0.45D, 0.1D, 0.35D, 0.55D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_WEST = new Cuboid6(new AxisAlignedBB(0.0D, 0.45D, 0.25D, 0.1D, 0.55D, 0.35D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_WEST = new Cuboid6(new AxisAlignedBB(0.0D, 0.45D, 0.65D, 0.1D, 0.55D, 0.75D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_WEST = new Cuboid6(new AxisAlignedBB(0.0D, 0.25D, 0.25D, 0.005D, 0.75D, 0.75D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_DOWN_LARGE = new Cuboid6(new AxisAlignedBB( 0.36D, 0.8D, 0.36D, 0.64D, 1.0D, 0.64D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_DOWN_LARGE = new Cuboid6(new AxisAlignedBB( 0.44D,0.9D,0.1D,0.56D, 1.0D,0.25D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_DOWN_LARGE = new Cuboid6(new AxisAlignedBB(0.44D,0.9D,0.75D,0.56D, 1.0D,0.9D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_DOWN_LARGE = new Cuboid6(new AxisAlignedBB(0.75D,0.9D,0.44D,0.9D, 1.0D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_DOWN_LARGE = new Cuboid6(new AxisAlignedBB(0.1D,0.9D,0.44D,0.25D, 1.0D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_DOWN_LARGE = new Cuboid6(new AxisAlignedBB(0.1D, 0.995D,0.1D,0.9D, 1.0D,0.9D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_UP_LARGE = new Cuboid6(new AxisAlignedBB(0.36D, 0.0D, 0.36D, 0.64D, 0.2D, 0.64D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_UP_LARGE = new Cuboid6(new AxisAlignedBB(0.44D, 0.0D,0.1D,0.56D,0.15D,0.25D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_UP_LARGE = new Cuboid6(new AxisAlignedBB(0.44D, 0.0D,0.75D,0.56D,0.15D,0.9D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_UP_LARGE = new Cuboid6(new AxisAlignedBB(0.75D, 0.0D,0.44D,0.9D,0.15D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_UP_LARGE = new Cuboid6(new AxisAlignedBB(0.1D, 0.0D,0.44D,0.25D,0.15D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_UP_LARGE = new Cuboid6(new AxisAlignedBB(0.1D, 0.0D,0.1D,0.9D, 0.005D,0.9D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_SOUTH_LARGE = new Cuboid6(new AxisAlignedBB(0.36D, 0.36D, 0.8D, 0.64D, 0.64D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_SOUTH_LARGE = new Cuboid6(new AxisAlignedBB(0.44D,0.75D,0.9D,0.56D,0.9D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_SOUTH_LARGE = new Cuboid6(new AxisAlignedBB(0.44D,0.1D,0.9D,0.56D,0.25D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_SOUTH_LARGE = new Cuboid6(new AxisAlignedBB(0.1D,0.44D,0.9D,0.25D,0.56D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_SOUTH_LARGE = new Cuboid6(new AxisAlignedBB(0.75D,0.44D,0.9D,0.9D,0.56D, 1.0D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_SOUTH_LARGE = new Cuboid6(new AxisAlignedBB(0.1D,0.1D, 0.995D,0.9D,0.9D, 1.0D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_NORTH_LARGE = new Cuboid6(new AxisAlignedBB(0.36D, 0.36D, 0.0D, 0.64D, 0.64D, 0.2D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_NORTH_LARGE = new Cuboid6(new AxisAlignedBB(0.44D,0.75D, 0.0D,0.56D,0.9D,0.15D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_NORTH_LARGE = new Cuboid6(new AxisAlignedBB(0.44D,0.1D, 0.0D,0.56D,0.25D,0.15D));
+    @Nonnull
     private static Cuboid6 CUBE_WEST_NORTH_LARGE = new Cuboid6(new AxisAlignedBB(0.1D,0.44D, 0.0D,0.25D,0.56D,0.15D));
+    @Nonnull
     private static Cuboid6 CUBE_EAST_NORTH_LARGE = new Cuboid6(new AxisAlignedBB(0.75D,0.44D, 0.0D,0.9D,0.56D,0.15D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_NORTH_LARGE = new Cuboid6(new AxisAlignedBB(0.1D,0.1D, 0.0D,0.9D,0.9D, 0.005D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_EAST_LARGE = new Cuboid6(new AxisAlignedBB(0.8D, 0.36D, 0.36D, 1.0D, 0.64D, 0.64D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_EAST_LARGE = new Cuboid6(new AxisAlignedBB(0.9D,0.75D,0.44D, 1.0D,0.9D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_EAST_LARGE = new Cuboid6(new AxisAlignedBB(0.9D,0.1D,0.44D, 1.0D,0.25D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_EAST_LARGE = new Cuboid6(new AxisAlignedBB(0.9D,0.44D,0.1D, 1.0D,0.56D,0.25D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_EAST_LARGE = new Cuboid6(new AxisAlignedBB( 0.9D,0.44D,0.75D, 1.0D,0.56D,0.9D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_EAST_LARGE = new Cuboid6(new AxisAlignedBB(0.995D,0.1D,0.1D, 1.0D,0.9D,0.9D));
 
+    @Nonnull
     private static Cuboid6 CUBE_CENTER_WEST_LARGE = new Cuboid6(new AxisAlignedBB(0.0D, 0.36D, 0.36D, 0.2D, 0.64D, 0.64D));
+    @Nonnull
     private static Cuboid6 CUBE_UP_WEST_LARGE = new Cuboid6(new AxisAlignedBB(0.0D,0.75D,0.44D,0.15D,0.9D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_DOWN_WEST_LARGE = new Cuboid6(new AxisAlignedBB(0.0D,0.1D,0.44D,0.15D,0.25D,0.56D));
+    @Nonnull
     private static Cuboid6 CUBE_NORTH_WEST_LARGE = new Cuboid6(new AxisAlignedBB(0.0D,0.44D,0.1D,0.15D,0.56D,0.25D));
+    @Nonnull
     private static Cuboid6 CUBE_SOUTH_WEST_LARGE = new Cuboid6(new AxisAlignedBB(0.0D,0.44D,0.75D,0.15D,0.56D,0.9D));
+    @Nonnull
     private static Cuboid6 CUBE_BASE_WEST_LARGE = new Cuboid6(new AxisAlignedBB(0.0D,0.1D,0.1D, 0.005D,0.9D,0.9D));
 
     public static final int HITDOWN = 0;
@@ -105,8 +179,10 @@ public class TileRedcrystal extends ModTileEntity {
     public static final int HITCENTER = 6;
     public static final int HITOTHER = 7;
 
+    @Nullable
     public EnumFacing orientation;
     public short powerStability;
+    @Nullable
     public EnumFacing powerSourceSide;
     public boolean powerSourceOutsideNetwork;
     public boolean connectN;
@@ -140,7 +216,7 @@ public class TileRedcrystal extends ModTileEntity {
         this.extraData = -1;
     }
 
-    public void addTraceableCuboids(List<IndexedCuboid6> cuboids, BlockPos pos, Boolean large) {
+    public void addTraceableCuboids(@Nonnull List<IndexedCuboid6> cuboids, @Nonnull BlockPos pos, Boolean large) {
         Vector3 offset = new Vector3(pos);
         if (large) {
             switch(this.orientation) {
@@ -247,11 +323,11 @@ public class TileRedcrystal extends ModTileEntity {
         }
     }
 
-    protected void addIndexedCuboid(List<IndexedCuboid6> cuboids, Vector3 offset, int i, Cuboid6 cuboid) {
+    protected void addIndexedCuboid(@Nonnull List<IndexedCuboid6> cuboids, Vector3 offset, int i, @Nonnull Cuboid6 cuboid) {
         cuboids.add(new IndexedCuboid6(i, cuboid.add(offset)));
     }
 
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.orientation = getEnumFacingFromNBT(nbttagcompound, "orientation", EnumFacing.UP);
         this.powerStability = nbttagcompound.getShort("powerStability");
         this.powerSourceSide = getEnumFacingFromNBT(nbttagcompound, "powerSourceSide", null, true);
@@ -272,7 +348,7 @@ public class TileRedcrystal extends ModTileEntity {
 
     }
 
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         setEnumFacingInNBT(nbttagcompound, "orientation", this.orientation);
         nbttagcompound.setShort("powerStability", this.powerStability);
         setEnumFacingInNBT(nbttagcompound, "powerSourceSide", this.powerSourceSide);

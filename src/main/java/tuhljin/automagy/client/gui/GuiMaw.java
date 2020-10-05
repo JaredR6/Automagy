@@ -19,8 +19,8 @@ public class GuiMaw extends GuiWithSingleFilter<TileMawBase> {
     public GuiMaw(TileMawBase te, InventoryPlayer invPlayer) {
         super(new ContainerMaw(te, invPlayer));
         String s = te instanceof TileMawSpitting ? "spittingMaw" : "finicalMaw";
-        this.textWhitelistItemCount = TjUtil.getMultiLineLocalizedString("Automagy.gui." + s + ".quantityResult.limit");
-        this.textBlacklistItemCount = TjUtil.getMultiLineLocalizedString("Automagy.gui." + s + ".quantityResult.leave");
+        this.textWhitelistItemCount = TjUtil.getMultiLineLocalizedString("automagy.gui." + s + ".quantityResult.limit");
+        this.textBlacklistItemCount = TjUtil.getMultiLineLocalizedString("automagy.gui." + s + ".quantityResult.leave");
     }
 
     @Override
@@ -36,14 +36,14 @@ public class GuiMaw extends GuiWithSingleFilter<TileMawBase> {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         GL11.glPushMatrix();
         GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-        this.drawStringScaled(this.fontRenderer, I18n.format("Automagy.gui.maw.redstoneDisables"), this.guiLeft + 117, this.guiTop + 34, 0xFFFFFF);
+        this.drawStringScaled(this.fontRenderer, I18n.format("automagy.gui.maw.redstoneDisables"), this.guiLeft + 117, this.guiTop + 34, 0xFFFFFF);
         GL11.glPopMatrix();
         if (this.listInstalled && this.filterUseItemCount) {
             float old = this.scaleFactor;
             this.scaleFactor *= 0.7F;
             GL11.glPushMatrix();
             GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-            String s = "Automagy.gui.finicalMaw.quantityResult.";
+            String s = "automagy.gui.finicalMaw.quantityResult.";
             // TODO: What is this line for?
             // (new StringBuilder()).append(s).append(this.filterIsBlacklist ? "leave" : "limit").toString();
             int x = this.guiLeft + 88;

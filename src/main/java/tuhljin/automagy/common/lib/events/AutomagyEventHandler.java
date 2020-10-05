@@ -17,19 +17,21 @@ import tuhljin.automagy.common.items.ModItems;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.compat.CompatibilityManager;
 
+import javax.annotation.Nonnull;
+
 public class AutomagyEventHandler {
     public AutomagyEventHandler() {
     }
 
     @SubscribeEvent
-    public void onCrafting(ItemCraftedEvent event) {
+    public void onCrafting(@Nonnull ItemCraftedEvent event) {
         ItemStack sourceRecipe;
         int sourceRecipeSlot;
         int recipesFound;
         int size;
         int i;
         ItemStack stack;
-        if (ItemFilter.stackIsFilter(event.crafting)) {
+        if (event.crafting.getItem() instanceof ItemFilter) {
             sourceRecipe = null;
             sourceRecipeSlot = 0;
             recipesFound = 0;
@@ -37,7 +39,7 @@ public class AutomagyEventHandler {
 
             for(i = 0; i < size; ++i) {
                 stack = event.craftMatrix.getStackInSlot(i);
-                if (!stack.isEmpty() && ItemFilter.stackIsFilter(stack)) {
+                if (!stack.isEmpty() && stack.getItem() instanceof ItemFilter) {
                     if (sourceRecipe == null) {
                         sourceRecipe = stack;
                         sourceRecipeSlot = i;
@@ -84,7 +86,7 @@ public class AutomagyEventHandler {
     }
 
     @SubscribeEvent
-    public void fillBucket(FillBucketEvent event) {
+    public void fillBucket(@Nonnull FillBucketEvent event) {
         if (event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
             World world = event.getWorld();
             BlockPos pos = event.getTarget().getBlockPos();
@@ -93,22 +95,24 @@ public class AutomagyEventHandler {
                 world.setBlockToAir(pos);
                 event.setFilledBucket(new ItemStack(Items.MILK_BUCKET));
                 event.setResult(Result.ALLOW);
-                return;
             }
-
+            /*
             if (block == ModBlocks.mushroomSoup && TjUtil.isSourceBlock(world, pos)) {
-                world.func_175698_g(pos);
+                world.setBlockToAir(pos);
+                event.setFilledBucket(event.getFilledBucket());
                 event.result = new ItemStack(ModItems.bucketMushroom);
                 event.setResult(Result.ALLOW);
                 return;
             }
 
             if (block == ModBlocks.vishroomSoup && TjUtil.isSourceBlock(world, pos)) {
-                world.func_175698_g(pos);
+                world.setBlockToAir(pos);
                 event.result = new ItemStack(ModItems.bucketVishroom);
                 event.setResult(Result.ALLOW);
                 return;
             }
+
+             */
         }
 
     }

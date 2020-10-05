@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.blocks.ModBlock;
 import tuhljin.automagy.common.blocks.ModBlocks;
 import tuhljin.automagy.common.entities.ModEntities;
@@ -21,14 +22,15 @@ import tuhljin.automagy.common.lib.compat.CompatibilityManager;
 import tuhljin.automagy.common.lib.events.AutomagyCasterTriggerManager;
 import tuhljin.automagy.common.lib.events.AutomagyEventHandler;
 import tuhljin.automagy.common.network.PacketHandler;
+import tuhljin.automagy.common.research.ModResearchItems;
+
+import javax.annotation.Nonnull;
 
 public class ProxyCommon {
     public AutomagyCasterTriggerManager casterTriggerManager;
 
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(@Nonnull FMLPreInitializationEvent event) {
         AutomagyConfig.load(event.getSuggestedConfigurationFile());
-        ModBlocks.initBlocks();
-        ModItems.initItems();
         ModItems.initFluidContainers();
         ModItems.registerDispenserBehaviors();
         ModBlocks.registerTileEntities();
@@ -45,31 +47,12 @@ public class ProxyCommon {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-        ModRecipes.registerRecipes();
-        ModRecipes.setAspects();
-        ModResearchItems.registerResearch();
+        //ModRecipes.registerRecipes();
+        //ModRecipes.setAspects();
+        //ModResearchItems.registerResearch();
     }
 
-    public Item initializeItem(Item item, String name) {
-        item.setUnlocalizedName("Automagy".toLowerCase() + "." + name);
-        item.setCreativeTab(Automagy.creativeTab);
-        GameRegistry.registerItem(item, name);
-        return item;
-    }
-
-    public Block initializeBlock(Block block, String name, boolean showInTab) {
-        block.setUnlocalizedName("Automagy".toLowerCase() + "." + name);
-        if (showInTab)
-            block.setCreativeTab(Automagy.creativeTab);
-        Class clazz = (block instanceof ModBlock) ? ((ModBlock)block).getItemBlockClass() : null;
-        if (clazz == null) {
-            GameRegistry.registerBlock(block, name);
-        } else {
-            GameRegistry.registerBlock(block, clazz, name);
-        }
-        return block;
-    }
-
+    @Nullable
     public EntityPlayer getCurrentPlayer() {
         return null;
     }

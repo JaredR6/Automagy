@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import thaumcraft.api.golems.EnumGolemTrait;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.IGolemAPI;
@@ -22,10 +23,13 @@ import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileGolemWorkbench;
 
+import javax.annotation.Nonnull;
+
 public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
     protected SealToggle[] props;
     protected int delay = (new Random(System.nanoTime())).nextInt(50);
     protected int watchedTask = -2147483648;
+    @Nullable
     protected ItemStack stackGoal = null;
     protected int filterCycle = 0;
 
@@ -39,11 +43,11 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
         this.props = toggles;
     }
 
-    public boolean canPlaceAt(World world, BlockPos pos, EnumFacing side) {
+    public boolean canPlaceAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         return TjUtil.getBlock(world, pos) == ModBlocks.golemWorkbench;
     }
 
-    public void tickSeal(World world, ISealEntity seal) {
+    public void tickSeal(@Nonnull World world, @Nonnull ISealEntity seal) {
         if (this.delay++ % 20 == 0) {
             Task oldTask = ThaumcraftExtension.getGolemTask(world, this.watchedTask);
             if (oldTask == null || oldTask.isSuspended() || oldTask.isCompleted()) {
@@ -98,7 +102,7 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
         }
     }
 
-    protected boolean tryCreateTask(World world, ISealEntity seal, ItemStack goal, TileGolemWorkbench te, boolean leaveOne) {
+    protected boolean tryCreateTask(@Nonnull World world, @Nonnull ISealEntity seal, @Nonnull ItemStack goal, @Nonnull TileGolemWorkbench te, boolean leaveOne) {
         Integer i = te.whichRecipeIndexHasCraftingComponents(goal, leaveOne, -2147483648);
         if (i == null) {
             return false;
@@ -109,7 +113,7 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
         }
     }
 
-    public void onTaskStarted(World world, IGolemAPI golem, Task task) {
+    public void onTaskStarted(@Nonnull World world, @Nonnull IGolemAPI golem, @Nonnull Task task) {
         ISealEntity seal = GolemHelper.getSealEntity(golem.getGolemWorld().provider.getDimension(), task.getSealPos());
         TileGolemWorkbench te = this.getWorkbench(world, seal);
         if (te != null) {
@@ -123,7 +127,7 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
         task.setSuspended(true);
     }
 
-    public boolean onTaskCompletion(World world, IGolemAPI golem, Task task) {
+    public boolean onTaskCompletion(@Nonnull World world, @Nonnull IGolemAPI golem, @Nonnull Task task) {
         ISealEntity seal = GolemHelper.getSealEntity(golem.getGolemWorld().provider.getDimension(), task.getSealPos());
         TileGolemWorkbench te = this.getWorkbench(world, seal);
         boolean leaveOne = this.shouldPreserveLastItem();
@@ -163,7 +167,7 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
     public void craftingSuccess(World world, ISealEntity seal, IGolemAPI golem, Task task) {
     }
 
-    public void onTaskSuspension(World world, Task task) {
+    public void onTaskSuspension(@Nonnull World world, @Nonnull Task task) {
         TileEntity te = world.getTileEntity(task.getSealPos().pos);
         if (te instanceof TileGolemWorkbench) {
             ((TileGolemWorkbench)te).releaseItemReservation(task.getId());
@@ -171,11 +175,11 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
 
     }
 
-    public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
+    public boolean canGolemPerformTask(@Nonnull IGolemAPI golem, Task task) {
         return ThaumcraftExtension.isGolemCarryingNothing(golem);
     }
 
-    public void onRemoval(World world, BlockPos pos, EnumFacing side) {
+    public void onRemoval(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileGolemWorkbench) {
             ((TileGolemWorkbench)te).releaseItemReservation(this.watchedTask);
@@ -195,10 +199,12 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
         return new EnumGolemTrait[]{EnumGolemTrait.DEFT};
     }
 
+    @Nullable
     public EnumGolemTrait[] getForbiddenTags() {
         return null;
     }
 
+    @Nonnull
     public int[] getGuiCategories() {
         return new int[]{1, 3, 0, 4};
     }
@@ -223,11 +229,13 @@ public class SealCraft extends ModSealFiltered implements ISealConfigToggles {
         return this.getToggles()[1].getValue();
     }
 
-    public Object returnContainer(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal) {
+    @Nonnull
+    public Object returnContainer(World world, @Nonnull EntityPlayer player, BlockPos pos, EnumFacing side, @Nonnull ISealEntity seal) {
         return new ContainerSealCraft(player.inventory, world, seal);
     }
 
-    public TileGolemWorkbench getWorkbench(World world, ISealEntity seal) {
+    @Nullable
+    public TileGolemWorkbench getWorkbench(@Nonnull World world, @Nonnull ISealEntity seal) {
         TileEntity te = world.getTileEntity(seal.getSealPos().pos);
         return te instanceof TileGolemWorkbench ? (TileGolemWorkbench)te : null;
     }

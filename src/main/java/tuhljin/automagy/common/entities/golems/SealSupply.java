@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import thaumcraft.api.golems.EnumGolemTrait;
 import thaumcraft.api.golems.IGolemAPI;
 import thaumcraft.api.golems.seals.ISealEntity;
@@ -17,9 +18,12 @@ import thaumcraft.api.golems.tasks.Task;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 
+import javax.annotation.Nonnull;
+
 public class SealSupply extends ModSeal {
     protected int delay = (new Random(System.nanoTime())).nextInt(50);
     protected int watchedTask = Integer.MIN_VALUE;
+    @Nonnull
     protected Map<Integer, ItemStack> lookupDelivering = new HashMap<>();
 
     public SealSupply() {
@@ -27,12 +31,12 @@ public class SealSupply extends ModSeal {
     }
 
     @Override
-    public boolean canPlaceAt(World world, BlockPos pos, EnumFacing side) {
+    public boolean canPlaceAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         return world.getTileEntity(pos) instanceof ISuppliedBySeal;
     }
 
     @Override
-    public void tickSeal(World world, ISealEntity seal) {
+    public void tickSeal(@Nonnull World world, @Nonnull ISealEntity seal) {
         if (this.delay % 100 == 0) {
             this.cleanLookup(world, seal.getSealPos().pos, false);
         }
@@ -50,7 +54,7 @@ public class SealSupply extends ModSeal {
     }
 
     @Override
-    public void onTaskStarted(World world, IGolemAPI golem, Task task) {
+    public void onTaskStarted(@Nonnull World world, @Nonnull IGolemAPI golem, @Nonnull Task task) {
         ItemStack carrying = golem.getCarrying().get(0);
         if (!carrying.isEmpty()) {
             ISuppliedBySeal tile = this.getTile(world, task.getSealPos().pos);
@@ -65,7 +69,7 @@ public class SealSupply extends ModSeal {
     }
 
     @Override
-    public boolean onTaskCompletion(World world, IGolemAPI golem, Task task) {
+    public boolean onTaskCompletion(@Nonnull World world, @Nonnull IGolemAPI golem, @Nonnull Task task) {
         ISuppliedBySeal tile = this.getTile(world, task.getSealPos().pos);
         ItemStack carrying = golem.getCarrying().get(0);
         if (tile != null && !carrying.isEmpty()) {
@@ -84,7 +88,7 @@ public class SealSupply extends ModSeal {
     }
 
     @Override
-    public void onTaskSuspension(World world, Task task) {
+    public void onTaskSuspension(@Nonnull World world, @Nonnull Task task) {
         Integer i = task.getId();
         if (this.lookupDelivering.containsKey(i)) {
             ISuppliedBySeal tile = this.getTile(world, task.getSealPos().pos);
@@ -98,11 +102,11 @@ public class SealSupply extends ModSeal {
     }
 
     @Override
-    public void onRemoval(World world, BlockPos pos, EnumFacing side) {
+    public void onRemoval(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         this.cleanLookup(world, pos, true);
     }
 
-    protected void cleanLookup(World world, BlockPos pos, boolean all) {
+    protected void cleanLookup(@Nonnull World world, @Nonnull BlockPos pos, boolean all) {
         ISuppliedBySeal tile = this.getTile(world, pos);
         if (tile != null) {
 
@@ -126,7 +130,7 @@ public class SealSupply extends ModSeal {
     }
 
     @Override
-    public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
+    public boolean canGolemPerformTask(@Nonnull IGolemAPI golem, @Nonnull Task task) {
         ItemStack carrying = golem.getCarrying().get(0);
         if (!carrying.isEmpty()) {
             World world = golem.getGolemWorld();
@@ -141,22 +145,26 @@ public class SealSupply extends ModSeal {
         return false;
     }
 
+    @Nullable
     @Override
     public EnumGolemTrait[] getRequiredTags() {
         return null;
     }
 
+    @Nonnull
     @Override
     public EnumGolemTrait[] getForbiddenTags() {
         return new EnumGolemTrait[]{EnumGolemTrait.CLUMSY};
     }
 
+    @Nonnull
     @Override
     public int[] getGuiCategories() {
         return new int[]{0, 4};
     }
 
-    public ISuppliedBySeal getTile(World world, BlockPos pos) {
+    @Nullable
+    public ISuppliedBySeal getTile(@Nonnull World world, @Nonnull BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         return te instanceof ISuppliedBySeal ? (ISuppliedBySeal)te : null;
     }

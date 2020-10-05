@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 
 public class ModItemBlock extends ItemBlock {
-    public ModItemBlock(Block block) {
+    public ModItemBlock(@Nonnull Block block) {
         super(block);
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
@@ -20,7 +20,7 @@ public class ModItemBlock extends ItemBlock {
 
     @Nonnull
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getUnlocalizedName(@Nonnull ItemStack stack) {
         return super.getUnlocalizedName() + "." + stack.getUnlocalizedName();
     }
 }

@@ -2,6 +2,8 @@ package tuhljin.automagy.common.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
+
 public class TileHourglassMagic extends TileHourglass {
     public int modeSignal = 1;
     public int modeSandFlip = 0;
@@ -11,7 +13,7 @@ public class TileHourglassMagic extends TileHourglass {
     }
 
     @Override
-    public void writeServerNBT(NBTTagCompound nbttagcompound) {
+    public void writeServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeServerNBT(nbttagcompound);
         nbttagcompound.setShort("modeSignal", (short)this.modeSignal);
         nbttagcompound.setShort("modeSandFlip", (short)this.modeSandFlip);
@@ -21,7 +23,7 @@ public class TileHourglassMagic extends TileHourglass {
     }
 
     @Override
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readServerNBT(nbttagcompound);
         this.modeSignal = nbttagcompound.getShort("modeSignal");
         this.modeSandFlip = nbttagcompound.getShort("modeSandFlip");

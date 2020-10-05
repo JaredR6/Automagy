@@ -3,14 +3,18 @@ package tuhljin.automagy.common.lib.inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import javax.annotation.Nullable;
+
+import javax.annotation.Nonnull;
 
 // TODO: Consider removing this entire class
 public class SizelessItem {
     public final int damage;
+    @Nullable
     public final NBTTagCompound tagCompound;
     private final int itemID;
 
-    public SizelessItem(ItemStack stack) {
+    public SizelessItem(@Nonnull ItemStack stack) {
         this.itemID = Item.getIdFromItem(stack.getItem());
         this.damage = stack.getItemDamage();
         this.tagCompound = stack.getTagCompound();
@@ -22,12 +26,13 @@ public class SizelessItem {
         this.tagCompound = tagCompound;
     }
 
-    public SizelessItem(SizelessItem item, boolean ignoreMetadata, boolean ignoreNBT) {
+    public SizelessItem(@Nonnull SizelessItem item, boolean ignoreMetadata, boolean ignoreNBT) {
         this.itemID = item.itemID;
         this.damage = ignoreMetadata ? 0 : item.damage;
         this.tagCompound = ignoreNBT ? null : item.tagCompound;
     }
 
+    @Nonnull
     public ItemStack getItemStack(int size) {
         ItemStack stack = new ItemStack(Item.getItemById(this.itemID), size, this.damage);
         if (this.tagCompound != null) {
@@ -37,6 +42,7 @@ public class SizelessItem {
         return stack;
     }
 
+    @Nonnull
     public Item getItem() {
         return Item.getItemById(this.itemID);
     }
@@ -78,7 +84,7 @@ public class SizelessItem {
         return this.isSameItem(stack, false, false);
     }
 
-    public boolean isSameItem(ItemStack stack, boolean ignoreMetadata, boolean ignoreNBT) {
+    public boolean isSameItem(@Nullable ItemStack stack, boolean ignoreMetadata, boolean ignoreNBT) {
         if (stack == null || this.itemID == Item.getIdFromItem(stack.getItem())) {
             return false;
         } else {
@@ -99,7 +105,7 @@ public class SizelessItem {
         }
     }
 
-    public boolean isSameItem(SizelessItem item, boolean ignoreMetadata, boolean ignoreNBT) {
+    public boolean isSameItem(@Nullable SizelessItem item, boolean ignoreMetadata, boolean ignoreNBT) {
         if (item == null || this.itemID == item.itemID) {
             return false;
         } else {

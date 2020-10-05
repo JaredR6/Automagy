@@ -34,7 +34,7 @@ public class BlockHourglassMagic extends BlockHourglass {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             if (ThaumcraftExtension.playerHasCasterEquipped(player)) {
                 AutomagyGUIHandler.openGUI(1, player, world, pos);

@@ -10,6 +10,8 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
+
 public class FacingPropertyBool {
     public final String name;
     private Map<EnumFacing, PropertyBool> map;
@@ -39,7 +41,7 @@ public class FacingPropertyBool {
         return state;
     }
 
-    public IBlockState addToState(IBlockState state, boolean[] dirs) {
+    public IBlockState addToState(IBlockState state, @Nonnull boolean[] dirs) {
         assert dirs.length == 6;
 
         for(int i = 0; i < 6; ++i) {
@@ -50,6 +52,7 @@ public class FacingPropertyBool {
         return state;
     }
 
+    @Nonnull
     public List<IProperty> getProperties() {
         return new ArrayList<>(this.map.values());
     }

@@ -13,12 +13,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 public abstract class ModTileBlockWithFacing extends ModBlockWithFacing implements ITileEntityProvider {
-    public ModTileBlockWithFacing(Material material, MapColor mapColor) {
+    public ModTileBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor) {
         super(material, mapColor);
         this.hasTileEntity = true;
     }
 
-    public ModTileBlockWithFacing(Material material) {
+    public ModTileBlockWithFacing(@Nonnull Material material) {
         this(material, material.getMaterialMapColor());
     }
 
@@ -33,7 +33,7 @@ public abstract class ModTileBlockWithFacing extends ModBlockWithFacing implemen
     }
 
     @Override
-    public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
+    public boolean eventReceived(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, int id, int param) {
         super.eventReceived(state, world, pos, id, param);
         TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(id, param);

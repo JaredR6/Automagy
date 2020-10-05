@@ -10,6 +10,8 @@ import net.minecraft.inventory.IInventory;
 import tuhljin.automagy.common.lib.inventory.IContainsFilter;
 import tuhljin.automagy.common.tiles.TileMawBase;
 
+import javax.annotation.Nonnull;
+
 public class ContainerMaw<T extends TileMawBase & IContainsFilter & IInventory> extends ContainerWithSingleFilter<T> {
     private boolean oldRedSense = true;
 
@@ -18,7 +20,7 @@ public class ContainerMaw<T extends TileMawBase & IContainsFilter & IInventory> 
     }
 
     @Override
-    public void addListener(IContainerListener player) {
+    public void addListener(@Nonnull IContainerListener player) {
         super.addListener(player);
         player.sendWindowProperty(this, 0, this.tile.isRedstoneSensitive() ? 1 : 0);
     }

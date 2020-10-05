@@ -26,6 +26,7 @@ public class GhostRecipeTransferHandler implements IRecipeTransferHandler {
         return ContainerRecipe.class;
     }
 
+    @Nonnull
     public String getRecipeCategoryUid() {
         return "minecraft.crafting";
     }

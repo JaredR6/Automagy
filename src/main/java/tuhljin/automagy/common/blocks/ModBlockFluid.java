@@ -1,44 +1,67 @@
 package tuhljin.automagy.common.blocks;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 
 public class ModBlockFluid extends BlockFluidClassic {
+    @Nonnull
     private final Fluid fluid;
 
-    public ModBlockFluid(Fluid fluid, Material material) {
-        super(registerFluid(fluid), material);
+    public ModBlockFluid(@Nonnull Fluid fluid, @Nonnull Material material) {
+        super(fluid, material);
         this.fluid = fluid;
         fluid.setBlock(this);
     }
 
-    public ModBlockFluid(Fluid fluid) {
+    public ModBlockFluid(@Nonnull Fluid fluid) {
         this(fluid, Material.WATER);
     }
 
-    private static Fluid registerFluid(Fluid fluid) {
+    public void register() {
         FluidRegistry.registerFluid(fluid);
-        return fluid;
     }
 
     public static class ModFluid extends Fluid {
-        public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing) {
+        public ModFluid(@Nonnull String fluidName, ResourceLocation still, ResourceLocation flowing) {
             super(fluidName, still, flowing);
         }
 
-        public ModFluid(String fluidName, ResourceLocation still) {
+        public ModFluid(@Nonnull String fluidName, ResourceLocation still) {
             this(fluidName, still, still);
         }
 
-        public ModFluid(String fluidName, String still, String flowing) {
+        public ModFluid(@Nonnull String fluidName, @Nonnull String still, @Nonnull String flowing) {
             this(fluidName, new ResourceLocation(still), new ResourceLocation(flowing));
         }
 
-        public ModFluid(String fluidName, String texture) {
+        public ModFluid(@Nonnull String fluidName, @Nonnull String texture) {
             this(fluidName, new ResourceLocation(texture));
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    void render() {
+        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
+    }
+
+    public static void registerFluids() {
+        ModBlocks.milk.register();
+        ModBlocks.mushroomSoup.register();
+        ModBlocks.vishroomSoup.register();
+    }
+
+    public static void renderFluids() {
+        ModBlocks.milk.render();
+        ModBlocks.mushroomSoup.render();
+        ModBlocks.vishroomSoup.render();
     }
 }

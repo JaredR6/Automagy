@@ -8,17 +8,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.blocks.BlockTallyBase;
 import tuhljin.automagy.common.lib.NeighborNotifier;
 import tuhljin.automagy.common.lib.inventory.FilteringItemList;
 import tuhljin.automagy.common.lib.inventory.SizelessItem;
 import tuhljin.automagy.common.lib.struct.WorldSpecificCoordinates;
 
+import javax.annotation.Nonnull;
+
 public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory implements ITickable {
     protected final int COOLDOWN_TIME = 10;
     public int targetX;
     public int targetY = -1;
     public int targetZ;
+    @Nonnull
     public boolean[] outputDirs = new boolean[6];
     protected boolean power = false;
     public boolean requireAllMatches = true;
@@ -30,7 +34,7 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
         super(name);
     }
 
-    public void setOutputDir(EnumFacing dir, boolean enabled) {
+    public void setOutputDir(@Nonnull EnumFacing dir, boolean enabled) {
         boolean prev = this.outputDirs[dir.getIndex()];
         if (prev != enabled) {
             this.outputDirs[dir.getIndex()] = enabled;
@@ -42,7 +46,7 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
 
     }
 
-    public boolean isOutputDir(EnumFacing dir) {
+    public boolean isOutputDir(@Nonnull EnumFacing dir) {
         return this.outputDirs[dir.getIndex()];
     }
 
@@ -166,6 +170,7 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
         }
     }
 
+    @Nullable
     public abstract FilteringItemList getDetectedItems();
 
     protected boolean compare(int a, int b) {
@@ -195,6 +200,7 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
 
     }
 
+    @Nullable
     public BlockPos getUltimateTarget() {
         if (this.antiloopIsChecking) {
             return null;
@@ -224,19 +230,19 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
     }
 
     @Override
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readServerNBT(nbttagcompound);
         this.requireAllMatches = nbttagcompound.getBoolean("requireAllMatches");
     }
 
     @Override
-    public void writeServerNBT(NBTTagCompound nbttagcompound) {
+    public void writeServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeServerNBT(nbttagcompound);
         nbttagcompound.setBoolean("requireAllMatches", this.requireAllMatches);
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readCommonNBT(nbttagcompound);
         this.targetX = nbttagcompound.getInteger("targetX");
         this.targetY = nbttagcompound.getInteger("targetY");
@@ -250,7 +256,7 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeCommonNBT(nbttagcompound);
         nbttagcompound.setInteger("targetX", this.targetX);
         nbttagcompound.setInteger("targetY", this.targetY);
@@ -259,7 +265,7 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
         setBooleanArrayInNbt(nbttagcompound, "output", this.outputDirs);
     }
 
-    public int getRedstoneOutput(EnumFacing dir) {
+    public int getRedstoneOutput(@Nonnull EnumFacing dir) {
         return this.power && this.isOutputDir(dir) ? 15 : 0;
     }
 

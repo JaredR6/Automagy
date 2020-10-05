@@ -1,7 +1,7 @@
 [
 {
   "modid": "automagy",
-  "name": "Automagy",
+  "name": "automagy",
   "description": "An addon for Thaumcraft 6 focused on automation and logistics, plus a few fun thaumic gadgets.",
   "version": "${version}",
   "mcversion": "${mcversion}",

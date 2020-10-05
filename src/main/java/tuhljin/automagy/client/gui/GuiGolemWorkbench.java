@@ -7,7 +7,10 @@ import tuhljin.automagy.common.gui.ContainerGolemWorkbench;
 import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileGolemWorkbench;
 
+import javax.annotation.Nonnull;
+
 public class GuiGolemWorkbench extends ModGuiContainer {
+    @Nonnull
     public final ResourceLocation texture;
 
     public GuiGolemWorkbench(TileGolemWorkbench te, InventoryPlayer invPlayer) {

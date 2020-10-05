@@ -25,7 +25,7 @@ public class BlockMawSpitting extends BlockMawFinical {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (rand.nextInt(4) <= 0) {
             EnumFacing facing = state.getValue(this.FACING);
             int r = pos.getX();

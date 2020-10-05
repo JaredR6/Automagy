@@ -6,6 +6,8 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 public abstract class FloatPosMessageToClient<T extends FloatPosMessageToClient> extends MessageToClient<T> {
     protected int dim;
     protected float x;
@@ -22,14 +24,14 @@ public abstract class FloatPosMessageToClient<T extends FloatPosMessageToClient>
         this.z = z;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         this.dim = buf.readInt();
         this.x = buf.readFloat();
         this.y = buf.readFloat();
         this.z = buf.readFloat();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeInt(this.dim);
         buf.writeFloat(this.x);
         buf.writeFloat(this.y);

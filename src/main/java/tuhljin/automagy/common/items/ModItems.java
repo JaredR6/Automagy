@@ -1,65 +1,76 @@
 package tuhljin.automagy.common.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 import thaumcraft.api.golems.GolemHelper;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.blocks.ModBlocks;
-//import tuhljin.automagy.common.entities.EntityAvaricePearl;
 
+import javax.annotation.Nonnull;
+import tuhljin.automagy.common.entities.EntityAvaricePearl;
+import tuhljin.automagy.common.lib.References;
+
+@Mod.EventBusSubscriber
 public class ModItems {
     //public static ItemSliver sliver;
-    public static Item enchantedPaper;
-    public static Item enchantedPaperBound;
-    public static Item filter;
-    public static Item recipe;
-    public static Item food;
-    public static Item crystalEye;
-    public static Item avaricePearl;
-    public static Item tallyLens;
-    public static ItemGlyph tankGlyph;
-    public static ItemBucketCustom bucketMushroom;
-    public static ItemBucketCustom bucketVishroom;
+    public static Item enchantedPaper = new ModItem(References.ITEM_ENCHANTEDPAPER);
+    public static Item enchantedPaperBound = new ModItem(References.ITEM_ENCHANTEDPAPER_BOUND);
+    public static Item filterWhitelist = new ItemFilterWhite();
+    public static Item filterBlacklist = new ItemFilterBlack();
+    public static Item recipe = new ItemRecipe();
+    public static Item food = new ItemFoodstuff();
+    public static Item crystalEye = new ItemCrystalEye();
+    public static Item avaricePearl = new ItemAvaricePearl().setRegistryName(References.ITEM_AVARICEPEARL);
+    public static Item tallyLens = new ItemTallyLens().setRegistryName(References.ITEM_TALLYLENS);
+    public static ItemGlyph tankGlyph = (ItemGlyph) new ItemGlyph().setRegistryName(References.ITEM_TANKGLYPH);
 
     public ModItems() {
     }
 
-    public static void initItems() {
+    @SubscribeEvent
+    public static void registerItems(RegistryEvent.Register<Item> evt) {
         //sliver = (ItemSliver)Automagy.proxy.initializeItem(new ItemSliver(), "sliver");
-        food = Automagy.proxy.initializeItem(new ItemFoodstuff(), "foodstuff");
-        enchantedPaper = Automagy.proxy.initializeItem(new Item(), "enchantedPaper");
-        enchantedPaperBound = Automagy.proxy.initializeItem(new ItemEnchantedPaperBound(), "book");
-        filter = Automagy.proxy.initializeItem(new ItemFilter(), "filter");
-        recipe = Automagy.proxy.initializeItem(new ItemRecipe(), "recipe");
-        crystalEye = Automagy.proxy.initializeItem(new ItemCrystalEye(), "crystalEye");
-        avaricePearl = Automagy.proxy.initializeItem(new ItemAvaricePearl(), "avaricePearl");
-        tallyLens = Automagy.proxy.initializeItem(new ItemTallyLens(), "tallyLens");
-        tankGlyph = (ItemGlyph)Automagy.proxy.initializeItem(new ItemGlyph(), "tankGlyph");
+        IForgeRegistry<Item> r = evt.getRegistry();
+        r.register(enchantedPaper);
+        r.register(enchantedPaperBound);
+        r.register(filterWhitelist);
+        r.register(filterBlacklist);
+        r.register(recipe);
+        r.register(food);
+        r.register(crystalEye);
+        r.register(avaricePearl);
+        r.register(tallyLens);
+        r.register(tankGlyph);
     }
 
     public static ItemStack getSealStack(String partialKey) {
-        return GolemHelper.getSealStack("Automagy:" + partialKey);
+        return GolemHelper.getSealStack("automagy:" + partialKey);
     }
 
     public static void initFluidContainers() {
-        bucketMushroom = (ItemBucketCustom)Automagy.proxy.initializeItem(new ItemBucketCustom(ModBlocks.mushroomSoup), "bucketMushroom");
-        bucketVishroom = (ItemBucketCustom)Automagy.proxy.initializeItem(new ItemBucketCustom(ModBlocks.vishroomSoup), "bucketVishroom");
-        FluidContainerRegistry.registerFluidContainer(new FluidStack(FluidRegistry.getFluid("mushroomsoup"), 1000), new ItemStack(bucketMushroom), new ItemStack(Items.field_151133_ar));
-        FluidContainerRegistry.registerFluidContainer(new FluidStack(FluidRegistry.getFluid("vishroomsoup"), 1000), new ItemStack(bucketVishroom), new ItemStack(Items.field_151133_ar));
-        FluidContainerRegistry.registerFluidContainer(new FluidStack(FluidRegistry.getFluid("milk"), 1000), new ItemStack(Items.field_151117_aB), new ItemStack(Items.field_151133_ar));
+        FluidRegistry.enableUniversalBucket();
+        FluidRegistry.addBucketForFluid(ModBlocks.mushroomSoup.getFluid());
+        FluidRegistry.addBucketForFluid(ModBlocks.vishroomSoup.getFluid());
     }
 
     public static void registerDispenserBehaviors() {
-        BlockDispenser.field_149943_a.func_82595_a(avaricePearl, new BehaviorProjectileDispenseWithItemStack() {
-            protected IProjectile func_82499_a(World worldIn, IPosition position) {
-                return new EntityAvaricePearl(worldIn, position.func_82615_a(), position.func_82617_b(), position.func_82616_c(), this.theItemStack.func_77952_i());
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(avaricePearl, new BehaviorProjectileDispense() {
+            @Nonnull
+            protected IProjectile getProjectileEntity(@Nonnull World worldIn, @Nonnull IPosition position, @Nonnull ItemStack stack) {
+                return new EntityAvaricePearl(worldIn, position.getX(), position.getY(), position.getZ(), stack.getItemDamage());
             }
         });
     }

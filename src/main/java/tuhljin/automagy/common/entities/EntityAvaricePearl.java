@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 
 public class EntityAvaricePearl extends EntityProjectileItem {
     public static final int LIMITEDMODE_MAX_STACKS = 10;
+    @Nonnull
     public static Map<String, Integer> extraChanceForResearch = new HashMap<>();
     public static int grabRange = 5;
     public double startX;
@@ -136,14 +137,14 @@ public class EntityAvaricePearl extends EntityProjectileItem {
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tagCompound) {
         NBTTagCompound nbt = this.getEntityData();
         nbt.setShort("stacksGrabbed", (short)this.stacksGrabbed);
         return super.writeToNBT(tagCompound);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
         NBTTagCompound nbt = this.getEntityData();
         this.startX = nbt.getDouble("startX");

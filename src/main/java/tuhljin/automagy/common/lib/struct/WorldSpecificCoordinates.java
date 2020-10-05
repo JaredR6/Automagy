@@ -2,6 +2,9 @@ package tuhljin.automagy.common.lib.struct;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
+
+import javax.annotation.Nonnull;
 
 public class WorldSpecificCoordinates {
     public final int dim;
@@ -16,7 +19,7 @@ public class WorldSpecificCoordinates {
         this.z = z;
     }
 
-    public WorldSpecificCoordinates(World world, int x, int y, int z) {
+    public WorldSpecificCoordinates(@Nonnull World world, int x, int y, int z) {
         this(world.provider.getDimension(), x, y, z);
     }
 
@@ -29,7 +32,7 @@ public class WorldSpecificCoordinates {
         return result;
     }
 
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         } else if (obj == null) {
@@ -50,6 +53,7 @@ public class WorldSpecificCoordinates {
         }
     }
 
+    @Nonnull
     public BlockPos toBlockPos() {
         return new BlockPos(this.x, this.y, this.z);
     }

@@ -63,7 +63,7 @@ public class TileMawSpitting extends TileMawBase implements IContainsFilter, ITi
         }
     }
 
-    public void expelExtraItems(IItemHandler handler) {
+    public void expelExtraItems(@Nonnull IItemHandler handler) {
         InventoryWithFilterOptions iwfo = this.invFilter.getFilter(0);
         FilteringItemList wanted = new FilteringItemList();
 
@@ -100,7 +100,7 @@ public class TileMawSpitting extends TileMawBase implements IContainsFilter, ITi
 
     }
 
-    public void spawnItem(ItemStack stack) {
+    public void spawnItem(@Nonnull ItemStack stack) {
         EnumFacing facing = this.getFacing().getOpposite();
         double x = this.getPos().getX() + 0.5D - facing.getFrontOffsetX() * 0.3D;
         double y = this.getPos().getY() + 0.25D - facing.getFrontOffsetY() * 0.3D;
@@ -120,12 +120,12 @@ public class TileMawSpitting extends TileMawBase implements IContainsFilter, ITi
         this.markDirty();
     }
 
-    public void writeServerNBT(NBTTagCompound nbttagcompound) {
+    public void writeServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.invFilter.writeCustomNBT(nbttagcompound);
         nbttagcompound.setBoolean("redSense", this.redSense);
     }
 
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.invFilter.readCustomNBT(nbttagcompound);
         this.redSense = nbttagcompound.getBoolean("redSense");
     }

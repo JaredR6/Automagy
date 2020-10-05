@@ -7,6 +7,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import tuhljin.automagy.common.tiles.TileHourglass;
 
+import javax.annotation.Nonnull;
+
 public class MessageHourglassFlipped extends BlockTiedMessageToClient<MessageHourglassFlipped> {
     boolean flipState;
 
@@ -18,17 +20,17 @@ public class MessageHourglassFlipped extends BlockTiedMessageToClient<MessageHou
         this.flipState = flipState;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.flipState = buf.readBoolean();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeBoolean(this.flipState);
     }
 
-    public void onReceived(World world, BlockPos pos) {
+    public void onReceived(@Nonnull World world, @Nonnull BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileHourglass) {
             ((TileHourglass)te).receiveFlipFromServer(this.flipState);
@@ -36,7 +38,7 @@ public class MessageHourglassFlipped extends BlockTiedMessageToClient<MessageHou
 
     }
 
-    public static void sendToClients(World world, int x, int y, int z, boolean flipState) {
+    public static void sendToClients(@Nonnull World world, int x, int y, int z, boolean flipState) {
         if (!world.isRemote) {
             int dim = world.provider.getDimension();
             TargetPoint point = new TargetPoint(dim, x, y, z, PacketHandler.DEFAULT_PACKET_RANGE);

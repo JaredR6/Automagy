@@ -6,6 +6,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import tuhljin.automagy.common.tiles.TileTallyBase;
 
+import javax.annotation.Nonnull;
+
 public class ContainerTallyBox extends ContainerWithSingleFilter<TileTallyBase> {
     private boolean oldRequireAllMatches = true;
 
@@ -14,7 +16,7 @@ public class ContainerTallyBox extends ContainerWithSingleFilter<TileTallyBase> 
     }
 
     @Override
-    public void addListener(IContainerListener player) {
+    public void addListener(@Nonnull IContainerListener player) {
         super.addListener(player);
         player.sendWindowProperty(this, 0, this.tile.requireAllMatches ? 1 : 0);
     }

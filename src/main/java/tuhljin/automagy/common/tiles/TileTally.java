@@ -4,6 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.inventory.FilteringItemList;
 
 public class TileTally extends TileTallyBase {
@@ -11,6 +12,7 @@ public class TileTally extends TileTallyBase {
         super("tally");
     }
 
+    @Nullable
     public FilteringItemList getDetectedItems() {
         BlockPos bc = this.getUltimateTarget();
         if (bc == null) {

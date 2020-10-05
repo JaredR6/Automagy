@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 
 public class BlockTorchInversion extends ModBlockTorchWithTE {
     private boolean isLit;
+    @Nonnull
     private static HashMap<World, ArrayList<Toggle>> toggles = new HashMap<>();
 
     public BlockTorchInversion(boolean lit) {
@@ -40,7 +41,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
         return this.isLit ? new TileTorchInversion() : null;
     }
 
-    private boolean isBurnedOut(World world, BlockPos pos, boolean turnOff) {
+    private boolean isBurnedOut(@Nonnull World world, BlockPos pos, boolean turnOff) {
         if (!toggles.containsKey(world)) {
             toggles.put(world, new ArrayList<>());
         }
@@ -76,7 +77,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
     }
 
     @Override
-    public int getWeakPower(IBlockState state, IBlockAccess blockaccess, BlockPos pos, EnumFacing side) {
+    public int getWeakPower(IBlockState state, @Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, EnumFacing side) {
         if (this.isLit) {
             TileEntity te = blockaccess.getTileEntity(pos);
             if (te instanceof TileTorchInversion) {
@@ -88,7 +89,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
     }
 
     @Override
-    public int getStrongPower(IBlockState state, IBlockAccess blockaccess, BlockPos pos, EnumFacing side) {
+    public int getStrongPower(IBlockState state, @Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, EnumFacing side) {
         return side == EnumFacing.DOWN ? this.getWeakPower(state, blockaccess, pos, side) : 0;
     }
 
@@ -99,7 +100,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess source, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange(IBlockAccess source, @Nonnull BlockPos pos, BlockPos neighbor) {
         World world = (World)source;
         if (!this.onNeighborChangeInternal(world, pos, world.getBlockState(pos))) {
             world.scheduleUpdate(pos, this, this.tickRate(world));
@@ -132,7 +133,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand) {
         ArrayList<Toggle> list = toggles.get(world);
 
         while(list != null && !list.isEmpty() && world.getTotalWorldTime() - list.get(0).time > 60L) {
@@ -178,7 +179,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (this.isLit) {
             double x = pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
             double y = pos.getY() + 0.7D + (rand.nextDouble() - 0.5D) * 0.2D;
@@ -197,6 +198,7 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
 
     }
 
+    @Nonnull
     @SideOnly(Side.CLIENT)
     public Item getItem(World world, int x, int y, int z) {
         return Item.getItemFromBlock(ModBlocks.torchInversion_on);

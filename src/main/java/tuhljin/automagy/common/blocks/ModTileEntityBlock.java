@@ -23,12 +23,12 @@ import tuhljin.automagy.common.lib.inventory.IContainsFilter;
 import javax.annotation.Nonnull;
 
 public abstract class ModTileEntityBlock extends ModBlock implements ITileEntityProvider {
-    public ModTileEntityBlock(Material material, MapColor mapColor) {
+    public ModTileEntityBlock(@Nonnull Material material, @Nonnull MapColor mapColor) {
         super(material, mapColor);
         this.hasTileEntity = true;
     }
 
-    public ModTileEntityBlock(Material material) {
+    public ModTileEntityBlock(@Nonnull Material material) {
         this(material, material.getMaterialMapColor());
     }
 
@@ -43,7 +43,7 @@ public abstract class ModTileEntityBlock extends ModBlock implements ITileEntity
     }
 
     @Override
-    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
+    public boolean eventReceived(IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos, int eventID, int eventParam) {
         super.eventReceived(state, worldIn, pos, eventID, eventParam);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(eventID, eventParam);
@@ -55,7 +55,7 @@ public abstract class ModTileEntityBlock extends ModBlock implements ITileEntity
         super.breakBlock(world, pos, state);
     }
 
-    public static void handleBreakBlock(World world, BlockPos pos, IBlockState state) {
+    public static void handleBreakBlock(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state) {
         TileEntity te = world.getTileEntity(pos);
         if (te != null) {
             if (te instanceof IInventory) {

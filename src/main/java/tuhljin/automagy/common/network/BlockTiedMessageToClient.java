@@ -7,6 +7,8 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 public abstract class BlockTiedMessageToClient<T extends BlockTiedMessageToClient> extends MessageToClient<T> {
     protected int dim;
     protected int x;
@@ -23,14 +25,14 @@ public abstract class BlockTiedMessageToClient<T extends BlockTiedMessageToClien
         this.z = z;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         this.dim = buf.readInt();
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeInt(this.dim);
         buf.writeInt(this.x);
         buf.writeInt(this.y);

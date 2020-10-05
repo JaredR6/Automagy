@@ -10,6 +10,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.Automagy;
 
+import javax.annotation.Nonnull;
+
 public class MessageSound extends MessageToClient<MessageSound> {
     public static final short WHISPERS = 0;
     protected short id;
@@ -21,11 +23,11 @@ public class MessageSound extends MessageToClient<MessageSound> {
         this.id = id;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         this.id = buf.readShort();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeShort(this.id);
     }
 

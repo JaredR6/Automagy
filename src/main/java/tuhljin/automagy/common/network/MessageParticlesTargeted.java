@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 
+import javax.annotation.Nonnull;
+
 public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessageParticlesTargeted> {
     public static final short BOLT_BLACK = 0;
     protected short id;
@@ -27,7 +29,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         this.targetZ = targetZ;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.id = buf.readShort();
         this.targetX = buf.readInt();
@@ -35,7 +37,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         this.targetZ = buf.readInt();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeShort(this.id);
         buf.writeInt(this.targetX);
@@ -43,7 +45,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         buf.writeInt(this.targetZ);
     }
 
-    public void onReceived(World world, BlockPos pos) {
+    public void onReceived(@Nonnull World world, BlockPos pos) {
         switch(this.id) {
             case BOLT_BLACK:
                 this.zapBlock(7, world, 0.1F, 0.0F, 0.8F);
@@ -54,7 +56,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         }
     }
 
-    private void zapBlock(int num, World world, float r, float g, float b) {
+    private void zapBlock(int num, @Nonnull World world, float r, float g, float b) {
         BlockPos source = new BlockPos(this.x, this.y, this.z);
         BlockPos target = new BlockPos(this.targetX, this.targetY, this.targetZ);
 
@@ -64,7 +66,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
 
     }
 
-    public static void sendToClients(short id, World world, int x, int y, int z, int targetX, int targetY, int targetZ) {
+    public static void sendToClients(short id, @Nonnull World world, int x, int y, int z, int targetX, int targetY, int targetZ) {
         if (!world.isRemote) {
             int dim = world.provider.getDimension();
             TargetPoint point = new TargetPoint(dim, x, y, z, PacketHandler.DEFAULT_PACKET_RANGE);
@@ -72,7 +74,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         }
     }
 
-    public static void sendToClients(short id, World world, BlockPos pos, BlockPos targetPos) {
+    public static void sendToClients(short id, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockPos targetPos) {
         sendToClients(id, world, pos.getX(), pos.getY(), pos.getZ(), targetPos.getX(), targetPos.getY(), targetPos.getZ());
     }
 }

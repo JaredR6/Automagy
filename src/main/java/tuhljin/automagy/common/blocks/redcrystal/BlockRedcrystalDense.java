@@ -6,22 +6,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
+
+import javax.annotation.Nonnull;
 
 public class BlockRedcrystalDense extends BlockRedcrystalLarge {
     public static final int MAX_MINIMUM = 15;
     public static final int MIN_MINIMUM = 2;
 
+    @Nullable
     @Override
-    protected PowerResult calculateRedstonePowerAt(World world, BlockPos pos, EnumFacing orientation) {
+    protected PowerResult calculateRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing orientation) {
         PowerResult result = super.calculateRedstonePowerAt(world, pos, orientation);
         return result != null && result.strength >= this.getRedstoneSignalMin(world, pos) ? result : null;
     }
 
     @Override
-    public boolean onBlockActivatedCenter(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public boolean onBlockActivatedCenter(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player) {
         if (!world.isRemote) {
             int min = this.getRedstoneSignalMin(world, pos);
 
@@ -38,14 +42,14 @@ public class BlockRedcrystalDense extends BlockRedcrystalLarge {
             }
 
             this.updateAndPropagateChanges(world, pos, true, false, true, false);
-            TjUtil.sendFormattedChatToPlayer(player, "Automagy.chat.redcrystalDense.setMin", min);
+            TjUtil.sendFormattedChatToPlayer(player, "automagy.chat.redcrystalDense.setMin", min);
             return true;
         } else {
             return false;
         }
     }
 
-    public int getRedstoneSignalMin(IBlockAccess blockaccess, BlockPos pos) {
+    public int getRedstoneSignalMin(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         int min = MIN_MINIMUM;
 
         try {

@@ -13,11 +13,14 @@ import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileHourglassMagic;
 
+import javax.annotation.Nonnull;
+
 public class GuiHourglassMagic extends ModGuiContainerAttachable<TileHourglassMagic> {
+    @Nonnull
     public final ResourceLocation texture;
-    public static final String[] strSignal = new String[]{I18n.format("Automagy.gui.hourglassMagic.signal.0"), I18n.format("Automagy.gui.hourglassMagic.signal.1"), I18n.format("Automagy.gui.hourglassMagic.signal.2"), I18n.format("Automagy.gui.hourglassMagic.signal.3"), I18n.format("Automagy.gui.hourglassMagic.signal.4")};
-    public static final String[] strSandFlip = new String[]{I18n.format("Automagy.gui.hourglassMagic.sandFlip.0"), I18n.format("Automagy.gui.hourglassMagic.sandFlip.1"), I18n.format("Automagy.gui.hourglassMagic.sandFlip.2")};
-    public static final String[] strSignalReaction = new String[]{I18n.format("Automagy.gui.hourglassMagic.signalReact.0"), I18n.format("Automagy.gui.hourglassMagic.signalReact.1"), I18n.format("Automagy.gui.hourglassMagic.signalReact.2"), I18n.format("Automagy.gui.hourglassMagic.signalReact.3")};
+    public static final String[] strSignal = {I18n.format("automagy.gui.hourglassMagic.signal.0"), I18n.format("automagy.gui.hourglassMagic.signal.1"), I18n.format("automagy.gui.hourglassMagic.signal.2"), I18n.format("automagy.gui.hourglassMagic.signal.3"), I18n.format("automagy.gui.hourglassMagic.signal.4")};
+    public static final String[] strSandFlip = {I18n.format("automagy.gui.hourglassMagic.sandFlip.0"), I18n.format("automagy.gui.hourglassMagic.sandFlip.1"), I18n.format("automagy.gui.hourglassMagic.sandFlip.2")};
+    public static final String[] strSignalReaction = {I18n.format("automagy.gui.hourglassMagic.signalReact.0"), I18n.format("automagy.gui.hourglassMagic.signalReact.1"), I18n.format("automagy.gui.hourglassMagic.signalReact.2"), I18n.format("automagy.gui.hourglassMagic.signalReact.3")};
 
     public GuiHourglassMagic(TileHourglassMagic tile, InventoryPlayer invPlayer) {
         super(new ContainerHourglassMagic(tile, invPlayer));
@@ -28,8 +31,8 @@ public class GuiHourglassMagic extends ModGuiContainerAttachable<TileHourglassMa
     public void initGui() {
         super.initGui();
         int height = (int)(20.0F * this.scaleFactor);
-        this.buttonList.add(new GuiButtonScaledText(1, this.guiLeft + 38, this.guiTop + 12, 40, 12, I18n.format("Automagy.gui.hourglassMagic.timer.min"), this.scaleFactor * 0.6666667F));
-        this.buttonList.add(new GuiButtonScaledText(2, this.guiLeft + 80, this.guiTop + 12, 40, 12, I18n.format("Automagy.gui.hourglassMagic.timer.sec"), this.scaleFactor * 0.6666667F));
+        this.buttonList.add(new GuiButtonScaledText(1, this.guiLeft + 38, this.guiTop + 12, 40, 12, I18n.format("automagy.gui.hourglassMagic.timer.min"), this.scaleFactor * 0.6666667F));
+        this.buttonList.add(new GuiButtonScaledText(2, this.guiLeft + 80, this.guiTop + 12, 40, 12, I18n.format("automagy.gui.hourglassMagic.timer.sec"), this.scaleFactor * 0.6666667F));
         this.buttonList.add(new GuiButtonScaledText(3, this.guiLeft + 75, this.guiTop + 31, 95, height, strSignal[1], this.scaleFactor));
         this.buttonList.add(new GuiButtonScaledText(4, this.guiLeft + 75, this.guiTop + 35 + height, 95, height, strSandFlip[0], this.scaleFactor));
         this.buttonList.add(new GuiButtonCheckbox(6, this.guiLeft + 145, this.guiTop + 10, false, this.texture, this.xSize, 0));
@@ -42,21 +45,21 @@ public class GuiHourglassMagic extends ModGuiContainerAttachable<TileHourglassMa
         this.drawTexturedModalRect(this.guiLeft, this.guiTop + 20, 0, 0, this.xSize, this.ySize);
         GL11.glPushMatrix();
         GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-        this.drawStringScaled(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.timer.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 1), 0xFFFFFF);
-        this.drawStringScaled(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.signal.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 35), 0xFFFFFF);
-        this.drawStringScaled(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.sandFlip.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 55), 0xFFFFFF);
-        this.drawStringScaled(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.signalReact.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 75), 0xFFFFFF);
-        this.drawCenteredStringScaled(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.repeat"), this.guiLeft + 149, this.guiTop + 1, 0xFFFFFF);
+        this.drawStringScaled(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.timer.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 1), 0xFFFFFF);
+        this.drawStringScaled(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.signal.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 35), 0xFFFFFF);
+        this.drawStringScaled(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.sandFlip.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 55), 0xFFFFFF);
+        this.drawStringScaled(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.signalReact.name"), (float)(this.guiLeft + 2), (float)(this.guiTop + 75), 0xFFFFFF);
+        this.drawCenteredStringScaled(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.repeat"), this.guiLeft + 149, this.guiTop + 1, 0xFFFFFF);
         GL11.glPopMatrix();
         int time = this.tile.getTargetTimeSeconds();
         if (time >= 60) {
             int min = time / 60;
             int sec = time % 60;
-            this.drawString(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.timer.minutesAndSeconds", min, sec), this.guiLeft + 40, this.guiTop, 0xFFFFFF);
+            this.drawString(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.timer.minutesAndSeconds", min, sec), this.guiLeft + 40, this.guiTop, 0xFFFFFF);
         } else if (time == 1) {
-            this.drawString(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.timer.secondsOne"), this.guiLeft + 40, this.guiTop, 0xFFFFFF);
+            this.drawString(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.timer.secondsOne"), this.guiLeft + 40, this.guiTop, 0xFFFFFF);
         } else {
-            this.drawString(this.fontRenderer, I18n.format("Automagy.gui.hourglassMagic.timer.seconds", time), this.guiLeft + 40, this.guiTop, 0xFFFFFF);
+            this.drawString(this.fontRenderer, I18n.format("automagy.gui.hourglassMagic.timer.seconds", time), this.guiLeft + 40, this.guiTop, 0xFFFFFF);
         }
 
     }
@@ -65,7 +68,7 @@ public class GuiHourglassMagic extends ModGuiContainerAttachable<TileHourglassMa
     public void drawScreen(int x, int y, float partialTicks) {
         super.drawScreen(x, y, partialTicks);
         if (((GuiButtonScaledText)this.buttonList.get(0)).isMouseHoveringOver() || ((GuiButtonScaledText)this.buttonList.get(1)).isMouseHoveringOver()) {
-            ArrayList<String> lines = TjUtil.getMultiLineLocalizedString("Automagy.gui.hourglassMagic.timer.tooltip");
+            ArrayList<String> lines = TjUtil.getMultiLineLocalizedString("automagy.gui.hourglassMagic.timer.tooltip");
             GL11.glPushMatrix();
             GL11.glTranslatef((float)this.guiLeft, (float)this.guiTop, 0.0F);
             GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
@@ -76,7 +79,7 @@ public class GuiHourglassMagic extends ModGuiContainerAttachable<TileHourglassMa
     }
 
     @Override
-    protected void buttonClicked(GuiButton button, boolean rightClick) {
+    protected void buttonClicked(@Nonnull GuiButton button, boolean rightClick) {
         int amount;
         if (button.id != 1 && button.id != 2) {
             amount = button.id;

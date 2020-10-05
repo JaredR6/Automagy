@@ -16,17 +16,19 @@ import thaumcraft.api.golems.tasks.Task;
 import thaumcraft.common.golems.client.gui.SealBaseContainer;
 import thaumcraft.common.golems.client.gui.SealBaseGUI;
 
+import javax.annotation.Nonnull;
+
 public abstract class ModSeal implements ISeal, ISealGui {
     public ResourceLocation icon;
     public String key;
 
     public ModSeal(String key, ResourceLocation icon) {
-        this.key = "Automagy:" + key;
+        this.key = "automagy:" + key;
         this.icon = icon;
     }
 
     public ModSeal(String key) {
-        this(key, new ResourceLocation("Automagy", "items/seals/seal_" + key));
+        this(key, new ResourceLocation("automagy", "items/seals/seal_" + key));
     }
 
     @Override
@@ -35,7 +37,7 @@ public abstract class ModSeal implements ISeal, ISealGui {
     }
 
     @Override
-    public boolean canPlaceAt(World world, BlockPos pos, EnumFacing side) {
+    public boolean canPlaceAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         return !world.isAirBlock(pos);
     }
 
@@ -56,14 +58,16 @@ public abstract class ModSeal implements ISeal, ISealGui {
     public void onRemoval(World world, BlockPos pos, EnumFacing side) {
     }
 
+    @Nonnull
     @Override
-    public Object returnContainer(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal) {
+    public Object returnContainer(World world, @Nonnull EntityPlayer player, BlockPos pos, EnumFacing side, @Nonnull ISealEntity seal) {
         return new SealBaseContainer(player.inventory, world, seal);
     }
 
+    @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
-    public Object returnGui(World world, EntityPlayer player, BlockPos pos, EnumFacing side, ISealEntity seal) {
+    public Object returnGui(World world, @Nonnull EntityPlayer player, BlockPos pos, EnumFacing side, @Nonnull ISealEntity seal) {
         return new SealBaseGUI(player.inventory, world, seal);
     }
 
@@ -72,14 +76,14 @@ public abstract class ModSeal implements ISeal, ISealGui {
         return new int[]{0};
     }
 
-    public static int createTaskAtSealPos(World world, ISealEntity seal) {
+    public static int createTaskAtSealPos(@Nonnull World world, @Nonnull ISealEntity seal) {
         Task task = new Task(seal.getSealPos(), seal.getSealPos().pos);
         task.setPriority(seal.getPriority());
         GolemHelper.addGolemTask(world.provider.getDimension(), task);
         return task.getId();
     }
 
-    public static ISealEntity getSealEntity(World world, Task task) {
+    public static ISealEntity getSealEntity(@Nonnull World world, @Nonnull Task task) {
         return GolemHelper.getSealEntity(world.provider.getDimension(), task.getSealPos());
     }
 }

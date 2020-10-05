@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.blocks.IRemoteComparatorOverride;
 import tuhljin.automagy.common.items.IAutomagyLocationLink;
 import tuhljin.automagy.common.lib.NeighborNotifier;
@@ -33,7 +34,7 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         super("remoteComparator", 1, true, true);
     }
 
-    public static boolean isValidContainerForReading(Block block, World world, BlockPos pos) {
+    public static boolean isValidContainerForReading(@Nonnull Block block, @Nonnull World world, @Nonnull BlockPos pos) {
         if (block.hasComparatorInputOverride(world.getBlockState(pos))) {
             return true;
         } else {
@@ -42,7 +43,7 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         }
     }
 
-    public static int getComparatorReading(Block block, World world, BlockPos pos) {
+    public static int getComparatorReading(@Nonnull Block block, @Nonnull World world, @Nonnull BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (block.hasComparatorInputOverride(state)) {
             return block.getComparatorInputOverride(state, world, pos);
@@ -52,12 +53,13 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         }
     }
 
+    @Nullable
     public WorldSpecificCoordinates getLinkLocation() {
         ItemStack stack = this.getStackInSlot(0);
         return stack.getItem() instanceof IAutomagyLocationLink ? ((IAutomagyLocationLink)stack.getItem()).getLinkLocation(stack) : null;
     }
 
-    public boolean coordinatesAreInRange(WorldSpecificCoordinates coord) {
+    public boolean coordinatesAreInRange(@Nullable WorldSpecificCoordinates coord) {
         if (coord != null && coord.dim == this.world.provider.getDimension()) {
             return this.pos.distanceSq(coord.x, coord.y, coord.z) <= MAX_DISTANCE;
         } else {
@@ -69,6 +71,7 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         return this.coordinatesAreInRange(this.getLinkLocation());
     }
 
+    @Nullable
     public Block getBlockAtLinkedLocationIfValid() {
         WorldSpecificCoordinates coord = this.getLinkLocation();
         if (coord != null && coord.dim == this.world.provider.getDimension()) {
@@ -82,6 +85,7 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
         return null;
     }
 
+    @Nonnull
     public ItemStack getFloatingDisplayItem() {
         return this.getStackInSlot(0);
     }
@@ -205,7 +209,7 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readCommonNBT(nbttagcompound);
         this.redstoneSignalStrength = nbttagcompound.getShort("strength");
         this.linkMode = nbttagcompound.getShort("linkMode");
@@ -215,7 +219,7 @@ public class TileRemoteComparator extends ModTileEntityWithInventory implements 
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeCommonNBT(nbttagcompound);
         nbttagcompound.setShort("strength", (short)this.redstoneSignalStrength);
         nbttagcompound.setShort("linkMode", (short)this.linkMode);

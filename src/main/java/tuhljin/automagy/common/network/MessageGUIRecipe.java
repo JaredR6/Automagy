@@ -9,7 +9,10 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.gui.ContainerRecipe;
+
+import javax.annotation.Nonnull;
 
 public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRecipe, IMessage> {
     protected NonNullList<ItemStack> stacks;
@@ -17,7 +20,7 @@ public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRec
     public MessageGUIRecipe() {
     }
 
-    public MessageGUIRecipe(ItemStack[] stacksRecipe) {
+    public MessageGUIRecipe(@Nonnull ItemStack[] stacksRecipe) {
         this.stacks = NonNullList.create();
 
         for (ItemStack itemStack : stacksRecipe) {
@@ -42,7 +45,8 @@ public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRec
 
     }
 
-    public IMessage onMessage(MessageGUIRecipe message, MessageContext ctx) {
+    @Nullable
+    public IMessage onMessage(@Nonnull MessageGUIRecipe message, @Nonnull MessageContext ctx) {
         EntityPlayer player = ctx.getServerHandler().player;
         if (player != null) {
             Container container = player.openContainer;
@@ -54,7 +58,7 @@ public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRec
         return null;
     }
 
-    public static void sendToServer(ItemStack[] stacks) {
+    public static void sendToServer(@Nonnull ItemStack[] stacks) {
         PacketHandler.INSTANCE.sendToServer(new MessageGUIRecipe(stacks));
     }
 }

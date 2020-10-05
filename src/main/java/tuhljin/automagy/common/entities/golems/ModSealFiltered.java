@@ -8,6 +8,8 @@ import net.minecraft.world.World;
 import thaumcraft.common.golems.seals.SealFiltered;
 import tuhljin.automagy.common.lib.TjUtil;
 
+import javax.annotation.Nonnull;
+
 public abstract class ModSealFiltered extends SealFiltered {
     public ResourceLocation icon;
     public String key;
@@ -29,7 +31,7 @@ public abstract class ModSealFiltered extends SealFiltered {
         return this.icon;
     }
 
-    public boolean canPlaceAt(World world, BlockPos pos, EnumFacing side) {
+    public boolean canPlaceAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         return !world.isAirBlock(pos);
     }
 
@@ -43,7 +45,7 @@ public abstract class ModSealFiltered extends SealFiltered {
         return true;
     }
 
-    public boolean isInFilter(ItemStack stack) {
+    public boolean isInFilter(@Nonnull ItemStack stack) {
         for(int i = 0; i < this.getFilterSize(); ++i) {
             ItemStack filterStack = this.getFilterSlot(i);
             if (filterStack != null && TjUtil.areItemsEqualIgnoringSize(stack, filterStack)) {

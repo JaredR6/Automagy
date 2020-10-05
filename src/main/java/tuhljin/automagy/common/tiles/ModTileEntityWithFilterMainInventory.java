@@ -2,13 +2,16 @@ package tuhljin.automagy.common.tiles;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.items.ItemFilter;
+import tuhljin.automagy.common.items.ItemFilterBlack;
 import tuhljin.automagy.common.lib.inventory.InventoryWithFilterOptions;
 import tuhljin.automagy.common.lib.inventory.SizelessItem;
 
 import javax.annotation.Nonnull;
 
 public class ModTileEntityWithFilterMainInventory extends ModTileEntityWithInventory {
+    @Nullable
     protected InventoryWithFilterOptions filter;
     protected boolean filterIsBlacklist;
 
@@ -22,11 +25,11 @@ public class ModTileEntityWithFilterMainInventory extends ModTileEntityWithInven
         this(inventoryName, true);
     }
 
-    public boolean nameFilterMatches(ItemStack stack) {
+    public boolean nameFilterMatches(@Nonnull ItemStack stack) {
         return this.filter != InventoryWithFilterOptions.NULL_FILTER && this.filter.nameFilterMatches(stack);
     }
 
-    public boolean nameFilterMatches(SizelessItem item) {
+    public boolean nameFilterMatches(@Nonnull SizelessItem item) {
         return this.nameFilterMatches(item.getItemStack(1));
     }
 
@@ -48,22 +51,22 @@ public class ModTileEntityWithFilterMainInventory extends ModTileEntityWithInven
         } else {
             this.filter = ItemFilter.getFilterInventory(stack);
             if (this.filter != InventoryWithFilterOptions.NULL_FILTER) {
-                this.filterIsBlacklist = ItemFilter.stackIsBlacklist(stack);
+                this.filterIsBlacklist = (stack.getItem() instanceof ItemFilterBlack);
             }
         }
 
     }
 
     @Override
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readServerNBT(nbttagcompound);
         ItemStack filterStack = this.getStackInSlot(0);
-        if (filterStack == null) {
+        if (filterStack.isEmpty()) {
             this.filter = null;
         } else {
             this.filter = ItemFilter.getFilterInventory(filterStack);
             if (this.filter != InventoryWithFilterOptions.NULL_FILTER) {
-                this.filterIsBlacklist = ItemFilter.stackIsBlacklist(filterStack);
+                this.filterIsBlacklist = (filterStack.getItem() instanceof ItemFilterBlack);
             }
         }
 

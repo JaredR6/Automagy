@@ -4,12 +4,12 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nonnull;
+
 public class PacketHandler {
     public static int DEFAULT_PACKET_RANGE = 20;
-    public static final SimpleNetworkWrapper INSTANCE;
-
-    public PacketHandler() {
-    }
+    @Nonnull
+    public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel("automagy".toLowerCase());
 
     public static void registerMessages() {
         int id = 0;
@@ -21,9 +21,5 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageSound.class, MessageSound.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageHourglassFlipped.class, MessageHourglassFlipped.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(MessageZap.class, MessageZap.class, id++, Side.CLIENT);
-    }
-
-    static {
-        INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel("Automagy".toLowerCase());
     }
 }

@@ -4,21 +4,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import tuhljin.automagy.common.lib.TjUtil;
 
+import javax.annotation.Nonnull;
+
 public class InventoryForLargeItemStacks extends InventoryForItem {
     private final int limit;
 
-    public InventoryForLargeItemStacks(ItemStack containerStack, String inventoryName, int numSlots, int limit) {
+    public InventoryForLargeItemStacks(@Nonnull ItemStack containerStack, String inventoryName, int numSlots, int limit) {
         super(containerStack, inventoryName, numSlots);
         this.limit = limit;
     }
 
+    @Nonnull
     @Override
-    protected ItemStack loadItemStack(NBTTagCompound nbt) {
+    protected ItemStack loadItemStack(@Nonnull NBTTagCompound nbt) {
         return TjUtil.readLargeItemStackFromNBT(nbt);
     }
 
     @Override
-    protected void writeItemStack(ItemStack stack, NBTTagCompound nbt) {
+    protected void writeItemStack(@Nonnull ItemStack stack, @Nonnull NBTTagCompound nbt) {
         TjUtil.writeLargeItemStackToNBT(stack, nbt);
     }
 

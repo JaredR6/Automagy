@@ -16,22 +16,24 @@ import net.minecraft.util.EnumFacing.Plane;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
 import javax.annotation.Nonnull;
 
 public abstract class ModBlockWithFacing<T extends Enum<T> & IStringSerializable & IEnumWithMetadata> extends ModBlock {
     public PropertyDirection FACING;
 
-    public ModBlockWithFacing(Material material, MapColor mapColor) {
+    public ModBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor) {
         super(material, mapColor);
         this.setDefaultState(this.getDefaultState().withProperty(this.FACING, EnumFacing.NORTH));
     }
 
-    public ModBlockWithFacing(Material material) {
+    public ModBlockWithFacing(@Nonnull Material material) {
         this(material, material.getMaterialMapColor());
     }
 
     // may not be necessary
+    @Nullable
     @Override
     public Map<String, Integer> getVariantNamesAndMetadata() {
         return null;
@@ -45,7 +47,7 @@ public abstract class ModBlockWithFacing<T extends Enum<T> & IStringSerializable
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(@Nonnull IBlockState state) {
         EnumFacing dir = state.getValue(this.FACING);
         return dir.getIndex();
     }
@@ -70,7 +72,8 @@ public abstract class ModBlockWithFacing<T extends Enum<T> & IStringSerializable
         return new BlockStateContainer(this, this.FACING);
     }
 
-    public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
+    @Nonnull
+    public EnumFacing getFacing(@Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         return state.getValue(this.FACING);
     }

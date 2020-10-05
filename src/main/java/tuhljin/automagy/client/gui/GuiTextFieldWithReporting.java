@@ -3,13 +3,17 @@ package tuhljin.automagy.client.gui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.text.TextFormatting;
+import javax.annotation.Nullable;
+
+import javax.annotation.Nonnull;
 
 public class GuiTextFieldWithReporting extends GuiTextField {
     public ModGuiContainer parent;
+    @Nullable
     public String emptyMessage = null;
     private FontRenderer font;
 
-    public GuiTextFieldWithReporting(int id, ModGuiContainer parent, FontRenderer fontRenderer, int xPos, int yPos, int width, int height) {
+    public GuiTextFieldWithReporting(int id, ModGuiContainer parent, @Nonnull FontRenderer fontRenderer, int xPos, int yPos, int width, int height) {
         super(id, fontRenderer, xPos, yPos, width, height);
         this.parent = parent;
         this.font = fontRenderer;
@@ -44,7 +48,7 @@ public class GuiTextFieldWithReporting extends GuiTextField {
         return x >= this.x && x < this.x + this.width && y >= this.y && y < this.y + this.height;
     }
 
-    public void setEmptyMessage(String str) {
+    public void setEmptyMessage(@Nullable String str) {
         if (str != null && !str.isEmpty()) {
             this.emptyMessage = TextFormatting.GRAY + "" + TextFormatting.ITALIC + str;
         } else {

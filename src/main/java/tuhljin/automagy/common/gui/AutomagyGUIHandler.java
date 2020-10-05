@@ -20,12 +20,14 @@ import tuhljin.automagy.common.tiles.TileHourglassMagic;
 import tuhljin.automagy.common.tiles.TileMawBase;
 import tuhljin.automagy.common.tiles.TileTallyBase;
 
+import javax.annotation.Nonnull;
+
 public class AutomagyGUIHandler implements IGuiHandler {
     public AutomagyGUIHandler() {
     }
 
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getServerGuiElement(int ID, @Nonnull EntityPlayer player, @Nonnull World world, int x, int y, int z) {
         switch(ID) {
             case References.guiIDFilterWhite:
                 return new ContainerFilter(false, player);
@@ -62,7 +64,7 @@ public class AutomagyGUIHandler implements IGuiHandler {
     }
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getClientGuiElement(int ID, @Nonnull EntityPlayer player, @Nonnull World world, int x, int y, int z) {
         switch (ID) {
             case References.guiIDFilterWhite:
                 return new GuiFilter(false, player);
@@ -98,7 +100,7 @@ public class AutomagyGUIHandler implements IGuiHandler {
         }
     }
 
-    public static void openGUI(int id, EntityPlayer player, World world, BlockPos pos) {
+    public static void openGUI(int id, EntityPlayer player, World world, @Nonnull BlockPos pos) {
         FMLNetworkHandler.openGui(player, Automagy.instance, id, world, pos.getX(), pos.getY(), pos.getZ());
     }
 }

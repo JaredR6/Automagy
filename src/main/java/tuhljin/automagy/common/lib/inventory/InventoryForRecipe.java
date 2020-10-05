@@ -2,14 +2,19 @@ package tuhljin.automagy.common.lib.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
+
+import javax.annotation.Nonnull;
 
 public class InventoryForRecipe extends InventoryForItem {
+    @Nullable
     private FilteringItemList list = null;
+    @Nullable
     private InventoryCraftingCachedResult craftInv = null;
     private World worldObj;
     private boolean craftInvUpdated = false;
 
-    public InventoryForRecipe(ItemStack containerStack, String inventoryName, int numSlots, World worldObj) {
+    public InventoryForRecipe(@Nonnull ItemStack containerStack, String inventoryName, int numSlots, World worldObj) {
         super(containerStack, inventoryName, numSlots + 1);
         this.notifyOnInventoryChanged = true;
         this.worldObj = worldObj;
@@ -20,6 +25,7 @@ public class InventoryForRecipe extends InventoryForItem {
         this.craftInvUpdated = false;
     }
 
+    @Nullable
     public IItemMap getIngredientItemMap() {
         if (this.list == null) {
             this.list = (new FilteringItemList()).populateFromInventory(this, false, 0, this.numSlots - 2);
@@ -47,6 +53,7 @@ public class InventoryForRecipe extends InventoryForItem {
         return result;
     }
 
+    @Nullable
     public InventoryCraftingCachedResult getCraftingInventory() {
         return this.craftInv;
     }

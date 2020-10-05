@@ -7,7 +7,10 @@ import org.lwjgl.opengl.GL11;
 import tuhljin.automagy.common.gui.ContainerRecipe;
 import tuhljin.automagy.common.lib.References;
 
+import javax.annotation.Nonnull;
+
 public class GuiRecipe extends ModGuiContainer {
+    @Nonnull
     public final ResourceLocation texture;
     private ContainerRecipe container;
     private GuiTextFieldWithReporting textFieldNameFilter;
@@ -21,7 +24,7 @@ public class GuiRecipe extends ModGuiContainer {
         this.ySize = 180;
     }
 
-    public GuiRecipe(EntityPlayer player) {
+    public GuiRecipe(@Nonnull EntityPlayer player) {
         this(new ContainerRecipe(player), player);
     }
 

@@ -6,15 +6,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
 import tuhljin.automagy.common.entities.golems.ISuppliedBySeal;
 import tuhljin.automagy.common.entities.golems.SealSupply;
 
+import javax.annotation.Nonnull;
+
 public class IncomingItemsTracker {
+    @Nonnull
     protected FilteringItemList neededSuppliesUnmarked = new FilteringItemList();
+    @Nonnull
     protected FilteringItemList incomingSupplies = new FilteringItemList();
+    @Nonnull
     protected FilteringItemList incomingSuppliesExtra = new FilteringItemList();
     protected ISuppliedBySeal parent;
     protected World worldObj;
@@ -54,11 +60,11 @@ public class IncomingItemsTracker {
         }
     }
 
-    public int getAdditionalNeeded(ItemStack stack) {
+    public int getAdditionalNeeded(@Nonnull ItemStack stack) {
         return this.neededSuppliesUnmarked.get(new SizelessItem(stack));
     }
 
-    public void markSuppliesIncoming(ItemStack stack) {
+    public void markSuppliesIncoming(@Nonnull ItemStack stack) {
         this.cacheTasksNeeded = -1;
         SizelessItem item = new SizelessItem(stack);
         int wanted = this.neededSuppliesUnmarked.get(item);
@@ -74,7 +80,7 @@ public class IncomingItemsTracker {
 
     }
 
-    public void unmarkSuppliesIncoming(ItemStack stack) {
+    public void unmarkSuppliesIncoming(@Nonnull ItemStack stack) {
         this.cacheTasksNeeded = -1;
         SizelessItem item = new SizelessItem(stack);
         int toSubtract = stack.getCount();
@@ -94,7 +100,7 @@ public class IncomingItemsTracker {
 
     }
 
-    public ItemStack supplyArrived(ItemStack stack) {
+    public ItemStack supplyArrived(@Nonnull ItemStack stack) {
         this.cacheTasksNeeded = -1;
         ItemStack leftover = this.parent.receiveSupplyFromTracker(stack);
         int toSubtract = leftover.isEmpty() ? stack.getCount() : stack.getCount() - leftover.getCount();
@@ -118,7 +124,7 @@ public class IncomingItemsTracker {
         return leftover;
     }
 
-    public void requestSupplies(IItemMap ingredients) {
+    public void requestSupplies(@Nonnull IItemMap ingredients) {
         ISealEntity seal = this.getSupplySeal();
         if (seal != null) {
             for (Entry<SizelessItem, Integer> entry : ingredients) {
@@ -136,6 +142,7 @@ public class IncomingItemsTracker {
         }
     }
 
+    @Nullable
     public ISealEntity getSupplySeal() {
         int dim = this.worldObj.provider.getDimension();
 

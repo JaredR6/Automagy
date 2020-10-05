@@ -4,6 +4,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.inventory.FilteringItemList;
 
@@ -12,6 +13,7 @@ public class TileTallyDrops extends TileTallyBase {
         super("tallyYield");
     }
 
+    @Nullable
     public FilteringItemList getDetectedItems() {
         BlockPos bc = this.getUltimateTarget();
         if (bc == null) {

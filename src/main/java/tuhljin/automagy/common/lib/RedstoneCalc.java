@@ -10,8 +10,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.lib.struct.BlockWithPos;
+
+import javax.annotation.Nonnull;
 
 public class RedstoneCalc {
     public static final int MAX_POWER = 15;
@@ -21,23 +24,28 @@ public class RedstoneCalc {
     public RedstoneCalc() {
     }
 
-    public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos) {
+    @Nullable
+    public static RedstoneCalc.PowerResult getRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos) {
         return getRedstonePowerAt(world, pos, EnumFacing.UP, false, (EnumFacing)null, false, MAX_POWER, EnumFacing.VALUES);
     }
 
-    public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing... directions) {
+    @Nullable
+    public static RedstoneCalc.PowerResult getRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing... directions) {
         return getRedstonePowerAt(world, pos, EnumFacing.UP, false, (EnumFacing)null, false, MAX_POWER, directions);
     }
 
-    public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower) {
+    @Nullable
+    public static RedstoneCalc.PowerResult getRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower) {
         return getRedstonePowerAt(world, pos, attachedToSide, isWire, excludeRedstoneWireDir, allowAmplifiedPower, MAX_POWER, EnumFacing.VALUES);
     }
 
-    public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower, EnumFacing... directions) {
+    @Nullable
+    public static RedstoneCalc.PowerResult getRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower, EnumFacing... directions) {
         return getRedstonePowerAt(world, pos, attachedToSide, isWire, excludeRedstoneWireDir, allowAmplifiedPower, MAX_POWER, directions);
     }
 
-    public static RedstoneCalc.PowerResult getRedstonePowerAt(World world, BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower, int maxPower, EnumFacing... directions) {
+    @Nullable
+    public static RedstoneCalc.PowerResult getRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing attachedToSide, boolean isWire, EnumFacing excludeRedstoneWireDir, boolean allowAmplifiedPower, int maxPower, @Nonnull EnumFacing... directions) {
         int strength = 0;
         EnumFacing directionToPower = null;
 
@@ -118,11 +126,12 @@ public class RedstoneCalc {
         return strength > 0 ? new RedstoneCalc.PowerResult(strength, directionToPower) : null;
     }
 
-    public static boolean isAirBlock(Block block, IBlockAccess blockaccess, BlockPos pos) {
+    public static boolean isAirBlock(Block block, @Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         return blockaccess.isAirBlock(pos) || block == Blocks.PISTON_HEAD;
     }
 
-    public static BlockWithPos getORCAroundCorner(IBlockAccess blockaccess, BlockPos pos2, EnumFacing attachedToSide, EnumFacing dir) {
+    @Nullable
+    public static BlockWithPos getORCAroundCorner(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos2, @Nullable EnumFacing attachedToSide, @Nonnull EnumFacing dir) {
         if (attachedToSide == null) {
             Automagy.logError("[Automagy] RedstoneCalc was passed invalid attachedToSide. Will calculate as if given DOWN.");
             attachedToSide = EnumFacing.DOWN;
@@ -143,7 +152,8 @@ public class RedstoneCalc {
         return null;
     }
 
-    public static LinkedHashMap<BlockPos, EnumFacing> getConnectedWireAwayFromSource(IBlockAccess blockaccess, BlockPos bc) {
+    @Nonnull
+    public static LinkedHashMap<BlockPos, EnumFacing> getConnectedWireAwayFromSource(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos bc) {
         LinkedHashMap<BlockPos, EnumFacing> wiring = new LinkedHashMap<>();
         BlockPos bcCopy = new BlockPos(bc);
         buildWiringSet(wiring, blockaccess, bc, null, 2);
@@ -151,7 +161,8 @@ public class RedstoneCalc {
         return wiring;
     }
 
-    public static LinkedHashMap<BlockPos, EnumFacing> getConnectedWireAwayFromSourceWithNoInputPoint(IBlockAccess blockaccess, BlockPos bc) {
+    @Nullable
+    public static LinkedHashMap<BlockPos, EnumFacing> getConnectedWireAwayFromSourceWithNoInputPoint(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos bc) {
         LinkedHashMap<BlockPos, EnumFacing> wiring = new LinkedHashMap<>();
         BlockPos bcCopy = new BlockPos(bc);
         boolean ret = buildWiringSet(wiring, blockaccess, bc, null, -1);
@@ -163,7 +174,7 @@ public class RedstoneCalc {
         }
     }
 
-    private static boolean buildWiringSet(LinkedHashMap<BlockPos, EnumFacing> wiring, IBlockAccess blockaccess, BlockPos bc, EnumFacing backDir, int distance) {
+    private static boolean buildWiringSet(@Nonnull LinkedHashMap<BlockPos, EnumFacing> wiring, @Nonnull IBlockAccess blockaccess, @Nonnull BlockPos bc, @Nullable EnumFacing backDir, int distance) {
         if (!wiring.containsKey(bc)) {
             IBlockState state = blockaccess.getBlockState(bc);
             Block block = state.getBlock();

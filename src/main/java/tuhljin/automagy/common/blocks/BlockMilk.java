@@ -3,10 +3,11 @@ package tuhljin.automagy.common.blocks;
 import java.awt.Color;
 import net.minecraft.block.material.Material;
 import tuhljin.automagy.common.blocks.ModBlockFluid.ModFluid;
+import tuhljin.automagy.common.lib.References;
 
 public class BlockMilk extends ModBlockFluid {
-    public BlockMilk(String fluidName, String fluidTexture) {
-        super(new BlockMilk.FluidMilk(fluidName, fluidTexture), Material.WATER);
+    public BlockMilk() {
+        super(new BlockMilk.FluidMilk(References.FLUID_MILK, References.FLUIDTEXTURE_MILK), Material.WATER);
         this.setLightOpacity(3);
     }
 

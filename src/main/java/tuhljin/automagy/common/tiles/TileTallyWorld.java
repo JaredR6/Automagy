@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.inventory.FilteringItemList;
 
 public class TileTallyWorld extends TileTallyBase {
@@ -14,6 +15,7 @@ public class TileTallyWorld extends TileTallyBase {
         super("tallyUnbound");
     }
 
+    @Nullable
     public FilteringItemList getDetectedItems() {
         BlockPos bc = this.getUltimateTarget();
         if (bc == null) {

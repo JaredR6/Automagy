@@ -16,22 +16,25 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.inventory.IItemMap;
 import tuhljin.automagy.common.lib.inventory.InventoryForRecipe;
 import tuhljin.automagy.common.lib.inventory.SizelessItem;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ItemRecipe extends Item {
+public class ItemRecipe extends ModItem {
     public static final int NUM_COMPONENT_SLOTS = 9;
-    protected static ItemStack examinedStack = null;
-    protected static ArrayList<String> examinedStackResults = null;
+    protected static ItemStack examinedStack = ItemStack.EMPTY;
+    protected static ArrayList<String> examinedStackResults = new ArrayList<>();
 
     public ItemRecipe() {
+        super(References.ITEM_RECIPE);
         this.setMaxStackSize(1);
     }
 
-    public ItemStack func_77659_a(ItemStack stack, World world, EntityPlayer player) {
+    public ItemStack onItemRightClick(ItemStack stack, @Nonnull World world, @Nonnull EntityPlayer player) {
         if (!world.isRemote) {
             AutomagyGUIHandler.openGUI(4, player, world, player.getPosition());
         }
@@ -41,7 +44,7 @@ public class ItemRecipe extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<String> tooltip, ITooltipFlag flag) {
         if (!ItemStack.areItemStacksEqual(stack, examinedStack)) {
             examinedStack = stack;
             examinedStackResults = new ArrayList<>();
@@ -60,20 +63,20 @@ public class ItemRecipe extends Item {
                         examinedStackResults.add(s);
                     }
 
-                    ItemStack product = inv.getStackInSlot(9);
+                    ItemStack product = inv.getStackInSlot(NUM_COMPONENT_SLOTS);
                     if (!product.isEmpty()) {
                         String name = product.getDisplayName();
                         String num = TextFormatting.AQUA + "" + product.getCount() + TextFormatting.GRAY;
-                        s = I18n.format("Automagy.tip.recipe.product", num, name);
+                        s = I18n.format("automagy.tip.recipe.product", num, name);
                         if (examinedStackResults.isEmpty()) {
                             examinedStackResults.add(s);
-                            examinedStackResults.add(TextFormatting.ITALIC + I18n.format("Automagy.tip.recipe.incomplete"));
+                            examinedStackResults.add(TextFormatting.ITALIC + I18n.format("automagy.tip.recipe.incomplete"));
                         } else {
                             examinedStackResults.add(0, s);
-                            examinedStackResults.add(1, TextFormatting.ITALIC + I18n.format("Automagy.tip.recipe.using"));
+                            examinedStackResults.add(1, TextFormatting.ITALIC + I18n.format("automagy.tip.recipe.using"));
                         }
                     } else if (!examinedStackResults.isEmpty()) {
-                        examinedStackResults.add(TextFormatting.ITALIC + I18n.format("Automagy.tip.recipe.incomplete"));
+                        examinedStackResults.add(TextFormatting.ITALIC + I18n.format("automagy.tip.recipe.incomplete"));
                     }
                 }
             }
@@ -83,15 +86,16 @@ public class ItemRecipe extends Item {
 
     }
 
-    public static InventoryForRecipe getRecipeInventory(ItemStack stack, World world) {
+    @Nullable
+    public static InventoryForRecipe getRecipeInventory(@Nonnull ItemStack stack, World world) {
         return stackIsRecipe(stack) ? new InventoryForRecipe(stack, "Recipe Inventory", 9, world) : null;
     }
 
-    public static boolean stackIsRecipe(ItemStack stack) {
+    public static boolean stackIsRecipe(@Nonnull ItemStack stack) {
         return !stack.isEmpty() && stack.getItem() instanceof ItemRecipe;
     }
 
-    public static boolean isItemPopulatedRecipe(ItemStack stack, World world) {
+    public static boolean isItemPopulatedRecipe(@Nonnull ItemStack stack, World world) {
         if (!stack.isEmpty()) {
             InventoryForRecipe inv = getRecipeInventory(stack, world);
             if (inv != null) {

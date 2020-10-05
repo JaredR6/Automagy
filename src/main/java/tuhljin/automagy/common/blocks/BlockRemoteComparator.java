@@ -39,16 +39,16 @@ public class BlockRemoteComparator extends ModTileRenderedBlockWithFacing implem
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, @Nonnull BlockPos pos) {
+    public boolean canPlaceBlockAt(@Nonnull World world, @Nonnull BlockPos pos) {
         return this.canBlockStay(world, pos) && super.canPlaceBlockAt(world, pos);
     }
 
-    public boolean canBlockStay(World world, BlockPos pos) {
+    public boolean canBlockStay(@Nonnull World world, @Nonnull BlockPos pos) {
         return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, true);
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess blockAccess, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange(IBlockAccess blockAccess, @Nonnull BlockPos pos, BlockPos neighbor) {
         World world = (World)blockAccess;
         if (!this.canBlockStay(world, pos)) {
             this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
@@ -65,7 +65,7 @@ public class BlockRemoteComparator extends ModTileRenderedBlockWithFacing implem
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileRemoteComparator) {
             TileRemoteComparator teRC = (TileRemoteComparator)te;
@@ -98,7 +98,7 @@ public class BlockRemoteComparator extends ModTileRenderedBlockWithFacing implem
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileRemoteComparator te = (TileRemoteComparator)world.getTileEntity(pos);
         ItemStack stack = te.getStackInSlot(0);
         ItemStack playerStack = player.getHeldItem(hand);
@@ -118,7 +118,7 @@ public class BlockRemoteComparator extends ModTileRenderedBlockWithFacing implem
 
                     if (playerStack.getItem() instanceof IAutomagyLocationLink) {
                     if (world.isRemote) {
-                        TjUtil.sendChatToPlayer(player, "Automagy.chat.remoteComparator.itemUnlinked");
+                        TjUtil.sendChatToPlayer(player, "automagy.chat.remoteComparator.itemUnlinked");
                     }
 
                     return true;
@@ -145,12 +145,12 @@ public class BlockRemoteComparator extends ModTileRenderedBlockWithFacing implem
     }
 
     @Override
-    public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public int getStrongPower(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
         return side != EnumFacing.UP ? this.getWeakPower(state, world, pos, side) : 0;
     }
 
     @Override
-    public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public int getWeakPower(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
         TileEntity te = world.getTileEntity(pos);
         return te instanceof TileRemoteComparator ? ((TileRemoteComparator)te).getRedstoneSignalStrength() : 0;
     }

@@ -6,134 +6,156 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import tuhljin.automagy.common.items.ModItems;
 import tuhljin.automagy.common.lib.AutomagyConfig;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.ITileWithTank;
 
+import javax.annotation.Nonnull;
+
 public abstract class BlockFillableByBucket extends ModTileRenderedBlock {
     public boolean useWaterBottles;
 
-    public BlockFillableByBucket(Material material, MapColor mapColor, boolean useWaterBottles) {
+    public BlockFillableByBucket(@Nonnull Material material, @Nonnull MapColor mapColor, boolean useWaterBottles) {
         super(material, mapColor);
         this.useWaterBottles = useWaterBottles && AutomagyConfig.waterBottleAmount != -1;
     }
 
-    public BlockFillableByBucket(Material material, boolean useWaterBottles) {
-        this(material, material.func_151565_r(), useWaterBottles);
+    public BlockFillableByBucket(@Nonnull Material material, boolean useWaterBottles) {
+        this(material, material.getMaterialMapColor(), useWaterBottles);
     }
 
-    public boolean func_180639_a(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-        ItemStack heldStack = player.field_71071_by.func_70448_g();
-        if (heldStack != null) {
-            FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(heldStack);
-            ITileWithTank te;
-            if (liquid != null) {
-                if (!world.field_72995_K) {
-                    te = (ITileWithTank)world.func_175625_s(pos);
-                    boolean returnBottle = false;
-                    if (heldStack.func_77969_a(new ItemStack(Items.field_151068_bn))) {
-                        if (!this.useWaterBottles) {
-                            return false;
-                        }
+    @Override
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldStack = player.getHeldItem(hand);
+        if (heldStack.isEmpty())
+            return false;
 
-                        if (AutomagyConfig.getRealWaterBottleAmount() == 0) {
-                            FluidStack fillFluid = te.getTank().getFluid();
-                            if (fillFluid != null && fillFluid.isFluidEqual(FluidRegistry.getFluidStack(FluidRegistry.WATER.getName(), 1))) {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151069_bo));
-                            }
+        FluidStack liquid = FluidUtil.getFluidContained(heldStack);
+        ITileWithTank te;
+        if (liquid != null) {
+            if (world.isRemote)
+                return this.useWaterBottles || !heldStack.isItemEqual(new ItemStack(Items.POTIONITEM));
 
-                            return true;
-                        }
-
-                        if (AutomagyConfig.getRealWaterBottleAmount() > 0) {
-                            liquid.amount = AutomagyConfig.getRealWaterBottleAmount();
-                            returnBottle = true;
-                        }
-                    }
-
-                    int amount = te.fill(side, liquid, false);
-                    if (amount == liquid.amount) {
-                        te.fill(side, liquid, true);
-                        if (!player.field_71075_bZ.field_75098_d) {
-                            if (returnBottle) {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151069_bo), true);
-                            } else if (FluidContainerRegistry.isBucket(heldStack)) {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151133_ar), true);
-                            } else if (heldStack.func_77969_a(new ItemStack(Items.field_151009_A))) {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151054_z), true);
-                            } else {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c);
-                            }
-                        }
-                    }
-                } else if (!this.useWaterBottles && heldStack.func_77969_a(new ItemStack(Items.field_151068_bn))) {
+            te = (ITileWithTank) world.getTileEntity(pos);
+            boolean returnBottle = false;
+            if (heldStack.isItemEqual(new ItemStack(Items.POTIONITEM))) {
+                if (!this.useWaterBottles) {
                     return false;
                 }
 
-                return true;
+                if (AutomagyConfig.getRealWaterBottleAmount() == 0) {
+                    FluidStack fillFluid = te.getTank().getFluid();
+                    if (fillFluid != null && fillFluid.isFluidEqual(FluidRegistry.getFluidStack(FluidRegistry.WATER.getName(), 1))) {
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.GLASS_BOTTLE));
+                    }
+
+                    return true;
+                }
+
+                if (AutomagyConfig.getRealWaterBottleAmount() > 0) {
+                    liquid.amount = AutomagyConfig.getRealWaterBottleAmount();
+                    returnBottle = true;
+                }
             }
 
-            FluidStack fillFluid;
-            if (FluidContainerRegistry.isBucket(heldStack)) {
-                if (!world.field_72995_K) {
-                    te = (ITileWithTank)world.func_175625_s(pos);
-                    fillFluid = te.getTank().getFluid();
-                    if (fillFluid == null) {
-                        return true;
+            int amount = te.fill(liquid, false);
+            if (amount == liquid.amount) {
+                te.fill(liquid, true);
+                if (!player.capabilities.isCreativeMode) {
+                    if (returnBottle) {
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.GLASS_BOTTLE), true);
+                    } else if (heldStack.getItem() instanceof ItemBucket) {
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.BUCKET), true);
+                    } else if (heldStack.isItemEqual(new ItemStack(Items.MUSHROOM_STEW))) {
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.BOWL), true);
+                    } else {
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem);
                     }
+                }
+            }
 
-                    ItemStack fillStack = FluidContainerRegistry.fillFluidContainer(fillFluid, heldStack);
-                    if (fillStack != null) {
-                        int amount = FluidContainerRegistry.getFluidForFilledItem(fillStack).amount;
-                        FluidStack drained = te.drain(side, amount, false);
-                        if (amount == drained.amount) {
-                            te.drain(side, amount, true);
-                            if (!player.field_71075_bZ.field_75098_d) {
-                                if (heldStack.field_77994_a == 1) {
-                                    player.field_71071_by.func_70299_a(player.field_71071_by.field_70461_c, fillStack);
-                                } else {
-                                    TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c);
-                                    if (!player.field_71071_by.func_70441_a(fillStack)) {
-                                        player.func_71019_a(fillStack, false);
-                                    } else if (player instanceof EntityPlayerMP) {
-                                        ((EntityPlayerMP)player).func_71120_a(player.field_71069_bz);
-                                    }
+            return true;
+
+        } else { // FluidUtil.getFluidContained(heldStack) == null
+
+            FluidStack fillFluid;
+            if (heldStack.getItem() instanceof ItemBucket) {
+                if (world.isRemote)
+                    return true;
+
+                te = (ITileWithTank) world.getTileEntity(pos);
+                fillFluid = te.getTank().getFluid();
+                if (fillFluid == null) {
+                    return true;
+                }
+
+                IFluidHandlerItem bucket = heldStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                int fillValue = bucket.fill(fillFluid, false);
+
+                if (fillValue > 0) {
+                    FluidStack drained = te.drain(Fluid.BUCKET_VOLUME, false);
+                    if (drained.amount == Fluid.BUCKET_VOLUME) {
+                        te.drain(Fluid.BUCKET_VOLUME, true);
+                        if (!player.capabilities.isCreativeMode) {
+                            bucket.fill(fillFluid, true);
+                            /*
+                            TODO: Fix creative mode bucket logic
+                            if (heldStack.getCount() == 1) {
+                                player.inventory.setInventorySlotContents(player.inventory.currentItem, fillStack);
+                            } else {
+                                TjUtil.consumePlayerItem(player, player.inventory.currentItem);
+                                if (!player.inventory.addItemStackToInventory(fillStack)) {
+                                    player.dropItem(fillStack, false);
+                                } else if (player instanceof EntityPlayerMP) {
+                                    ((EntityPlayerMP) player).sendContainerToPlayer(player.inventoryContainer);
                                 }
                             }
+                             */
                         }
-                    } else if (fillFluid.amount >= 1000) {
-                        if (fillFluid.isFluidEqual(new FluidStack(ModBlocks.milk.getFluid(), 1))) {
-                            te.drain(side, 1000, true);
-                            TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151117_aB));
-                        } else if (fillFluid.isFluidEqual(new FluidStack(ModBlocks.mushroomSoup.getFluid(), 1))) {
-                            te.drain(side, 1000, true);
-                            TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(ModItems.bucketMushroom));
-                        }
-                    } else if (player.field_71075_bZ.field_75098_d && heldStack.func_77969_a(new ItemStack(Items.field_151133_ar))) {
-                        te.drain(side, 1000, true);
                     }
+                } else if (fillFluid.amount >= 1000) {
+                    if (fillFluid.isFluidEqual(new FluidStack(ModBlocks.milk.getFluid(), 1))) {
+                        te.drain(Fluid.BUCKET_VOLUME, true);
+                        bucket.fill(new FluidStack(ModBlocks.milk.getFluid(), Fluid.BUCKET_VOLUME), true);
+                        //TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.MILK_BUCKET));
+                    } else if (fillFluid.isFluidEqual(new FluidStack(ModBlocks.mushroomSoup.getFluid(), 1))) {
+                        te.drain(Fluid.BUCKET_VOLUME, true);
+                        bucket.fill(new FluidStack(ModBlocks.mushroomSoup.getFluid(), Fluid.BUCKET_VOLUME), true);
+                        //TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(ModItems.bucketMushroom));
+                    }
+                } else if (player.capabilities.isCreativeMode && heldStack.isItemEqual(new ItemStack(Items.BUCKET))) {
+                    te.drain(1000, true);
                 }
 
                 return true;
             }
 
-            if (this.useWaterBottles && heldStack.func_77969_a(new ItemStack(Items.field_151069_bo))) {
-                if (!world.field_72995_K) {
-                    te = (ITileWithTank)world.func_175625_s(pos);
+            if (this.useWaterBottles && heldStack.isItemEqual(new ItemStack(Items.GLASS_BOTTLE))) {
+                if (!world.isRemote) {
+                    te = (ITileWithTank) world.getTileEntity(pos);
                     fillFluid = te.getTank().getFluid();
                     if (fillFluid != null && fillFluid.isFluidEqual(FluidRegistry.getFluidStack(FluidRegistry.WATER.getName(), 1))) {
                         if (AutomagyConfig.getRealWaterBottleAmount() == 0) {
-                            TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151068_bn));
+                            TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.POTIONITEM));
                         } else if (te.drainExactAmount(side, AutomagyConfig.getRealWaterBottleAmount(), true)) {
-                            TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151068_bn));
+                            TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.POTIONITEM));
                         }
                     }
                 }
@@ -141,17 +163,17 @@ public abstract class BlockFillableByBucket extends ModTileRenderedBlock {
                 return true;
             }
 
-            if (heldStack.func_77969_a(new ItemStack(Items.field_151054_z))) {
-                if (!world.field_72995_K) {
-                    te = (ITileWithTank)world.func_175625_s(pos);
+            if (heldStack.isItemEqual(new ItemStack(Items.BOWL))) {
+                if (!world.isRemote) {
+                    te = (ITileWithTank) world.getTileEntity(pos);
                     fillFluid = te.getTank().getFluid();
                     if (fillFluid != null) {
                         if (fillFluid.isFluidEqual(new FluidStack(ModBlocks.mushroomSoup.getFluid(), 1))) {
                             if (te.drainExactAmount(side, 1000, true)) {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151009_A));
+                                TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.MUSHROOM_STEW));
                             }
                         } else if (fillFluid.isFluidEqual(new FluidStack(ModBlocks.vishroomSoup.getFluid(), 1)) && te.drainExactAmount(side, 1000, true)) {
-                            TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(ModItems.food, 1, 0));
+                            TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(ModItems.food, 1, 0));
                         }
                     }
                 }
@@ -159,29 +181,30 @@ public abstract class BlockFillableByBucket extends ModTileRenderedBlock {
                 return true;
             }
 
-            if (heldStack.func_77969_a(new ItemStack(Items.field_151009_A))) {
-                if (!world.field_72995_K) {
-                    te = (ITileWithTank)world.func_175625_s(pos);
+            if (heldStack.isItemEqual(new ItemStack(Items.MUSHROOM_STEW))) {
+                if (!world.isRemote) {
+                    te = (ITileWithTank) world.getTileEntity(pos);
                     if (te.fillExactAmount(side, new FluidStack(ModBlocks.mushroomSoup.getFluid(), 1000))) {
-                        TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151054_z));
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.BOWL));
                     }
                 }
 
                 return true;
             }
 
-            if (heldStack.func_77969_a(new ItemStack(ModItems.food, 1, 0))) {
-                if (!world.field_72995_K) {
-                    te = (ITileWithTank)world.func_175625_s(pos);
+            if (heldStack.isItemEqual(new ItemStack(ModItems.food, 1, 0))) {
+                if (!world.isRemote) {
+                    te = (ITileWithTank) world.getTileEntity(pos);
                     if (te.fillExactAmount(side, new FluidStack(ModBlocks.vishroomSoup.getFluid(), 1000))) {
-                        TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c, new ItemStack(Items.field_151054_z));
+                        TjUtil.consumePlayerItem(player, player.inventory.currentItem, new ItemStack(Items.BOWL));
                     }
                 }
 
                 return true;
             }
-        }
 
-        return false;
+            return true;
+        }
     }
+
 }

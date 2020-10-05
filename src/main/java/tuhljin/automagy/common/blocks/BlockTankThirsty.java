@@ -12,60 +12,76 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
+import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.items.ModItems;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileTankThirsty;
 
+import javax.annotation.Nonnull;
+
 public class BlockTankThirsty extends BlockFillableByBucket {
+    @Nonnull
+    private static AxisAlignedBB AABB_BOUNDS = new AxisAlignedBB(0.064F, 0.0F, 0.064F, 0.936F, 0.875F, 0.936F);
+
+    @Nullable
     private FluidStack lastFluidStack = null;
+    @Nullable
     private int[] lastGlyphs = null;
 
     public BlockTankThirsty() {
-        super(Material.field_151576_e, true);
-        this.func_149711_c(3.0F);
-        this.func_149752_b(10.0F);
+        super(Material.ROCK, true);
+        this.setHardness(3.0F);
+        this.setResistance(10.0F);
         this.setHarvestLevel("pickaxe", 0);
-        this.func_149676_a(0.064F, 0.0F, 0.064F, 0.936F, 0.875F, 0.936F);
     }
 
+    @Nonnull
+    @Override
     public Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockTankThirsty.class;
     }
 
-    public TileEntity func_149915_a(World worldIn, int meta) {
+    @Override
+    public TileEntity createNewTileEntity(@Nonnull World world, int meta) {
         return new TileTankThirsty();
     }
 
-    public int func_149645_b() {
-        return 3;
+    @Nonnull
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
+    @Nonnull
     @SideOnly(Side.CLIENT)
-    public EnumWorldBlockLayer func_180664_k() {
-        return EnumWorldBlockLayer.TRANSLUCENT;
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
-    public boolean func_149740_M() {
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState blockState) {
         return true;
     }
 
-    public int func_180641_l(World worldIn, BlockPos pos) {
-        return ((TileTankThirsty)worldIn.func_175625_s(pos)).getComparatorStrength();
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        return ((TileTankThirsty)worldIn.getTileEntity(pos)).getComparatorStrength();
     }
 
-    public void func_180663_b(World worldIn, BlockPos pos, IBlockState state) {
-        TileTankThirsty te = null;
-
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         try {
-            te = (TileTankThirsty)worldIn.func_175625_s(pos);
+            TileTankThirsty te = (TileTankThirsty)worldIn.getTileEntity(pos);
             this.lastFluidStack = te.tank.getFluid();
             this.lastGlyphs = null;
 
@@ -75,24 +91,25 @@ public class BlockTankThirsty extends BlockFillableByBucket {
                     break;
                 }
             }
-        } catch (Exception var6) {
+        } catch (Exception ex) {
             this.lastFluidStack = null;
             this.lastGlyphs = null;
         }
 
-        super.func_180663_b(worldIn, pos, state);
+        super.breakBlock(worldIn, pos, state);
     }
 
+    @Nonnull
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList();
-        Random rand = world instanceof World ? ((World)world).field_73012_v : RANDOM;
-        Item item = this.func_180660_a(state, rand, fortune);
-        ItemStack stack = new ItemStack(item, 1, this.func_180651_a(state));
+        Random rand = world instanceof World ? ((World)world).rand : RANDOM;
+        Item item = this.getItemDropped(state, rand, fortune);
+        ItemStack stack = new ItemStack(item, 1, this.damageDropped(state));
         TileTankThirsty te = null;
 
         try {
-            te = (TileTankThirsty)world.func_175625_s(pos);
-        } catch (Exception var12) {
+            te = (TileTankThirsty)world.getTileEntity(pos);
+        } catch (Exception ignored) {
         }
 
         FluidStack fluidStack = null;
@@ -103,15 +120,14 @@ public class BlockTankThirsty extends BlockFillableByBucket {
         }
 
         if (fluidStack != null) {
-            if (!stack.func_77942_o()) {
-                stack.func_77982_d(new NBTTagCompound());
+            if (!stack.hasTagCompound()) {
+                stack.setTagCompound(new NBTTagCompound());
             }
 
-            fluidStack.writeToNBT(stack.func_77978_p());
+            fluidStack.writeToNBT(stack.getTagCompound());
         }
 
         this.lastFluidStack = null;
-        int[] glyphs = null;
         int[] glyphs;
         if (te != null) {
             glyphs = te.glyphs;
@@ -120,11 +136,11 @@ public class BlockTankThirsty extends BlockFillableByBucket {
         }
 
         if (glyphs != null) {
-            if (!stack.func_77942_o()) {
-                stack.func_77982_d(new NBTTagCompound());
+            if (!stack.hasTagCompound()) {
+                stack.setTagCompound(new NBTTagCompound());
             }
 
-            stack.func_77978_p().func_74783_a("Glyphs", glyphs);
+            stack.getTagCompound().setIntArray("Glyphs", glyphs);
         }
 
         this.lastGlyphs = null;
@@ -132,22 +148,23 @@ public class BlockTankThirsty extends BlockFillableByBucket {
         return drops;
     }
 
-    public boolean func_180639_a(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (super.func_180639_a(world, pos, state, player, side, hitX, hitY, hitZ)) {
+    @Override
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, @Nonnull EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (super.onBlockActivated(world, pos, state, player, hand, side, hitX, hitY, hitZ)) {
             return true;
         } else {
-            ItemStack heldStack = player.field_71071_by.func_70448_g();
-            if (heldStack != null && heldStack.func_77973_b() == ModItems.tankGlyph) {
-                int glyph = heldStack.func_77952_i();
+            ItemStack heldStack = player.inventory.getCurrentItem();
+            if (!heldStack.isEmpty() && heldStack.getItem() == ModItems.tankGlyph) {
+                int glyph = heldStack.getItemDamage();
                 if (glyph > 0) {
-                    if (!world.field_72995_K) {
-                        TileTankThirsty te = (TileTankThirsty)world.func_175625_s(pos);
+                    if (!world.isRemote) {
+                        TileTankThirsty te = (TileTankThirsty)world.getTileEntity(pos);
                         if (te.installGlyph(glyph, side)) {
-                            if (!player.field_71075_bZ.field_75098_d) {
-                                TjUtil.consumePlayerItem(player, player.field_71071_by.field_70461_c);
+                            if (!player.capabilities.isCreativeMode) {
+                                TjUtil.consumePlayerItem(player, player.inventory.currentItem);
                             }
 
-                            world.func_72956_a(player, "thaumcraft:upgrade", 0.5F, 1.0F);
+                            world.playSound(player, pos, SoundsTC.upgrade, SoundCategory.BLOCKS, 0.5F, 1.0F);
                         }
                     }
 
@@ -159,22 +176,33 @@ public class BlockTankThirsty extends BlockFillableByBucket {
         }
     }
 
-    public void func_176213_c(World worldIn, BlockPos pos, IBlockState state) {
-        TileTankThirsty te = (TileTankThirsty)worldIn.func_175625_s(pos);
-        if (worldIn.func_175640_z(pos)) {
+    @Override
+    public void onBlockAdded(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state) {
+        TileTankThirsty te = (TileTankThirsty)worldIn.getTileEntity(pos);
+        if (worldIn.isBlockPowered(pos)) {
             te.receivingSignal = true;
-            te.func_70296_d();
+            te.markDirty();
         }
 
     }
 
-    public void func_176204_a(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        if (!worldIn.field_72995_K) {
-            TileEntity te = worldIn.func_175625_s(pos);
-            if (te instanceof TileTankThirsty) {
-                ((TileTankThirsty)te).updateRedstoneInput(worldIn.func_175640_z(pos));
+    @Override
+    public void onNeighborChange(IBlockAccess access, @Nonnull BlockPos pos, BlockPos neighbor) {
+        if (access instanceof World) {
+            World world = (World) access;
+            if (!world.isRemote) {
+                TileEntity te = world.getTileEntity(pos);
+                if (te instanceof TileTankThirsty) {
+                    ((TileTankThirsty) te).updateRedstoneInput(world.isBlockPowered(pos));
+                }
             }
         }
+    }
 
+
+    @Nonnull
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return AABB_BOUNDS;
     }
 }

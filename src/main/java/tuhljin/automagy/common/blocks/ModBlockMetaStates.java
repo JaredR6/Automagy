@@ -13,25 +13,26 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IStringSerializable;
+import javax.annotation.Nullable;
 
 import javax.annotation.Nonnull;
 
 public abstract class ModBlockMetaStates<T extends Enum<T> & IStringSerializable & IEnumWithMetadata> extends ModBlock {
     public final PropertyEnum<T> VARIANT;
     private Map<Integer, T> statesFromMetaEnumLookup;
-    private static PropertyEnum lastPropertyFromConstructor;
 
-    public ModBlockMetaStates(Material material, MapColor mapColor) {
+    public ModBlockMetaStates(@Nonnull Material material, @Nonnull MapColor mapColor) {
         super(material, mapColor);
         this.statesFromMetaEnumLookup = null;
-        this.VARIANT = lastPropertyFromConstructor;
+        this.VARIANT = createVariantProperty();
         this.setDefaultState(this.blockState.getBaseState().withProperty(this.VARIANT, Iterables.get(this.VARIANT.getAllowedValues(), 0)));
     }
 
-    public ModBlockMetaStates(Material material) {
+    public ModBlockMetaStates(@Nonnull Material material) {
         this(material, material.getMaterialMapColor());
     }
 
+    @Nonnull
     public Map<String, Integer> getVariantNamesAndMetadata() {
         Collection<? extends T> values = this.VARIANT.getAllowedValues();
         Map<String, Integer> map = new HashMap<>();
@@ -44,10 +45,11 @@ public abstract class ModBlockMetaStates<T extends Enum<T> & IStringSerializable
     }
     
     @Override
-    public int damageDropped(IBlockState state) {
+    public int damageDropped(@Nonnull IBlockState state) {
         return this.getMetaFromState(state);
     }
 
+    @Nonnull
     public Class<? extends ItemBlock> getItemBlockClass() {
         return ModItemBlock.class;
     }
@@ -69,19 +71,14 @@ public abstract class ModBlockMetaStates<T extends Enum<T> & IStringSerializable
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(@Nonnull IBlockState state) {
         return state.getValue(this.VARIANT).getMetadata();
     }
 
     @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
-        if (this.VARIANT == null) {
-            lastPropertyFromConstructor = this.createVariantProperty();
-            return new BlockStateContainer(this, lastPropertyFromConstructor);
-        } else {
-            return new BlockStateContainer(this, this.VARIANT);
-        }
+        return new BlockStateContainer(this, this.VARIANT);
     }
 
     protected abstract PropertyEnum<T> createVariantProperty();

@@ -7,6 +7,8 @@ import net.minecraft.util.Timer;
 import tuhljin.automagy.common.lib.RedstoneCalc;
 import tuhljin.automagy.common.network.MessageHourglassFlipped;
 
+import javax.annotation.Nonnull;
+
 public class TileHourglass extends ModTileEntity implements ITickable {
     public final float SECONDS_COOLDOWN_BETWEEN_FLIPS = 0.25F;
     public final int REDSTONE_PULSE_LENGTH = 5;
@@ -158,7 +160,7 @@ public class TileHourglass extends ModTileEntity implements ITickable {
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         nbttagcompound.setInteger("ticksTarget", this.ticksTarget);
         nbttagcompound.setInteger("ticksCounted", this.ticksCounted);
         nbttagcompound.setShort("ticksSendingSignal", (short)this.ticksSendingPulse);
@@ -167,7 +169,7 @@ public class TileHourglass extends ModTileEntity implements ITickable {
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.ticksTarget = nbttagcompound.getInteger("ticksTarget");
         this.ticksCounted = nbttagcompound.getInteger("ticksCounted");
         this.ticksSendingPulse = nbttagcompound.getShort("ticksSendingSignal");

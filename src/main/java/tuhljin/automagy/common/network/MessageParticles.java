@@ -15,6 +15,8 @@ import thaumcraft.common.tiles.misc.TileHole;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 
+import javax.annotation.Nonnull;
+
 public class MessageParticles extends BlockTiedMessageToClient<MessageParticles> {
     public static final short BREAKBLOCK = 0;
     public static final short SMOKE = 1;
@@ -36,19 +38,19 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
         this(id, (short)0, dim, x, y, z);
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.id = buf.readShort();
         this.count = buf.readShort();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeShort(this.id);
         buf.writeShort(this.count);
     }
 
-    public void onReceived(World world, BlockPos pos) {
+    public void onReceived(@Nonnull World world, @Nonnull BlockPos pos) {
         int i;
         switch(this.id) {
             case BREAKBLOCK:
@@ -84,7 +86,7 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
     }
 
     @SideOnly(Side.CLIENT)
-    private void showBreakBlock(World world, BlockPos pos) {
+    private void showBreakBlock(@Nonnull World world, @Nonnull BlockPos pos) {
         try {
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock() == BlocksTC.hole) {
@@ -100,7 +102,7 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
 
     }
 
-    private void showSmoke(World world) {
+    private void showSmoke(@Nonnull World world) {
         world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.x + 0.5D, this.y + 0.25D + world.rand.nextDouble(), this.z + 0.5D, world.rand.nextGaussian() * 0.05D, 0.005D, world.rand.nextGaussian() * 0.05D);
     }
 
@@ -108,7 +110,7 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
         Automagy.proxy.fxOldBlockSparkle(world, this.x, this.y, this.z, color, count);
     }
 
-    public static void sendToClients(short id, int count, World world, int x, int y, int z) {
+    public static void sendToClients(short id, int count, @Nonnull World world, int x, int y, int z) {
         if (!world.isRemote) {
             int dim = world.provider.getDimension();
             TargetPoint point = new TargetPoint(dim, x, y, z, PacketHandler.DEFAULT_PACKET_RANGE);
@@ -116,7 +118,7 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
         }
     }
 
-    public static void sendToClients(short id, World world, int x, int y, int z) {
+    public static void sendToClients(short id, @Nonnull World world, int x, int y, int z) {
         if (!world.isRemote) {
             int dim = world.provider.getDimension();
             TargetPoint point = new TargetPoint(dim, x, y, z, PacketHandler.DEFAULT_PACKET_RANGE);
@@ -124,7 +126,7 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
         }
     }
 
-    public static void sendToClients(short id, World world, BlockPos pos) {
+    public static void sendToClients(short id, @Nonnull World world, @Nonnull BlockPos pos) {
         sendToClients(id, world, pos.getX(), pos.getY(), pos.getZ());
     }
 }

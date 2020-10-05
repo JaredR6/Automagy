@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import thaumcraft.api.casters.ICaster;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
@@ -61,13 +62,13 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
 
     @Nonnull
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(this.FACING, facing.getOpposite());
     }
 
     @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
+    public IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileTallyBase) {
             state = this.outputProp.addToState(state, ((TileTallyBase)te).outputDirs);
@@ -78,7 +79,7 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof TileTallyBase) {
@@ -102,7 +103,7 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess blockAccess, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange(@Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, @Nonnull BlockPos neighbor) {
         World world = (World)blockAccess;
         if (!world.isRemote) {
             TileTallyBase teT = null;
@@ -135,7 +136,7 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nullable EnumFacing side) {
         if (side == null) {
             return false;
         } else {
@@ -145,12 +146,12 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     }
 
     @Override
-    public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public int getStrongPower(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
         return this.getWeakPower(state, world, pos, side);
     }
 
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public int getWeakPower(IBlockState blockState, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nullable EnumFacing side) {
         if (side == null) {
             return 0;
         } else {
@@ -165,7 +166,7 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, @Nonnull EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack held = player.getHeldItem(hand);
         if (!held.isEmpty()) {
             Item item = held.getItem();
@@ -197,7 +198,7 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     }
 
     @Override
-    public void breakBlock(World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         if (!world.isRemote) {
             TileEntity teRC = world.getTileEntity(pos.offset(EnumFacing.UP));
             if (teRC instanceof TileRemoteComparator) {
@@ -208,7 +209,7 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
         super.breakBlock(world, pos, state);
     }
 
-    public boolean isAnySideOutputtingPower(IBlockAccess world, BlockPos pos) {
+    public boolean isAnySideOutputtingPower(@Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileTallyBase) {
             return ((TileTallyBase)te).getRedstoneOutput() > 0;
@@ -217,17 +218,17 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
         }
     }
 
-    public int getRemoteComparatorParticleColor(World world, BlockPos pos, TileRemoteComparator teRC) {
+    public int getRemoteComparatorParticleColor(@Nonnull World world, @Nonnull BlockPos pos, TileRemoteComparator teRC) {
         TileEntity te = world.getTileEntity(pos);
         return te instanceof TileTallyBase && ((TileTallyBase)te).hasValidTarget() ? 0 : -1;
     }
 
     @Override
-    public boolean hasActiveRedstoneSignal(World world, BlockPos pos, TileRemoteComparator teRC) {
+    public boolean hasActiveRedstoneSignal(@Nonnull World world, @Nonnull BlockPos pos, TileRemoteComparator teRC) {
         return this.isAnySideOutputtingPower(world, pos);
     }
 
-    public void changeFacing(TileTallyBase te, World world, BlockPos pos, IBlockState state, EnumFacing facing, boolean blockUpdate) {
+    public void changeFacing(@Nonnull TileTallyBase te, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing facing, boolean blockUpdate) {
         if (te.isOutputDir(facing)) {
             te.setOutputDir(facing, false);
         }

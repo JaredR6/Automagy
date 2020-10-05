@@ -49,11 +49,17 @@ import javax.annotation.Nullable;
 
 public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientableRedstoneConductor, IRedcrystalPowerConductor {
 
+    @Nonnull
     private static AxisAlignedBB AABB_BASIC_DOWN = new AxisAlignedBB(0.25F, 0.8F, 0.25F, 0.75F, 1.0F, 0.75F);
+    @Nonnull
     private static AxisAlignedBB AABB_BASIC_NORTH = new AxisAlignedBB(0.25F, 0.25F, 0.8F, 0.75F, 0.75F, 1.0F);
+    @Nonnull
     private static AxisAlignedBB AABB_BASIC_SOUTH = new AxisAlignedBB(0.25F, 0.25F, 0.0F, 0.75F, 0.75F, 0.2F);
+    @Nonnull
     private static AxisAlignedBB AABB_BASIC_WEST = new AxisAlignedBB(0.8F, 0.25F, 0.25F, 1.0F, 0.75F, 0.75F);
+    @Nonnull
     private static AxisAlignedBB AABB_BASIC_EAST = new AxisAlignedBB(0.0F, 0.25F, 0.25F, 0.2F, 0.75F, 0.75F);
+    @Nonnull
     private static AxisAlignedBB AABB_BASIC_UP = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 0.2F, 0.75F);
 
     public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
@@ -61,11 +67,15 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     protected static final int MAX_POWER = 15;
     private boolean simplePowerCheck = true;
     protected static boolean resettingPowerLevels = false;
+    @Nonnull
     private HashSet<BlockPos> newPrimaryPowerInputLocations = new HashSet<>();
+    @Nonnull
     private HashMap<Integer, LinkedHashSet<BlockPos>> queuedBlockUpdateLocations = new HashMap<>();
     private Field redstonedustAllowingPowerCheck;
+    @Nullable
     public EnumFacing nextTEOrientation = null;
     public boolean nextTENoConnections = false;
+    @Nonnull
     private RayTracer rayTracer = new RayTracer();
 
     public BlockRedcrystal() {
@@ -83,11 +93,13 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     }
 
+    @Nonnull
     @Override
     public Class<? extends ItemBlock> getItemBlockClass() {
         return ItemBlockRedcrystal.class;
     }
 
+    @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World world, int meta) {
         TileRedcrystal te = new TileRedcrystal(this.nextTEOrientation, this.nextTENoConnections);
@@ -97,7 +109,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state) {
         super.onBlockAdded(world, pos, state);
         this.updateAndPropagateChanges(world, pos, true, false, false, false);
     }
@@ -109,7 +121,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public int getLightValue(IBlockState state) {
+    public int getLightValue(@Nonnull IBlockState state) {
         if (!AutomagyConfig.redcrystalEmitsLight) {
             return super.getLightValue(state);
         } else {
@@ -126,7 +138,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(@Nonnull IBlockState state) {
         return state.getValue(POWER);
     }
 
@@ -137,20 +149,20 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, @Nonnull BlockPos pos) {
+    public boolean canPlaceBlockAt(@Nonnull World world, @Nonnull BlockPos pos) {
         EnumFacing side = this.getOrientation(world, pos);
         return this.canPlaceBlockOnSide(world, pos, side);
     }
 
     @Override
-    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+    public boolean canPlaceBlockOnSide(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         BlockPos pos2 = pos.offset(side.getOpposite());
         return world.isSideSolid(pos2, side) || TjUtil.getBlock(world, pos) == Blocks.GLOWSTONE;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         int strength = state.getValue(POWER);
         if (strength > 0) {
             int x = pos.getX();
@@ -159,7 +171,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
             double d0 =x + 0.5D + (rand.nextFloat() - 0.5D) * 0.2D;
             double d1 = y + 0.1625D;
             double d2 = z + 0.5D + (rand.nextFloat() - 0.5D) * 0.2D;
-            float f = strength / MAX_POWER;
+            float f = (float)strength / MAX_POWER;
             float f1 = f * 0.6F + 0.4F;
 
             float f2 = f * f * 0.7F - 0.5F;
@@ -211,7 +223,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nullable EnumFacing side) {
         if (side == null) {
             return false;
         } else {
@@ -237,7 +249,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public int getStrongPower(@Nonnull IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         if (!this.simplePowerCheck) {
             return 0;
         } else {
@@ -253,7 +265,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public int getWeakPower(@Nonnull IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         if (!this.simplePowerCheck) {
             return 0;
         } else {
@@ -286,7 +298,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange(IBlockAccess world, @Nonnull BlockPos pos, @Nonnull BlockPos neighbor) {
         if (world instanceof World) {
             if (!((World)world).isRemote) {
                 EnumFacing side = this.getOrientation(world, pos);
@@ -307,7 +319,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         }
     }
 
-    public void updateAndPropagateChanges(World world, BlockPos pos, boolean checkStrength, boolean calledByNeighborWire, boolean forcePropagate, boolean immediateNeighborUpdates) {
+    public void updateAndPropagateChanges(@Nonnull World world, @Nonnull BlockPos pos, boolean checkStrength, boolean calledByNeighborWire, boolean forcePropagate, boolean immediateNeighborUpdates) {
         if (!world.isRemote) {
             boolean notifyChain = false;
             boolean needClientUpdate = false;
@@ -441,7 +453,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public int getRedstoneSignalStrength(IBlockAccess blockaccess, BlockPos pos, boolean allowAmplifiedPower) {
+    public int getRedstoneSignalStrength(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, boolean allowAmplifiedPower) {
         if (resettingPowerLevels) {
             return 0;
         } else {
@@ -456,13 +468,14 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public int getRedstoneSignalStrength(IBlockAccess blockaccess, BlockPos pos, EnumFacing intoDirection, boolean allowAmplifiedPower) {
+    public int getRedstoneSignalStrength(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, @Nonnull EnumFacing intoDirection, boolean allowAmplifiedPower) {
         int strength = this.getRedstoneSignalStrength(blockaccess, pos, allowAmplifiedPower);
         return strength > 0 && !this.canSendRedstoneSignalInDirection(blockaccess, pos, intoDirection) ? 0 : strength;
     }
 
+    @Nullable
     @Override
-    public EnumFacing getOrientation(IBlockAccess blockaccess, BlockPos pos) {
+    public EnumFacing getOrientation(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         EnumFacing orientation = null;
         TileRedcrystal te = (TileRedcrystal)blockaccess.getTileEntity(pos);
         if (te != null) {
@@ -476,7 +489,8 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return true;
     }
 
-    public EnumFacing getRedstoneSignalSourceSide(IBlockAccess blockaccess, BlockPos pos) {
+    @Nullable
+    public EnumFacing getRedstoneSignalSourceSide(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         EnumFacing side = null;
         TileRedcrystal te = (TileRedcrystal)blockaccess.getTileEntity(pos);
         if (te != null) {
@@ -486,7 +500,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return side;
     }
 
-    public boolean canReceiveRedstoneSignalFromDirection(IBlockAccess blockaccess, BlockPos pos, EnumFacing dir) {
+    public boolean canReceiveRedstoneSignalFromDirection(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, EnumFacing dir) {
         EnumFacing[] dirs = this.getRedstoneInputDirections(blockaccess, pos);
 
         for (EnumFacing d : dirs) {
@@ -498,7 +512,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return false;
     }
 
-    public void onNeighborRedstoneConductorUpdate(World world, BlockPos pos, EnumFacing neighborDir, int neighborStrength) {
+    public void onNeighborRedstoneConductorUpdate(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing neighborDir, int neighborStrength) {
         int strength = this.getRedstoneSignalStrength(world, pos, true);
         if (neighborStrength > strength || this.getRedstoneSignalSourceSide(world, pos) == neighborDir) {
             this.updateAndPropagateChanges(world, pos, true, true, false, false);
@@ -506,24 +520,25 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     }
 
-    public void onNeighborRedstoneConductorUpdate(World world, BlockPos pos, IBlockState state) {
+    public void onNeighborRedstoneConductorUpdate(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state) {
         this.updateAndPropagateChanges(world, pos, true, true, false, false);
     }
 
-    public boolean isRedstoneSignalInputPoint(IBlockAccess blockaccess, BlockPos pos) {
+    public boolean isRedstoneSignalInputPoint(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         TileRedcrystal te = (TileRedcrystal)blockaccess.getTileEntity(pos);
         return te != null && te.powerSourceOutsideNetwork;
     }
 
-    protected PowerResult calculateRedstonePowerAt(World world, BlockPos pos, EnumFacing orientation) {
+    @Nullable
+    protected PowerResult calculateRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing orientation) {
         return RedstoneCalc.getRedstonePowerAt(world, pos, orientation, true, orientation, true, this.getRedstoneInputDirections(world, pos));
     }
 
-    public void setConnection(IBlockAccess blockaccess, BlockPos pos, boolean connects, EnumFacing... sides) {
+    public void setConnection(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, boolean connects, EnumFacing... sides) {
         this.setConnection(blockaccess, pos, blockaccess.getBlockState(pos), connects, sides);
     }
 
-    public void setConnection(IBlockAccess blockaccess, BlockPos pos, IBlockState state, boolean connects, EnumFacing... sides) {
+    public void setConnection(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, IBlockState state, boolean connects, @Nonnull EnumFacing... sides) {
         TileRedcrystal te;
         try {
             te = (TileRedcrystal)blockaccess.getTileEntity(pos);
@@ -564,7 +579,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         this.updateAndPropagateChanges(te.getWorld(), pos, true, false, true, false);
     }
 
-    public boolean canSendRedstoneSignalInDirection(IBlockAccess blockaccess, BlockPos pos, EnumFacing dir) {
+    public boolean canSendRedstoneSignalInDirection(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, @Nonnull EnumFacing dir) {
         TileRedcrystal te;
         try {
             te = (TileRedcrystal)blockaccess.getTileEntity(pos);
@@ -662,7 +677,8 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return false;
     }
 
-    public EnumFacing[] getRedstoneInputDirections(IBlockAccess blockaccess, BlockPos pos) {
+    @Nullable
+    public EnumFacing[] getRedstoneInputDirections(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         TileRedcrystal te;
         try {
             te = (TileRedcrystal)blockaccess.getTileEntity(pos);
@@ -781,7 +797,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return list.toArray(new EnumFacing[0]);
     }
 
-    public void scheduleAreaUpdateNotification(World world, BlockPos pos, boolean immediate) {
+    public void scheduleAreaUpdateNotification(@Nonnull World world, @Nonnull BlockPos pos, boolean immediate) {
         if (!world.isRemote) {
             int x = pos.getX();
             int y = pos.getY();
@@ -828,7 +844,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     }
 
-    private void handleQueuedBlockUpdates(World world) {
+    private void handleQueuedBlockUpdates(@Nonnull World world) {
         if (!world.isRemote) {
             int dimension = world.provider.getDimension();
             LinkedHashSet<BlockPos> bcs = this.queuedBlockUpdateLocations.get(dimension);
@@ -845,12 +861,12 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(@Nonnull World world, BlockPos pos, IBlockState state, Random rand) {
         this.handleQueuedBlockUpdates(world);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && player.getHeldItem(hand).getItem() instanceof ICaster) {
             RayTraceResult hit = RayTracer.retraceBlock(world, player, pos);
             if (hit != null) {
@@ -878,7 +894,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return false;
     }
 
-    public boolean onBlockActivatedAdjustedSide(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side) {
+    public boolean onBlockActivatedAdjustedSide(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityPlayer player, @Nonnull EnumFacing side) {
         if (this.toggleConnectionToDirection(world, pos, state, side, true)) {
             world.playSound(player, pos, SoundsTC.crystal, SoundCategory.BLOCKS, 1.0F, 1.0F);
             return true;
@@ -887,7 +903,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         }
     }
 
-    public boolean toggleConnectionToDirection(World world, BlockPos pos, IBlockState state, EnumFacing side, boolean alterOtherConnection) {
+    public boolean toggleConnectionToDirection(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing side, boolean alterOtherConnection) {
         TileRedcrystal te = null;
 
         try {
@@ -976,7 +992,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     @Override
     @Nullable
-    public RayTraceResult collisionRayTrace(IBlockState blockState, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d start, @Nonnull Vec3d end) {
+    public RayTraceResult collisionRayTrace(@Nonnull IBlockState blockState, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d start, @Nonnull Vec3d end) {
         Block block = blockState.getBlock();
         if (block != this) {
             return super.collisionRayTrace(blockState, world, pos, start, end);
@@ -997,7 +1013,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     @Nonnull
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
         EntityPlayer player = Minecraft.getMinecraft().player;
         if (!ThaumcraftExtension.playerHasCasterEquipped(player)) {
             return this.getNoCasterBlockBounds(source, pos);
@@ -1017,11 +1033,11 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         return super.getBoundingBox(state, source, pos);
     }
 
-    protected void addTraceableCuboids(List<IndexedCuboid6> cuboids, IBlockAccess source, BlockPos pos) {
+    protected void addTraceableCuboids(@Nonnull List<IndexedCuboid6> cuboids, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
         ((TileRedcrystal)source.getTileEntity(pos)).addTraceableCuboids(cuboids, pos, false);
     }
 
-    protected AxisAlignedBB getNoCasterBlockBounds(IBlockAccess blockAccess, BlockPos pos) {
+    protected AxisAlignedBB getNoCasterBlockBounds(@Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos) {
         EnumFacing orientation = this.getOrientation(blockAccess, pos);
         if (orientation == null) {
             orientation = EnumFacing.UP;
@@ -1045,7 +1061,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     }
 
-    private int internalGetMetadata(IBlockAccess blockaccess, BlockPos pos) {
+    private int internalGetMetadata(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         return blockaccess.getTileEntity(pos).getBlockMetadata();
     }
 }

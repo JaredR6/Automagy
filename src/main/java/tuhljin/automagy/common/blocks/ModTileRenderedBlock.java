@@ -8,20 +8,24 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 public abstract class ModTileRenderedBlock extends ModTileEntityBlock {
-    public ModTileRenderedBlock(Material material, MapColor mapColor) {
+    public ModTileRenderedBlock(@Nonnull Material material, @Nonnull MapColor mapColor) {
         super(material, mapColor);
     }
 
-    public ModTileRenderedBlock(Material material) {
+    public ModTileRenderedBlock(@Nonnull Material material) {
         super(material);
     }
 
+    @Nonnull
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
+    @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {

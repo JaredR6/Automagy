@@ -9,13 +9,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.TjUtil;
+
+import javax.annotation.Nonnull;
 
 public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
     public boolean useItemCount;
     public boolean ignoreNBT;
     public boolean ignoreMetadata;
     protected String nameFilter;
+    @Nullable
     protected Pattern pattern;
     protected boolean patternCompiled = false;
     public static final InventoryWithFilterOptions NULL_FILTER = new InventoryWithFilterOptions(ItemStack.EMPTY, null, 0, 1);
@@ -29,7 +33,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
 
     }
 
-    public void readCustomNBT(NBTTagCompound nbttagcompound) {
+    public void readCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readCustomNBT(nbttagcompound);
         this.useItemCount = false;
         this.ignoreNBT = false;
@@ -50,7 +54,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
 
     }
 
-    public void writeCustomNBT(NBTTagCompound nbttagcompound) {
+    public void writeCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeCustomNBT(nbttagcompound);
         NBTTagCompound nbtsub = new NBTTagCompound();
         if (this.useItemCount) {
@@ -114,6 +118,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
         this.patternCompiled = false;
     }
 
+    @Nullable
     public Pattern getPattern() {
         if (this.patternCompiled) {
             return this.pattern;
@@ -129,7 +134,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
         }
     }
 
-    public boolean nameFilterMatches(ItemStack stack) {
+    public boolean nameFilterMatches(@Nonnull ItemStack stack) {
         Pattern p = this.getPattern();
         if (p != null) {
             String name = stack.getDisplayName().toLowerCase();

@@ -1,16 +1,19 @@
 package tuhljin.automagy.common.entities.golems;
 
+import javax.annotation.Nullable;
 import thaumcraft.api.golems.EnumGolemTrait;
 import thaumcraft.api.golems.IGolemAPI;
 import thaumcraft.api.golems.IGolemProperties;
 import thaumcraft.api.golems.parts.GolemArm;
 
+import javax.annotation.Nonnull;
+
 public class SealShearAdvanced extends SealShear {
     public SealShearAdvanced() {
-        super("shear_advanced", new SealToggle[]{new SealToggle(true, "shearCreature", "Automagy.golem.shearCreature"), new SealToggle(false, "shearBlock", "Automagy.golem.shearBlock"), new SealToggle(true, "saveShears", "Automagy.golem.saveShears"), new SealToggle(false, "ppro", "golem.prop.provision.wl")});
+        super("shear_advanced", new SealToggle[]{new SealToggle(true, "shearCreature", "automagy.golem.shearCreature"), new SealToggle(false, "shearBlock", "automagy.golem.shearBlock"), new SealToggle(true, "saveShears", "automagy.golem.saveShears"), new SealToggle(false, "ppro", "golem.prop.provision.wl")});
     }
 
-    protected boolean canGolemShearWithoutItem(IGolemAPI golem) {
+    protected boolean canGolemShearWithoutItem(@Nonnull IGolemAPI golem) {
         IGolemProperties prop = golem.getProperties();
         GolemArm arm = prop.getArms();
         if (arm != null && "CLAWS".equals(arm.key)) {
@@ -20,6 +23,7 @@ public class SealShearAdvanced extends SealShear {
         }
     }
 
+    @Nullable
     public EnumGolemTrait[] getForbiddenTags() {
         return null;
     }

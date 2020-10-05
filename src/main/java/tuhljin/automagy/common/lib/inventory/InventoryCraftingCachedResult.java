@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.gui.ContainerEmpty;
 
 import javax.annotation.Nonnull;
@@ -17,11 +18,13 @@ public class InventoryCraftingCachedResult extends InventoryCrafting {
     private static int HEIGHT = 3;
     protected final String nbtKey;
     protected boolean hasResult;
+    @Nullable
     protected ItemStack result;
     protected World world;
+    @Nullable
     private HashMap<SizelessItem, Integer> map;
 
-    public InventoryCraftingCachedResult(Container container, String nbtKey) {
+    public InventoryCraftingCachedResult(@Nonnull Container container, String nbtKey) {
         super(container, WIDTH, HEIGHT);
         this.hasResult = false;
         this.result = ItemStack.EMPTY;
@@ -59,6 +62,7 @@ public class InventoryCraftingCachedResult extends InventoryCrafting {
         this.world = world;
     }
 
+    @Nullable
     public ItemStack getCraftingResult() {
         if (!this.hasResult) {
             this.result = CraftingManager.findMatchingResult(this, this.world);
@@ -68,7 +72,7 @@ public class InventoryCraftingCachedResult extends InventoryCrafting {
         return this.result;
     }
 
-    public boolean containsItem(ItemStack stack) {
+    public boolean containsItem(@Nonnull ItemStack stack) {
         if (this.map == null) {
             this.getItemMap();
         }
@@ -76,6 +80,7 @@ public class InventoryCraftingCachedResult extends InventoryCrafting {
         return this.map.containsKey(new SizelessItem(stack));
     }
 
+    @Nullable
     public HashMap<SizelessItem, Integer> getItemMap() {
         if (this.map == null) {
             this.map = new HashMap<>();
@@ -97,7 +102,7 @@ public class InventoryCraftingCachedResult extends InventoryCrafting {
         return this.map;
     }
 
-    public void readCustomNBT(NBTTagCompound nbttagcompound) {
+    public void readCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = nbttagcompound.getTagList(this.nbtKey, 10);
         if (nbttaglist.tagCount() > 0) {
             int numSlots = this.getSizeInventory();
@@ -113,7 +118,7 @@ public class InventoryCraftingCachedResult extends InventoryCrafting {
 
     }
 
-    public void writeCustomNBT(NBTTagCompound nbttagcompound) {
+    public void writeCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = new NBTTagList();
         int numSlots = this.getSizeInventory();
 

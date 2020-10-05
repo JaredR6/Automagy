@@ -7,10 +7,14 @@ import tuhljin.automagy.common.gui.ContainerWithFilter;
 import tuhljin.automagy.common.gui.IReporteeForSlot;
 import tuhljin.automagy.common.gui.SlotRestrictedWithReporting;
 import tuhljin.automagy.common.items.ItemFilter;
+import tuhljin.automagy.common.items.ItemFilterBlack;
 import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.inventory.InventoryWithFilterOptions;
 
+import javax.annotation.Nonnull;
+
 public class GuiWithSingleFilter<T extends TileEntity> extends ModGuiContainerAttachable<T> implements IReporteeForSlot {
+    @Nonnull
     public final ResourceLocation texture;
     protected boolean listInstalled;
     protected boolean filterUseItemCount;
@@ -24,11 +28,11 @@ public class GuiWithSingleFilter<T extends TileEntity> extends ModGuiContainerAt
         this.filterIsBlacklist = false;
     }
 
-    public void onSlotChanged(SlotRestrictedWithReporting slot) {
+    public void onSlotChanged(@Nonnull SlotRestrictedWithReporting slot) {
         ItemStack stack = slot.getStack();
         if (!stack.isEmpty()) {
             this.listInstalled = true;
-            this.filterIsBlacklist = ItemFilter.stackIsBlacklist(stack);
+            this.filterIsBlacklist = (stack.getItem() instanceof ItemFilterBlack);
             InventoryWithFilterOptions inv = ItemFilter.getFilterInventory(stack);
             if (inv != InventoryWithFilterOptions.NULL_FILTER) {
                 this.filterUseItemCount = inv.useItemCount;

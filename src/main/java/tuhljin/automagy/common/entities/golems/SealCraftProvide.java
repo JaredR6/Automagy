@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import thaumcraft.api.golems.EnumGolemTrait;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.IGolemAPI;
@@ -20,13 +21,16 @@ import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.inventory.IItemMap;
 import tuhljin.automagy.common.tiles.TileGolemWorkbench;
 
+import javax.annotation.Nonnull;
+
 public class SealCraftProvide extends SealCraft {
-    ProvisionRequest request = null;
+    @Nullable ProvisionRequest request = null;
 
     public SealCraftProvide() {
-        super("craft_provide", new SealToggle[]{new SealToggle(false, "pleave", "golem.prop.leave"), new SealToggle(false, "ppro", "Automagy.golem.craftSupply")});
+        super("craft_provide", new SealToggle[]{new SealToggle(false, "pleave", "golem.prop.leave"), new SealToggle(false, "ppro", "automagy.golem.craftSupply")});
     }
 
+    @Nonnull
     public EnumGolemTrait[] getRequiredTags() {
         return new EnumGolemTrait[]{EnumGolemTrait.DEFT, EnumGolemTrait.SMART};
     }
@@ -39,7 +43,7 @@ public class SealCraftProvide extends SealCraft {
         return this.getToggles()[1].getValue();
     }
 
-    public void tickSeal(World world, ISealEntity seal) {
+    public void tickSeal(@Nonnull World world, @Nonnull ISealEntity seal) {
         if (this.delay++ % 20 == 0) {
             Task oldTask = ThaumcraftExtension.getGolemTask(world, this.watchedTask);
             if (oldTask == null || oldTask.isSuspended() || oldTask.isCompleted()) {
@@ -99,7 +103,7 @@ public class SealCraftProvide extends SealCraft {
         }
     }
 
-    protected boolean isRequestAllowedByFilter(ItemStack goal) {
+    protected boolean isRequestAllowedByFilter(@Nonnull ItemStack goal) {
         if (this.isBlacklist()) {
             return !this.isInFilter(goal);
         } else {
@@ -108,11 +112,11 @@ public class SealCraftProvide extends SealCraft {
 
     }
 
-    protected boolean canFulfillRequest(TileGolemWorkbench te, ISealEntity seal, ItemStack goal) {
+    protected boolean canFulfillRequest(@Nonnull TileGolemWorkbench te, ISealEntity seal, @Nonnull ItemStack goal) {
         return te.hasCraftingComponents(goal, this.shouldPreserveLastItem(), Integer.MIN_VALUE);
     }
 
-    public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
+    public boolean canGolemPerformTask(@Nonnull IGolemAPI golem, Task task) {
         if (this.request != null && super.canGolemPerformTask(golem, task)) {
             return ((EntityThaumcraftGolem)golem).isWithinHomeDistanceFromPosition(this.request.getSeal().getSealPos().pos) && this.areGolemTagsValidForTask(this.request.getSeal(), golem) && !this.request.getStack().isEmpty() && golem.canCarry(this.request.getStack(), true);
         } else {
@@ -120,7 +124,7 @@ public class SealCraftProvide extends SealCraft {
         }
     }
 
-    protected boolean areGolemTagsValidForTask(ISealEntity se, IGolemAPI golem) {
+    protected boolean areGolemTagsValidForTask(@Nullable ISealEntity se, @Nonnull IGolemAPI golem) {
         if (se == null) {
             return true;
         } else if (se.isLocked() && ((EntityOwnedConstruct)golem).isOwned() && !se.getOwner().equals(((IEntityOwnable) (golem)).getOwnerId().toString())) {
@@ -140,11 +144,11 @@ public class SealCraftProvide extends SealCraft {
         }
     }
 
-    public void onTaskSuspension(World world, Task task) {
+    public void onTaskSuspension(@Nonnull World world, @Nonnull Task task) {
         super.onTaskSuspension(world, task);
     }
 
-    public void craftingSuccess(World world, ISealEntity seal, IGolemAPI golem, Task task) {
+    public void craftingSuccess(@Nonnull World world, ISealEntity seal, IGolemAPI golem, Task task) {
         if (this.request != null) {
             Integer dim = world.provider.getDimension();
             if (GolemHelper.provisionRequests.containsKey(dim)) {

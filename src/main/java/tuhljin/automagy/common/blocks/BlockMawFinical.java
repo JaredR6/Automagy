@@ -7,6 +7,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
 import tuhljin.automagy.common.items.ItemFilter;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
@@ -19,13 +20,14 @@ public class BlockMawFinical extends BlockMawHungry {
     public BlockMawFinical() {
     }
 
+    @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World world, int meta) {
         return new TileMawFinical();
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!ThaumcraftExtension.playerHasCasterEquipped(player) && !ItemFilter.isItemPopulatedFilter(player.getActiveItemStack())) {
             return false;
         } else {

@@ -3,7 +3,6 @@ package tuhljin.automagy.common.tiles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.block.Block;
@@ -15,12 +14,9 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
@@ -29,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.casters.IInteractWithCaster;
 import thaumcraft.common.lib.SoundsTC;
@@ -42,6 +39,9 @@ import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.compat.CompatibilityManager;
 import tuhljin.automagy.common.network.MessageParticles;
 import tuhljin.automagy.common.network.MessageParticlesFloat;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IInteractWithCaster, ITickable {
     public static final int MAX_STEPS = 32;
@@ -71,6 +71,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
     protected int cooldownConsume;
     protected int cooldownSiphon;
     protected int ticksSinceDrink;
+    @Nullable
     public int[] glyphs;
     public boolean voids;
     public boolean redstoneControlled;
@@ -105,7 +106,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
     }
 
     @Override
-    public int fill(FluidStack resource, boolean doFill) {
+    public int fill(@Nonnull FluidStack resource, boolean doFill) {
         if (this.voids) {
             return this.fillVoiding(resource, doFill);
         } else {
@@ -118,7 +119,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
-    public int fillVoiding(FluidStack resource, boolean doFill) {
+    public int fillVoiding(@Nonnull FluidStack resource, boolean doFill) {
         FluidStack fluid = this.tank.getFluid();
         int prevAmount = 0;
         if (fluid != null) {
@@ -143,7 +144,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
     }
 
     @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
+    public FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
         return resource != null && resource.isFluidEqual(this.tank.getFluid()) ? this.drain(resource.amount, doDrain) : null;
     }
 
@@ -172,6 +173,12 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         return true;
     }
 
+    @Nonnull
+    public IFluidTankProperties[] getTankProperties() {
+        return this.tank.getTankProperties();
+    }
+
+    @Nonnull
     public FluidTankInfo[] getTankInfo(EnumFacing from) {
         return new FluidTankInfo[]{this.tank.getInfo()};
     }
@@ -193,14 +200,25 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
-    public boolean fillExactAmount(FluidStack resource) {
-        int amount = this.fill(resource, false);
-        if (amount == resource.amount) {
-            this.fill(resource, true);
+    @Override
+    public boolean fillExactAmount(EnumFacing facing, @Nonnull FluidStack fluid) {
+        return fillExactAmount(fluid);
+    }
+
+    public boolean fillExactAmount(@Nonnull FluidStack fluid) {
+        int amount = this.fill(fluid, false);
+        if (amount == fluid.amount) {
+            this.fill(fluid, true);
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean drainExactAmount(EnumFacing dir, int amount, boolean doDrain) {
+
+        return drainExactAmount(amount, doDrain);
     }
 
     public int getComparatorStrength() {
@@ -208,7 +226,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
     }
 
     @Override
-    public void readCommonNBT(NBTTagCompound nbttagcompound) {
+    public void readCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKey("Empty")) {
             this.tank.setFluid(null);
         } else {
@@ -221,7 +239,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
     }
 
     @Override
-    public void writeCommonNBT(NBTTagCompound nbttagcompound) {
+    public void writeCommonNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.tank.writeToNBT(nbttagcompound);
         nbttagcompound.setIntArray("glyphs", this.glyphs);
         nbttagcompound.setBoolean("receivingSignal", this.receivingSignal);
@@ -271,7 +289,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         this.drinkFrequency = Math.round(drinkRate);
     }
 
-    public int getGlyph(EnumFacing side) {
+    public int getGlyph(@Nonnull EnumFacing side) {
         return this.glyphs[side.getIndex()];
     }
 
@@ -280,7 +298,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         this.markForUpdate();
     }
 
-    public void setGlyphs(int[] glyphs) {
+    public void setGlyphs(@Nullable int[] glyphs) {
         if (glyphs != null && glyphs.length == 6) {
             this.glyphs = glyphs;
             if (this.world != null) {
@@ -293,7 +311,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
-    public boolean installGlyph(int glyph, EnumFacing side) {
+    public boolean installGlyph(int glyph, @Nonnull EnumFacing side) {
         int i = side.getIndex();
         if (glyph != 0 && this.glyphs[i] == 0) {
             this.glyphs[i] = glyph;
@@ -305,7 +323,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
-    public int removeGlyph(EnumFacing side) {
+    public int removeGlyph(@Nonnull EnumFacing side) {
         int i = side.getIndex();
         int drop = this.glyphs[i];
         if (drop != 0) {
@@ -577,21 +595,23 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         return false;
     }
 
-    public boolean pilferFluid(IFluidHandler otherTank, EnumFacing dir) {
+    public boolean pilferFluid(@Nonnull IFluidHandler otherTank, @Nonnull EnumFacing dir) {
         int amount = 1000;
         if (!this.voids) {
             amount = Math.min(amount, this.tank.getCapacity() - this.tank.getFluidAmount());
         }
 
         if (amount > 0) {
-            Fluid drainable = TjUtil.canDrainTank(otherTank, dir.getOpposite(), this.tank.getFluid());
-            if (drainable != null) {
-                FluidStack gained = otherTank.drain(new FluidStack(drainable, amount), true);
-                if (gained != null && gained.amount > 0) {
-                    this.fill(gained, true);
-                    MessageParticles.sendToClients((short)2, this.world, this.pos.offset(dir));
-                    this.playSoundEffect(SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.BLOCKS, 0.2F, this.world.rand.nextFloat() * 0.25F + this.world.rand.nextFloat() * 0.25F + 0.3F);
-                    return true;
+            if (this.tank.getFluid() != null) {
+                Fluid drainable = TjUtil.canDrainTank(otherTank, dir.getOpposite(), this.tank.getFluid().getFluid());
+                if (drainable != null) {
+                    FluidStack gained = otherTank.drain(new FluidStack(drainable, amount), true);
+                    if (gained != null && gained.amount > 0) {
+                        this.fill(gained, true);
+                        MessageParticles.sendToClients((short) 2, this.world, this.pos.offset(dir));
+                        this.playSoundEffect(SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.BLOCKS, 0.2F, this.world.rand.nextFloat() * 0.25F + this.world.rand.nextFloat() * 0.25F + 0.3F);
+                        return true;
+                    }
                 }
             }
         }
@@ -599,7 +619,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         return false;
     }
 
-    protected int siphonInto(EnumFacing dir, int amount, boolean doFill) {
+    protected int siphonInto(@Nonnull EnumFacing dir, int amount, boolean doFill) {
         TileEntity te = this.world.getTileEntity(this.pos.offset(dir));
         if (te instanceof IFluidHandler) {
             FluidStack fluid = this.tank.getFluid();
@@ -607,7 +627,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
                 return 0;
             } else {
                 IFluidHandler otherTank = (IFluidHandler)te;
-                if (!otherTank.canFill(dir.getOpposite(), fluid.getFluid())) {
+                if (otherTank.fill(fluid, false) == 0) {
                     return 0;
                 } else {
                     fluid = fluid.copy();
@@ -620,6 +640,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
+    @Nullable
     public Fluid getFluidIfValidBlock(Block block) {
         Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
         if (fluid != null) {
@@ -634,7 +655,8 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
-    public TileTankThirsty.SourceLiquidResult findSourceLiquid(Block fluidBlock, BlockPos thePos, EnumFacing dir) {
+    @Nullable
+    public TileTankThirsty.SourceLiquidResult findSourceLiquid(Block fluidBlock, @Nonnull BlockPos thePos, @Nonnull EnumFacing dir) {
         ArrayList<EnumFacing> list = new ArrayList<>();
 
         for (EnumFacing d : EnumFacing.VALUES) {
@@ -652,7 +674,8 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         return this.findSourceLiquid(fluidBlock, thePos, list, dir, 1, new HashSet<>());
     }
 
-    private TileTankThirsty.SourceLiquidResult findSourceLiquid(Block fluidBlock, BlockPos coord, ArrayList<EnumFacing> dirs, EnumFacing nextDir, int steps, HashSet<BlockPos> seen) {
+    @Nullable
+    private TileTankThirsty.SourceLiquidResult findSourceLiquid(Block fluidBlock, @Nonnull BlockPos coord, @Nonnull ArrayList<EnumFacing> dirs, @Nonnull EnumFacing nextDir, int steps, @Nonnull HashSet<BlockPos> seen) {
         if (seen.contains(coord)) {
             return null;
         } else {
@@ -709,7 +732,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         }
     }
 
-    public boolean onCasterUse(World world, ItemStack caster, EntityPlayer player, BlockPos pos, EnumFacing side) {
+    public boolean onCasterRightClick(@Nonnull World world, ItemStack caster, @Nonnull EntityPlayer player, @Nonnull BlockPos pos, @Nonnull EnumFacing side, EnumHand hand) {
         if (player.isSneaking() && this.getGlyph(side) != 0) {
             if (!world.isRemote) {
                 int glyph = this.removeGlyph(side);
@@ -726,8 +749,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
                     }
                 }
             }
-            // TODO: get enumHand for this to workProperty
-            //player.swingArm(hand);
+            player.swingArm(hand);
             return false;
         } else {
             return true;
@@ -769,7 +791,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
 
     }
 
-    private boolean isSourceBlock(BlockPos blockPos) {
+    private boolean isSourceBlock(@Nonnull BlockPos blockPos) {
         return TjUtil.isSourceBlock(this.world, blockPos);
     }
 

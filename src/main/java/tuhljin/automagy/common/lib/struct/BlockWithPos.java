@@ -1,9 +1,10 @@
 package tuhljin.automagy.common.lib.struct;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nonnull;
 
 public class BlockWithPos extends BlockPos {
     public final Block block;
@@ -15,7 +16,7 @@ public class BlockWithPos extends BlockPos {
         this.blockaccess = blockaccess;
     }
 
-    public BlockWithPos(Block block, IBlockAccess blockaccess, BlockPos pos) {
+    public BlockWithPos(Block block, IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         super(pos);
         this.block = block;
         this.blockaccess = blockaccess;

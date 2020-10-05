@@ -10,6 +10,8 @@ import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXVisSparkle;
 import thaumcraft.Thaumcraft;
 
+import javax.annotation.Nonnull;
+
 public class MessageParticlesFloat extends FloatPosMessageToClient<MessageParticlesFloat> {
     public static final short GRABLIQUID = 2;
     protected short id;
@@ -22,17 +24,17 @@ public class MessageParticlesFloat extends FloatPosMessageToClient<MessagePartic
         this.id = id;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.id = buf.readShort();
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeShort(this.id);
     }
 
-    public void onReceived(World world, float x, float y, float z) {
+    public void onReceived(@Nonnull World world, float x, float y, float z) {
         if (this.id == GRABLIQUID) {
             int color = 7;
             this.sparkle(world, color, 7);
@@ -40,7 +42,7 @@ public class MessageParticlesFloat extends FloatPosMessageToClient<MessagePartic
     }
 
     @SideOnly(Side.CLIENT)
-    private void sparkle(World world, int color, int count) {
+    private void sparkle(@Nonnull World world, int color, int count) {
         for(int a = 0; a < count; ++a) {
             FXVisSparkle fx = new FXVisSparkle(world, (this.x + world.rand.nextFloat()), (this.y + world.rand.nextFloat()), (this.z + world.rand.nextFloat()), 1.75F, color == -1 ? world.rand.nextInt(5) : color, 3 + world.rand.nextInt(3));
             fx.setGravity(0.2F);
@@ -49,7 +51,7 @@ public class MessageParticlesFloat extends FloatPosMessageToClient<MessagePartic
 
     }
 
-    public static void sendToClients(short id, World world, float x, float y, float z) {
+    public static void sendToClients(short id, @Nonnull World world, float x, float y, float z) {
         if (!world.isRemote) {
             int dim = world.provider.getDimension();
             TargetPoint point = new TargetPoint(dim, x, y, z, PacketHandler.DEFAULT_PACKET_RANGE);
@@ -57,7 +59,7 @@ public class MessageParticlesFloat extends FloatPosMessageToClient<MessagePartic
         }
     }
 
-    public static void sendToClients(short id, World world, double x, double y, double z) {
+    public static void sendToClients(short id, @Nonnull World world, double x, double y, double z) {
         sendToClients(id, world, (float)x, (float)y, (float)z);
     }
 }

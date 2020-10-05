@@ -12,14 +12,14 @@ import javax.annotation.Nonnull;
 public class ContainerSealCraft extends SealBaseContainer {
     protected World world;
 
-    public ContainerSealCraft(InventoryPlayer iinventory, World world, ISealEntity seal) {
+    public ContainerSealCraft(@Nonnull InventoryPlayer iinventory, World world, @Nonnull ISealEntity seal) {
         super(iinventory, world, seal);
         this.world = world;
     }
 
     @Override
     @Nonnull
-    protected Slot addSlotToContainer(Slot slotIn) {
+    protected Slot addSlotToContainer(@Nonnull Slot slotIn) {
         return slotIn.getClass() == SlotGhost.class ? super.addSlotToContainer(new SlotGhostRecipe(slotIn, this.world)) : super.addSlotToContainer(slotIn);
     }
 }

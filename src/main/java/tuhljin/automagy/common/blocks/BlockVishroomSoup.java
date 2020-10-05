@@ -32,6 +32,7 @@ import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXSlimyBubble;
 import thaumcraft.common.lib.potions.PotionBlurredVision;
 import thaumcraft.common.lib.potions.PotionWarpWard;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.network.MessageParticles;
@@ -50,13 +51,13 @@ public class BlockVishroomSoup extends ModBlockFluid {
     public static final String TAG_WARPSEEN = "fluidVishroomWarpSeen";
     public static final String TAG_COWTIMER = "fluidVishroomCowTime";
 
-    public BlockVishroomSoup(String fluidName, String fluidTexture) {
-        super(new BlockVishroomSoup.FluidVishroomSoup(fluidName, fluidTexture), Material.WATER);
+    public BlockVishroomSoup() {
+        super(new BlockVishroomSoup.FluidVishroomSoup(References.FLUID_VISHROOMSOUP, References.FLUIDTEXTURE_VISHROOMSOUP), Material.WATER);
         this.setLightOpacity(5);
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, Entity entity) {
         if (!world.isRemote) {
             NBTTagCompound data;
             long t;
@@ -241,7 +242,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         if (this.isSourceBlock(world, pos)) {
             int x = pos.getX();
             int y = pos.getY();
@@ -265,7 +266,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
         }
     }
 
-    private boolean doSpread(World world, int x, int y, int z, Random rand, int count) {
+    private boolean doSpread(@Nonnull World world, int x, int y, int z, @Nonnull Random rand, int count) {
         BlockPos pos = new BlockPos(x, y, z);
         Block block = TjUtil.getBlock(world, pos);
         if (block == this) {
@@ -311,7 +312,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
         }
     }
 
-    private void poof(World world, BlockPos pos) {
+    private void poof(@Nonnull World world, @Nonnull BlockPos pos) {
         world.setBlockToAir(pos);
         ThaumcraftExtension.bamf(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
         AxisAlignedBB box = new AxisAlignedBB(pos.getX() - 0.5D, pos.getY() - 0.1D, pos.getZ() - 0.5D, pos.getX() + 1.5D, pos.getY() + 1.1D, pos.getZ() + 1.5D);
@@ -323,7 +324,8 @@ public class BlockVishroomSoup extends ModBlockFluid {
 
     }
 
-    public static EntityMooshroom turnCowIntoMooshroom(EntityCow cow) {
+    @Nonnull
+    public static EntityMooshroom turnCowIntoMooshroom(@Nonnull EntityCow cow) {
         cow.setDead();
         EntityMooshroom mooshroom = new EntityMooshroom(cow.world);
         mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
@@ -337,7 +339,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
     }
 
     public static class FluidVishroomSoup extends ModFluid {
-        public FluidVishroomSoup(String fluidName, String texture) {
+        public FluidVishroomSoup(@Nonnull String fluidName, @Nonnull String texture) {
             super(fluidName, texture);
             this.setGaseous(false);
             this.setViscosity(1500);

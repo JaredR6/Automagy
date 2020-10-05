@@ -2,13 +2,11 @@ package tuhljin.automagy.common.lib;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -16,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,19 +25,18 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import javax.annotation.Nullable;
 import thaumcraft.common.tiles.crafting.TilePedestal;
 import tuhljin.automagy.common.Automagy;
 
@@ -46,22 +44,22 @@ import javax.annotation.Nonnull;
 
 public class TjUtil {
 
-    public static void sendChatToPlayer(EntityPlayer player, String message) {
+    public static void sendChatToPlayer(@Nonnull EntityPlayer player, String message) {
         message = I18n.format(message);
-        sendRawChatToPlayer(player, message, EnumChatFormatting.DARK_AQUA);
+        sendRawChatToPlayer(player, message, TextFormatting.DARK_AQUA);
     }
 
-    public static void sendFormattedChatToPlayer(EntityPlayer player, String message, Object... data) {
-        message = StatCollector.func_74837_a(message, data);
-        sendRawChatToPlayer(player, message, EnumChatFormatting.DARK_AQUA);
+    public static void sendFormattedChatToPlayer(@Nonnull EntityPlayer player, String message, Object... data) {
+        message = I18n.format(message, data);
+        sendRawChatToPlayer(player, message, TextFormatting.DARK_AQUA);
     }
 
-    public static void sendRawChatToPlayer(EntityPlayer player, String message, EnumChatFormatting chatFormatting) {
+    public static void sendRawChatToPlayer(@Nonnull EntityPlayer player, String message, @Nullable TextFormatting chatFormatting) {
         if (chatFormatting != null) {
             message = chatFormatting + message;
         }
 
-        player.func_145747_a(new ChatComponentText(message));
+        player.sendMessage(new TextComponentString(message));
     }
 
     public static boolean isPlayerOnline(String name) {
@@ -74,17 +72,20 @@ public class TjUtil {
         return false;
     }
 
+    @Nonnull
     public static ArrayList<String> getMultiLineLocalizedString(String message) {
         message = I18n.format(message);
         String[] s = message.split("\\\\n");
         return new ArrayList<>(Arrays.asList(s));
      }
 
-    public static Block getBlock(IBlockAccess blockAccess, BlockPos pos) {
+    @Nonnull
+    public static Block getBlock(@Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos) {
         return blockAccess.getBlockState(pos).getBlock();
     }
 
-    public static EnumFacing getNextSideOnBlockFromDir(EnumFacing side, EnumFacing dir) {
+    @Nullable
+    public static EnumFacing getNextSideOnBlockFromDir(@Nonnull EnumFacing side, @Nonnull EnumFacing dir) {
         switch(side) {
             case UP:
             case DOWN:
@@ -137,7 +138,8 @@ public class TjUtil {
         return null;
     }
 
-    public static EnumFacing getSideFromEntityFacing(EntityLivingBase entity) {
+    @Nullable
+    public static EnumFacing getSideFromEntityFacing(@Nonnull EntityLivingBase entity) {
         int l = MathHelper.floor((double)(entity.rotationYaw * 4.0F / 360.0F) + 2.5D) & 3;
         switch(l) {
             case 0:
@@ -153,57 +155,54 @@ public class TjUtil {
         }
     }
 
-    public static String getBlockNameAt(World world, BlockPos pos) {
+    @Nullable
+    public static String getBlockNameAt(@Nonnull World world, @Nonnull BlockPos pos) {
         String name = null;
+
         if (isChunkLoaded(world, pos)) {
+            if (world.isAirBlock(pos))
+                    return null;
             IBlockState state = world.getBlockState(pos);
-            if (state == null) {
-                return null;
-            }
 
             Block block = state.getBlock();
-            if (block != null) {
-                Item blockItem = Item.getItemFromBlock(block);
-                if (blockItem == null) {
-                    name = block.getUnlocalizedName();
-                } else {
-                    ItemStack blockStack = new ItemStack(blockItem, 1, block.getMetaFromState(state));
-                    name = blockItem.getUnlocalizedName(blockStack);
-                }
+            Item blockItem = Item.getItemFromBlock(block);
+            if (blockItem == Items.AIR) {
+                name = block.getUnlocalizedName();
+            } else {
+                ItemStack blockStack = new ItemStack(blockItem, 1, block.getMetaFromState(state));
+                name = blockItem.getUnlocalizedName(blockStack);
+            }
 
-                if (name != null) {
-                    if (name.isEmpty()) {
-                        return null;
-                    }
-                    /*
-                    String temp = name + ".name";
-                    String name2 = I18n.format(temp);
+            if (name.isEmpty()) {
+                return null;
+            }
+                /*
+                String temp = name + ".name";
+                String name2 = I18n.format(temp);
+                if (temp.equals(name2)) {
+                    int meta = block.getMetaFromState(state);
+                    temp = name + "." + meta + ".name";
+                    name2 = I18n.format(temp);
                     if (temp.equals(name2)) {
-                        int meta = block.func_176201_c(state);
-                        temp = name + "." + meta + ".name";
-                        name2 = I18n.format(temp);
-                        if (temp.equals(name2)) {
-                            if (name.substring(0, 5).equals("tile.")) {
-                                name = name.substring(5);
-                            }
-
-                            name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                        } else {
-                            name = name2;
+                        if (name.substring(0, 5).equals("tile.")) {
+                            name = name.substring(5);
                         }
+
+                        name = name.substring(0, 1).toUpperCase() + name.substring(1);
                     } else {
                         name = name2;
                     }
-
-                     */
+                } else {
+                    name = name2;
                 }
-            }
+
+                 */
         }
 
         return name;
     }
 
-    public static boolean isAcceptableSurfaceAtPos(World world, BlockPos pos, boolean allowGlowstone, boolean allowGlass, boolean allowPedestal) {
+    public static boolean isAcceptableSurfaceAtPos(@Nonnull World world, @Nonnull BlockPos pos, boolean allowGlowstone, boolean allowGlass, boolean allowPedestal) {
         if (world.isSideSolid(pos, EnumFacing.UP)) {
             return true;
         } else {
@@ -227,11 +226,12 @@ public class TjUtil {
         }
     }
 
-    public static boolean isAcceptableSurfaceBelowPos(World world, BlockPos pos, boolean allowGlowstone, boolean allowGlass, boolean allowPedestal) {
+    public static boolean isAcceptableSurfaceBelowPos(@Nonnull World world, @Nonnull BlockPos pos, boolean allowGlowstone, boolean allowGlass, boolean allowPedestal) {
         return isAcceptableSurfaceAtPos(world, pos.offset(EnumFacing.DOWN), allowGlowstone, allowGlass, allowPedestal);
     }
 
-    public static NonNullList<ItemStack> getDropsFromBlock(World world, BlockPos pos, boolean includeSilkDrops, int fortune) {
+    @Nonnull
+    public static NonNullList<ItemStack> getDropsFromBlock(@Nonnull World world, @Nonnull BlockPos pos, boolean includeSilkDrops, int fortune) {
         IBlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> drops = NonNullList.create();
         state.getBlock().getDrops(drops, world, pos, state, fortune);
@@ -254,15 +254,17 @@ public class TjUtil {
         return drops;
     }
 
-    public static ItemStack getStackFromBlock(World world, BlockPos pos) {
+    @Nonnull
+    public static ItemStack getStackFromBlock(@Nonnull World world, @Nonnull BlockPos pos) {
         return getStackFromBlock(TjUtil.getBlock(world, pos), world, pos);
     }
 
-    public static ItemStack getStackFromBlock(Block block, World world, BlockPos pos) {
+    @Nonnull
+    public static ItemStack getStackFromBlock(@Nonnull Block block, @Nonnull World world, @Nonnull BlockPos pos) {
         return new ItemStack(Item.getItemFromBlock(block), 1, block.getMetaFromState(world.getBlockState(pos)));
     }
 
-    public static boolean isPrecipitationAt(World world, BlockPos pos) {
+    public static boolean isPrecipitationAt(@Nonnull World world, @Nonnull BlockPos pos) {
         if (!world.isRaining()) {
             return false;
         } else {
@@ -271,19 +273,20 @@ public class TjUtil {
         }
     }
 
-    public static boolean isEntityLookingDown(EntityLivingBase entity) {
+    public static boolean isEntityLookingDown(@Nonnull EntityLivingBase entity) {
         return entity.rotationPitch > 0.0F;
     }
 
-    public static boolean areItemsEqualIgnoringSize(ItemStack stack1, ItemStack stack2) {
+    public static boolean areItemsEqualIgnoringSize(@Nonnull ItemStack stack1, @Nonnull ItemStack stack2) {
         return !stack1.isEmpty() && !stack2.isEmpty() && stack1.isItemEqual(stack2) && ItemStack.areItemStackTagsEqual(stack2, stack1);
     }
 
-    public static boolean canItemsStack(ItemStack stack1, ItemStack stack2) {
+    public static boolean canItemsStack(@Nonnull ItemStack stack1, @Nonnull ItemStack stack2) {
         return (stack1.isEmpty() || stack2.isEmpty() || areItemsEqualIgnoringSize(stack1, stack2)) && stack1.isStackable();
     }
 
-    public static NBTTagCompound writeLargeItemStackToNBT(ItemStack stack, NBTTagCompound nbt) {
+    @Nonnull
+    public static NBTTagCompound writeLargeItemStackToNBT(@Nonnull ItemStack stack, @Nonnull NBTTagCompound nbt) {
         nbt.setShort("id", (short)Item.getIdFromItem(stack.getItem()));
         nbt.setInteger("Count", stack.getCount());
         nbt.setShort("Damage", (short)stack.getItemDamage());
@@ -294,7 +297,8 @@ public class TjUtil {
         return nbt;
     }
 
-    public static ItemStack readLargeItemStackFromNBT(NBTTagCompound nbt) {
+    @Nonnull
+    public static ItemStack readLargeItemStackFromNBT(@Nonnull NBTTagCompound nbt) {
         Item item = Item.getItemById(nbt.getShort("id"));
         int damage = Math.max(nbt.getShort("Damage"), 0);
         ItemStack stack = new ItemStack(item, nbt.getInteger("Count"), damage);
@@ -306,7 +310,7 @@ public class TjUtil {
         return stack;
     }
 
-    public static boolean playerHasPartialStackedItem(EntityPlayer player, ItemStack stack) {
+    public static boolean playerHasPartialStackedItem(@Nonnull EntityPlayer player, @Nonnull ItemStack stack) {
         if (!stack.isStackable()) {
             return false;
         } else {
@@ -328,7 +332,7 @@ public class TjUtil {
         }
     }
 
-    public static void consumePlayerItem(EntityPlayer player, int slot, ItemStack replace, boolean replaceOnlyIfNoContainer) {
+    public static void consumePlayerItem(@Nonnull EntityPlayer player, int slot, ItemStack replace, boolean replaceOnlyIfNoContainer) {
         boolean replaced = false;
         boolean needUpdate = false;
         boolean containerTookSlot = false;
@@ -385,15 +389,15 @@ public class TjUtil {
 
     }
 
-    public static void consumePlayerItem(EntityPlayer player, int slot, ItemStack replace) {
+    public static void consumePlayerItem(@Nonnull EntityPlayer player, int slot, ItemStack replace) {
         consumePlayerItem(player, slot, replace, false);
     }
 
-    public static void consumePlayerItem(EntityPlayer player, int slot) {
+    public static void consumePlayerItem(@Nonnull EntityPlayer player, int slot) {
         consumePlayerItem(player, slot, (ItemStack)null, false);
     }
 
-    public static void dropItemsIntoWorld(IInventory inventory, World world, BlockPos pos, Block block) {
+    public static void dropItemsIntoWorld(@Nullable IInventory inventory, @Nonnull World world, @Nonnull BlockPos pos, @Nullable Block block) {
         if (inventory != null) {
             int x = pos.getX();
             int y = pos.getY();
@@ -413,7 +417,8 @@ public class TjUtil {
 
     }
 
-    public static EntityItem dropItemIntoWorld(ItemStack stack, World world, double x, double y, double z) {
+    @Nullable
+    public static EntityItem dropItemIntoWorld(@Nonnull ItemStack stack, @Nonnull World world, double x, double y, double z) {
         Random rand = world.rand;
         float f = rand.nextFloat() * 0.8F + 0.1F;
         float f1 = rand.nextFloat() * 0.8F + 0.1F;
@@ -439,7 +444,8 @@ public class TjUtil {
         return entityitem;
     }
 
-    public static EntityItem dropItemIntoWorldSimple(ItemStack stack, World world, double x, double y, double z) {
+    @Nonnull
+    public static EntityItem dropItemIntoWorldSimple(@Nonnull ItemStack stack, @Nonnull World world, double x, double y, double z) {
         Random rand = world.rand;
         double f3 = 0.05D;
         double motionX = rand.nextGaussian() * f3;
@@ -448,7 +454,8 @@ public class TjUtil {
         return dropItemIntoWorldWithMotion(stack, world, x, y, z, motionX, motionY, motionZ);
     }
 
-    public static EntityItem dropItemIntoWorldWithMotion(ItemStack stack, World world, double x, double y, double z, double motionX, double motionY, double motionZ) {
+    @Nonnull
+    public static EntityItem dropItemIntoWorldWithMotion(@Nonnull ItemStack stack, @Nonnull World world, double x, double y, double z, double motionX, double motionY, double motionZ) {
         EntityItem entityitem = new EntityItem(world, x, y, z, stack);
         entityitem.motionX = motionX;
         entityitem.motionY = motionY;
@@ -457,11 +464,12 @@ public class TjUtil {
         return entityitem;
     }
 
-    public static List<EntityItem> getItemsInArea(World world, AxisAlignedBB area) {
+    @Nonnull
+    public static List<EntityItem> getItemsInArea(@Nonnull World world, @Nonnull AxisAlignedBB area) {
         return world.getEntitiesWithinAABB(EntityItem.class, area);
     }
 
-    public static boolean canFullyExtract(IItemHandler inv, int slot) {
+    public static boolean canFullyExtract(@Nonnull IItemHandler inv, int slot) {
         ItemStack stack = inv.getStackInSlot(slot);
         if (stack.isEmpty()) {
             return false;
@@ -472,7 +480,7 @@ public class TjUtil {
     }
 
     @Nonnull
-    public static ItemStack addToInventory(ItemStack stack, IInventory inv, int firstSlot, int lastSlot) {
+    public static ItemStack addToInventory(ItemStack stack, @Nonnull IInventory inv, int firstSlot, int lastSlot) {
         stack = stack.copy();
         boolean reverse = firstSlot > lastSlot;
         int offSlot = reverse ? lastSlot - 1 : lastSlot + 1;
@@ -538,11 +546,12 @@ public class TjUtil {
         return stack;
     }
 
-    public static ItemStack addToInventory(ItemStack stack, IInventory inv) {
+    @Nonnull
+    public static ItemStack addToInventory(ItemStack stack, @Nonnull IInventory inv) {
         return addToInventory(stack, inv, 0, inv.getSizeInventory() - 1);
     }
 
-    public static boolean canFitInInventory(ItemStack stack, IInventory inv, int firstSlot, int lastSlot) {
+    public static boolean canFitInInventory(@Nonnull ItemStack stack, @Nonnull IInventory inv, int firstSlot, int lastSlot) {
         int toDropOff = stack.getCount();
         boolean stackable = stack.isStackable();
         int stacksTo = stackable ? Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit()) : 1;
@@ -569,44 +578,31 @@ public class TjUtil {
         return false;
     }
 
-    public static ItemStack addToInventory(ItemStack stack, IItemHandler handler, boolean simulate) {
+    @Nonnull
+    public static ItemStack addToInventory(@Nonnull ItemStack stack, IItemHandler handler, boolean simulate) {
         return ItemHandlerHelper.insertItem(handler, stack.copy(), simulate);
     }
 
     // TODO: Implement liquids
-    /*
-    public static Fluid canDrainTank(IFluidHandler tank, EnumFacing dir, Fluid fluid) {
+    @Nullable
+    public static Fluid canDrainTank(@Nonnull IFluidHandler tank, EnumFacing dir, @Nullable Fluid fluid) {
+        tank.getTankProperties();
+
         if (fluid != null) {
-            return tank.canDrain(dir, fluid) ? fluid : null;
-        } else {
-            FluidTankInfo[] infos = tank.getTankInfo(dir);
-            if (infos != null && infos.length >= 1) {
-                FluidTankInfo[] var4 = infos;
-                int var5 = infos.length;
-
-                for(int var6 = 0; var6 < var5; ++var6) {
-                    FluidTankInfo info = var4[var6];
-                    if (info.fluid != null && info.capacity > 0) {
-                        fluid = info.fluid.getFluid();
-                        if (tank.canDrain(dir, fluid)) {
-                            return fluid;
-                        }
-                    }
-                }
-
-                return null;
+            FluidStack testDrain = tank.drain(Integer.MAX_VALUE, false);
+            if (testDrain != null && testDrain.getFluid() == fluid) {
+                return fluid;
             } else {
                 return null;
             }
+        } else {
+
+            FluidStack testDrain = tank.drain(Integer.MAX_VALUE, false);
+            return testDrain == null ? null : testDrain.getFluid();
         }
     }
 
-    public static Fluid canDrainTank(IFluidHandler tank, EnumFacing dir, FluidStack fluidStack) {
-        return canDrainTank(tank, dir, fluidStack == null ? null : fluidStack.getFluid());
-    }
-     */
-
-    public static boolean isSourceBlock(World world, BlockPos blockPos) {
+    public static boolean isSourceBlock(@Nonnull World world, @Nonnull BlockPos blockPos) {
         IBlockState state = world.getBlockState(blockPos);
         if (state == Blocks.AIR.getDefaultState()) {
             return false;
@@ -637,15 +633,16 @@ public class TjUtil {
         return (double)MathHelper.sqrt(f);
     }
 
-    public static boolean isChunkLoaded(World world, BlockPos pos) {
+    public static boolean isChunkLoaded(@Nonnull World world, @Nonnull BlockPos pos) {
         return world.getChunkFromBlockCoords(pos).isLoaded();
     }
 
-    public static boolean isChunkLoaded(World world, int blockX, int blockZ) {
+    public static boolean isChunkLoaded(@Nonnull World world, int blockX, int blockZ) {
         return isChunkLoaded(world, new BlockPos(blockX, 0, blockZ));
     }
 
-    public static Pattern getSafePatternUsingAsteriskForWildcard(String str) {
+    @Nullable
+    public static Pattern getSafePatternUsingAsteriskForWildcard(@Nonnull String str) {
         String s = str.replaceAll("\\*+", ".*");
         s = Pattern.quote(s);
         s = s.replace(".*", "\\E.*\\Q");

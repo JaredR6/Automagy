@@ -3,22 +3,28 @@ package tuhljin.automagy.common.tiles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.inventory.FilterHelper;
 import tuhljin.automagy.common.lib.inventory.IContainsFilter;
 import tuhljin.automagy.common.lib.inventory.InventoryObjectFilter;
 
+import javax.annotation.Nonnull;
+
 public class TileMawFinical extends TileMawHungry implements IContainsFilter {
     public boolean redSense = false;
+    @Nonnull
     protected InventoryObjectFilter invFilter = new InventoryObjectFilter("Maw Filter", 1);
 
     public TileMawFinical() {
     }
 
+    @Nonnull
     public InventoryObjectFilter getFilterInventory() {
         return this.invFilter;
     }
 
-    protected ItemStack depositItem(ItemStack stack, IItemHandler itemHandler) {
+    @Nullable
+    protected ItemStack depositItem(@Nonnull ItemStack stack, IItemHandler itemHandler) {
         if (this.invFilter.getFilter(0) == null) {
             return super.depositItem(stack, itemHandler);
         } else {
@@ -54,12 +60,12 @@ public class TileMawFinical extends TileMawHungry implements IContainsFilter {
         this.markDirty();
     }
 
-    public void writeServerNBT(NBTTagCompound nbttagcompound) {
+    public void writeServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.invFilter.writeCustomNBT(nbttagcompound);
         nbttagcompound.setBoolean("redSense", this.redSense);
     }
 
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.invFilter.readCustomNBT(nbttagcompound);
         this.redSense = nbttagcompound.getBoolean("redSense");
     }

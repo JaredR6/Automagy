@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 public class ContainerGolemWorkbench extends ModContainerAttached<TileGolemWorkbench> implements IReporteeForSlot {
     private World world;
 
-    public ContainerGolemWorkbench(TileGolemWorkbench tile, InventoryPlayer invPlayer) {
+    public ContainerGolemWorkbench(@Nonnull TileGolemWorkbench tile, @Nonnull InventoryPlayer invPlayer) {
         super(tile, invPlayer);
         this.world = invPlayer.player.world;
         this.addPlayerInventorySlots(39);
@@ -69,7 +69,7 @@ public class ContainerGolemWorkbench extends ModContainerAttached<TileGolemWorkb
     }
 
     @Override
-    public void onSlotChanged(SlotRestrictedWithReporting slot) {
+    public void onSlotChanged(@Nonnull SlotRestrictedWithReporting slot) {
         if (!this.world.isRemote) {
             this.tile.onInventoryChanged(slot.getSlotIndex());
         }

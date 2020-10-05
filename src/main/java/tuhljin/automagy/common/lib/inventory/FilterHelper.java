@@ -3,20 +3,23 @@ package tuhljin.automagy.common.lib.inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import javax.annotation.Nullable;
+
+import javax.annotation.Nonnull;
 
 public class FilterHelper {
     public FilterHelper() {
     }
 
-    public static int getMaxAllowedAfterFilter(ItemStack queryStack, InventoryWithFilterOptions filter, boolean isBlacklist, IItemHandler destHandler) {
+    public static int getMaxAllowedAfterFilter(@Nonnull ItemStack queryStack, @Nonnull InventoryWithFilterOptions filter, boolean isBlacklist, IItemHandler destHandler) {
         return getMaxAllowedAfterFilter(queryStack, filter, isBlacklist, destHandler, null);
     }
 
-    public static int getMaxAllowedAfterFilter(ItemStack queryStack, InventoryWithFilterOptions filter, boolean isBlacklist, FilteringItemList destList) {
+    public static int getMaxAllowedAfterFilter(@Nonnull ItemStack queryStack, @Nonnull InventoryWithFilterOptions filter, boolean isBlacklist, FilteringItemList destList) {
         return getMaxAllowedAfterFilter(queryStack, filter, isBlacklist, null, destList);
     }
 
-    protected static int getMaxAllowedAfterFilter(ItemStack queryStack, InventoryWithFilterOptions filter, boolean isBlacklist, IItemHandler destHandler, FilteringItemList destList) {
+    protected static int getMaxAllowedAfterFilter(@Nonnull ItemStack queryStack, @Nonnull InventoryWithFilterOptions filter, boolean isBlacklist, IItemHandler destHandler, @Nullable FilteringItemList destList) {
         ItemStack stack = null;
         boolean found = false;
         Item qItem = queryStack.getItem();

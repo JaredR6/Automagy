@@ -4,7 +4,9 @@ import java.util.regex.Pattern;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.items.ItemFilter;
+import tuhljin.automagy.common.items.ItemFilterBlack;
 
 import javax.annotation.Nonnull;
 
@@ -32,9 +34,10 @@ public class InventoryObjectFilter extends InventorySimple {
     @Override
     public void onInventoryChanged(int slot, ItemStack prevStack) {
         this.filter.set(slot, InventoryWithFilterOptions.NULL_FILTER);
-        this.blacklist[slot] = ItemFilter.stackIsBlacklist(this.getStackInSlot(slot));
+        this.blacklist[slot] = (this.getStackInSlot(slot).getItem() instanceof ItemFilterBlack);
     }
 
+    @Nonnull
     public InventoryWithFilterOptions getFilter(int slot) {
         if (this.filter.get(slot) == InventoryWithFilterOptions.NULL_FILTER) {
             ItemStack stack = this.getStackInSlot(slot);
@@ -49,6 +52,7 @@ public class InventoryObjectFilter extends InventorySimple {
         return this.blacklist[slot];
     }
 
+    @Nullable
     public Pattern getPattern(int slot) {
         InventoryWithFilterOptions invF = this.getFilter(slot);
         return invF == InventoryWithFilterOptions.NULL_FILTER ? null : invF.getPattern();
@@ -60,12 +64,12 @@ public class InventoryObjectFilter extends InventorySimple {
     }
 
     @Override
-    public void readCustomNBT(NBTTagCompound nbttagcompound) {
+    public void readCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readCustomNBT(nbttagcompound);
 
         for(int slot = 0; slot < this.getSizeInventory(); ++slot) {
             this.filter.set(slot, InventoryWithFilterOptions.NULL_FILTER);
-            this.blacklist[slot] = ItemFilter.stackIsBlacklist(this.getStackInSlot(slot));
+            this.blacklist[slot] = (this.getStackInSlot(slot).getItem() instanceof ItemFilterBlack);
         }
 
     }

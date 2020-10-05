@@ -17,6 +17,8 @@ import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.network.MessageParticles;
 import tuhljin.automagy.common.network.MessageParticlesTargeted;
 
+import javax.annotation.Nonnull;
+
 public class TileProcess extends ModTileEntity implements ITickable {
     int completedActions = 0;
     int ticksSinceAction = 0;
@@ -89,13 +91,13 @@ public class TileProcess extends ModTileEntity implements ITickable {
     }
 
     @Override
-    public void readServerNBT(NBTTagCompound nbttagcompound) {
+    public void readServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         this.completedActions = nbttagcompound.getInteger("completedActions");
         this.blocksConsumed = nbttagcompound.getInteger("blocksConsumed");
     }
 
     @Override
-    public void writeServerNBT(NBTTagCompound nbttagcompound) {
+    public void writeServerNBT(@Nonnull NBTTagCompound nbttagcompound) {
         nbttagcompound.setInteger("completedActions", this.completedActions);
         nbttagcompound.setInteger("blocksConsumed", this.blocksConsumed);
     }

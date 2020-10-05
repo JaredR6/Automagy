@@ -110,7 +110,7 @@ public class InventorySimple implements IInventory {
         }
     }
 
-    public void setInventorySlotContentsSoftly(int slot, ItemStack stack) {
+    public void setInventorySlotContentsSoftly(int slot, @Nonnull ItemStack stack) {
         this.inventorySlots.set(slot, stack);
     }
 
@@ -185,7 +185,7 @@ public class InventorySimple implements IInventory {
         this.markDirty();
     }
 
-    public void readCustomNBT(NBTTagCompound nbttagcompound) {
+    public void readCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = nbttagcompound.getTagList(this.nbtKey, 10);
         this.inventorySlots = NonNullList.withSize(this.numSlots, ItemStack.EMPTY);
         if (nbttaglist.tagCount() > 0) {
@@ -200,7 +200,7 @@ public class InventorySimple implements IInventory {
 
     }
 
-    public void writeCustomNBT(NBTTagCompound nbttagcompound) {
+    public void writeCustomNBT(@Nonnull NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = new NBTTagList();
 
         for(int i = 0; i < this.numSlots; ++i) {
@@ -215,11 +215,11 @@ public class InventorySimple implements IInventory {
         nbttagcompound.setTag(this.nbtKey, nbttaglist);
     }
 
-    protected ItemStack loadItemStack(NBTTagCompound nbt) {
+    protected ItemStack loadItemStack(@Nonnull NBTTagCompound nbt) {
         return new ItemStack(nbt);
     }
 
-    protected void writeItemStack(ItemStack stack, NBTTagCompound nbt) {
+    protected void writeItemStack(@Nonnull ItemStack stack, @Nonnull NBTTagCompound nbt) {
         stack.writeToNBT(nbt);
     }
 }

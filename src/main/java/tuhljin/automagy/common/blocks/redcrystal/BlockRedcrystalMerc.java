@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
+    @Nullable
     private WorldSpecificCoordinates lastCoord = null;
 
     public BlockRedcrystalMerc() {
@@ -50,18 +51,18 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, @Nonnull BlockPos pos) {
+    public boolean canPlaceBlockAt(@Nonnull World world, @Nonnull BlockPos pos) {
         return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, false) && TjUtil.getBlock(world, pos).isReplaceable(world, pos);
     }
 
     @Override
-    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+    public boolean canPlaceBlockOnSide(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
         return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, false);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+    public void randomDisplayTick(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Random rand) {
         TileRedcrystalMerc te = null;
 
         try {
@@ -164,7 +165,8 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
         return drops;
     }
 
-    protected PowerResult calculateRedstonePowerAt(World world, BlockPos pos, EnumFacing orientation) {
+    @Nullable
+    protected PowerResult calculateRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing orientation) {
         int receivingStrength = 0;
 
         TileRedcrystalMerc te;
@@ -193,7 +195,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
         }
     }
 
-    public void updateAndPropagateChanges(World world, BlockPos pos, boolean checkStrength, boolean calledByNeighborWire, boolean forcePropagate, boolean immediateNeighborUpdates) {
+    public void updateAndPropagateChanges(@Nonnull World world, @Nonnull BlockPos pos, boolean checkStrength, boolean calledByNeighborWire, boolean forcePropagate, boolean immediateNeighborUpdates) {
         super.updateAndPropagateChanges(world, pos, checkStrength, calledByNeighborWire, forcePropagate, immediateNeighborUpdates);
         if (!world.isRemote) {
             TileRedcrystalMerc te = null;
@@ -212,7 +214,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess world, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess world, @Nonnull BlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -220,7 +222,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean isActualState) {
+    public void addCollisionBoxToList(@Nonnull IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean isActualState) {
         super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity, isActualState);
         if (entity instanceof EntityPlayer) {
             int x = pos.getX();

@@ -7,6 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import javax.annotation.Nullable;
 import thaumcraft.common.container.slot.SlotGhost;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.items.ItemRecipe;
@@ -18,9 +19,10 @@ public class ContainerRecipe extends Container {
     public final int blockedSlotID;
     @Nonnull ItemStack modifyingStack = ItemStack.EMPTY;
     private int productSlotID;
+    @Nullable
     public InventoryForRecipe recipeInventory;
 
-    public ContainerRecipe(EntityPlayer player) {
+    public ContainerRecipe(@Nonnull EntityPlayer player) {
         InventoryPlayer inventoryPlayer = player.inventory;
         this.blockedSlotID = inventoryPlayer.currentItem;
 
@@ -61,7 +63,7 @@ public class ContainerRecipe extends Container {
 
     @Nonnull
     @Override
-    public ItemStack slotClick(int slot, int dragType, ClickType clickType, EntityPlayer player) {
+    public ItemStack slotClick(int slot, int dragType, ClickType clickType, @Nonnull EntityPlayer player) {
         if (slot != this.blockedSlotID && slot != this.productSlotID) {
             ItemStack stack = super.slotClick(slot, dragType, clickType, player);
             if (slot >= this.productSlotID - 9 && slot < this.productSlotID) {
@@ -74,7 +76,7 @@ public class ContainerRecipe extends Container {
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer player) {
+    public void onContainerClosed(@Nonnull EntityPlayer player) {
         super.onContainerClosed(player);
         if (!player.world.isRemote && !this.modifyingStack.isEmpty() && this.recipeInventory != null) {
             boolean properActiveStack = ItemStack.areItemStacksEqual(this.modifyingStack, player.inventory.getStackInSlot(this.blockedSlotID));
@@ -86,7 +88,7 @@ public class ContainerRecipe extends Container {
 
     }
 
-    public void receiveMessageFromClient(NonNullList<ItemStack> stacks) {
+    public void receiveMessageFromClient(@Nonnull NonNullList<ItemStack> stacks) {
         if (stacks.size() != 9) {
             Automagy.logError("ContainerFilter received invalid packet data. Ignoring.");
         } else {

@@ -6,9 +6,10 @@ import java.util.Locale;
 
 public class References {
     public static final String MOD_ID = "automagy";
-    public static final String MOD_NAME = "Automagy";
+    public static final String MOD_DOMAIN = "automagy";
+    public static final String MOD_PREFIX = MOD_DOMAIN + ":";
+    public static final String MOD_NAME = "automagy";
     public static final String VERSION = "3.0.0";
-    public static final String MOD_DOMAIN;
     public static final String URL_VERSION_CHECK = "http://everburningtorch.com/minecraft/automagy/checkVersion2/";
     public static final String BLOCK_REDCRYSTAL = "redcrystal";
     public static final String BLOCK_REDCRYSTAL_AMP = "redcrystalAmp";
@@ -39,7 +40,8 @@ public class References {
     public static final String ITEM_AVARICEPEARL = "avaricePearl";
     public static final String ITEM_ENCHANTEDPAPER = "enchantedPaper";
     public static final String ITEM_ENCHANTEDPAPER_BOUND = "book";
-    public static final String ITEM_FILTER = "filter";
+    public static final String ITEM_FILTER_WHITE = "filterWhitelist";
+    public static final String ITEM_FILTER_BLACK = "filterBlacklist";
     public static final String ITEM_RECIPE = "recipe";
     public static final String ITEM_FOODSTUFF = "foodstuff";
     public static final String ITEM_TALLYLENS = "tallyLens";
@@ -47,25 +49,25 @@ public class References {
     public static final String ITEM_BUCKET_MUSHROOM = "bucketMushroom";
     public static final String ITEM_BUCKET_VISHROOM = "bucketVishroom";
     public static final String FLUID_MILK = "milk";
-    public static final String FLUIDTEXTURE_MILK;
+    public static final String FLUIDTEXTURE_MILK = MOD_PREFIX + "blocks/milk";
     public static final String FLUID_MUSHROOMSOUP = "mushroomsoup";
-    public static final String FLUIDTEXTURE_MUSHROOMSOUP;
+    public static final String FLUIDTEXTURE_MUSHROOMSOUP = MOD_PREFIX + "blocks/mushroomSoup";
     public static final String FLUID_VISHROOMSOUP = "vishroomsoup";
-    public static final String FLUIDTEXTURE_VISHROOMSOUP;
-    public static final String ENTITY_AVARICEPEARL;
+    public static final String FLUIDTEXTURE_VISHROOMSOUP = MOD_PREFIX + "blocks/vishroomSoup";
+    public static final String ENTITY_AVARICEPEARL = MOD_PREFIX + "avaricePearl";
     public static final String SEAL_CRAFT = "craft";
     public static final String SEAL_CRAFT_PROVIDE = "craft_provide";
     public static final String SEAL_SHEAR = "shear";
     public static final String SEAL_SHEAR_ADV = "shear_advanced";
     public static final String SEAL_SUPPLY = "supply";
-    public static final String PREFIX_GUI;
-    public static final String GUI_CHECKBOXABLE;
-    public static final String GUI_WIDGETS_RECOLOR;
-    public static final String GUI_FILTERHOLDER;
-    public static final String GUI_RUNICWHITELIST;
-    public static final String GUI_RUNICBLACKLIST;
-    public static final String GUI_RUNICRECIPE;
-    public static final String GUI_GOLEMWORKBENCH;
+public static final String PREFIX_GUI = MOD_PREFIX + "textures/gui/";
+    public static final String GUI_CHECKBOXABLE = PREFIX_GUI + "guiCheckboxable.png";
+    public static final String GUI_WIDGETS_RECOLOR = PREFIX_GUI + "widgetsRecolor.png";
+    public static final String GUI_FILTERHOLDER = PREFIX_GUI + "filterHolder.png";
+    public static final String GUI_RUNICWHITELIST = PREFIX_GUI + "runicWhitelist.png";
+    public static final String GUI_RUNICBLACKLIST = PREFIX_GUI + "runicBlacklist.png";
+    public static final String GUI_RUNICRECIPE = PREFIX_GUI + "runicRecipe.png";
+    public static final String GUI_GOLEMWORKBENCH = PREFIX_GUI + "golemWorkbench.png";
     public static final int guiIDHourglassMagic = 1;
     public static final int guiIDFilterWhite = 2;
     public static final int guiIDFilterBlack = 3;
@@ -74,9 +76,9 @@ public class References {
     public static final int guiIDGolemWorkbench = 6;
     public static final int guiIDMaw = 7;
     public static final String RESEARCH_CATEGORY = "AUTOMAGY";
-    public static final String GUI_RESEARCH_ICON;
+    public static final String GUI_RESEARCH_ICON = PREFIX_GUI + "researchIcon.png";
     public static final String GUI_RESEARCH_BACKGROUND = "thaumcraft:textures/gui/gui_research_back_5.jpg";
-    public static final String GUI_RESEARCH_BACKGROUND_OVER;
+    public static final String GUI_RESEARCH_BACKGROUND_OVER = PREFIX_GUI + "gui_research_back_over_red.png";
     public static final String WAILA_REDCRYSTAL_POWER = "wailaTip.redcrystalPower";
     public static final String WAILA_REDCRYSTAL_POWER_AMP = "wailaTip.redcrystalPowerWithAmp";
     public static final String WAILA_REDCRYSTAL_POWER_DIM = "wailaTip.redcrystalPowerWithCap";
@@ -87,27 +89,5 @@ public class References {
     public static final String WAILA_HOURGLASS_COUNTDOWN = "wailaTip.hourglassTimerCountdown";
     public static final String WAILA_FLUIDDATA = "wailaTip.tankFluidData";
     public static final String WAILA_FLUIDDATA_EMPTY = "wailaTip.tankFluidDataEmpty";
-    public static final ResourceLocation ENTITY_AVARICEPEARL_REGISTRY;
-
-    public References() {
-    }
-
-    static {
-        MOD_DOMAIN = "Automagy".toLowerCase(Locale.ENGLISH);
-        FLUIDTEXTURE_MILK = MOD_DOMAIN + ":blocks/milk";
-        FLUIDTEXTURE_MUSHROOMSOUP = MOD_DOMAIN + ":blocks/mushroomSoup";
-        FLUIDTEXTURE_VISHROOMSOUP = MOD_DOMAIN + ":blocks/vishroomSoup";
-        PREFIX_GUI = MOD_DOMAIN + ":" + "textures/gui/";
-        GUI_CHECKBOXABLE = PREFIX_GUI + "guiCheckboxable.png";
-        GUI_WIDGETS_RECOLOR = PREFIX_GUI + "widgetsRecolor.png";
-        GUI_FILTERHOLDER = PREFIX_GUI + "filterHolder.png";
-        GUI_RUNICWHITELIST = PREFIX_GUI + "runicWhitelist.png";
-        GUI_RUNICBLACKLIST = PREFIX_GUI + "runicBlacklist.png";
-        GUI_RUNICRECIPE = PREFIX_GUI + "runicRecipe.png";
-        GUI_GOLEMWORKBENCH = PREFIX_GUI + "golemWorkbench.png";
-        GUI_RESEARCH_ICON = PREFIX_GUI + "researchIcon.png";
-        GUI_RESEARCH_BACKGROUND_OVER = PREFIX_GUI + "gui_research_back_over_red.png";
-        ENTITY_AVARICEPEARL = MOD_DOMAIN + ":avaricePearl";
-        ENTITY_AVARICEPEARL_REGISTRY = new ResourceLocation(MOD_DOMAIN, "avarice_pearl");
-    }
+    public static final ResourceLocation ENTITY_AVARICEPEARL_REGISTRY = new ResourceLocation(MOD_DOMAIN, "avarice_pearl");
 }

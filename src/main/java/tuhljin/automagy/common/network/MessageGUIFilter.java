@@ -7,7 +7,10 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.gui.ContainerFilter;
+
+import javax.annotation.Nonnull;
 
 public class MessageGUIFilter implements IMessage, IMessageHandler<MessageGUIFilter, IMessage> {
     private int type;
@@ -18,17 +21,18 @@ public class MessageGUIFilter implements IMessage, IMessageHandler<MessageGUIFil
         this.data = data;
     }
 
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(@Nonnull ByteBuf buf) {
         this.type = buf.readByte();
         this.data = ByteBufUtils.readUTF8String(buf);
     }
 
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeByte(this.type);
         ByteBufUtils.writeUTF8String(buf, this.data);
     }
 
-    public IMessage onMessage(MessageGUIFilter message, MessageContext ctx) {
+    @Nullable
+    public IMessage onMessage(@Nonnull MessageGUIFilter message, @Nonnull MessageContext ctx) {
         EntityPlayer player = ctx.getServerHandler().player;
         if (player != null) {
             Container container = player.openContainer;

@@ -8,6 +8,8 @@ import thaumcraft.common.container.slot.SlotGhost;
 import tuhljin.automagy.common.items.ItemRecipe;
 import tuhljin.automagy.common.lib.inventory.InventoryForRecipe;
 
+import javax.annotation.Nonnull;
+
 public class SlotGhostRecipe extends SlotGhost {
     private World world;
 
@@ -16,12 +18,12 @@ public class SlotGhostRecipe extends SlotGhost {
         this.world = world;
     }
 
-    public SlotGhostRecipe(Slot slot, World world) {
+    public SlotGhostRecipe(@Nonnull Slot slot, World world) {
         this(slot.inventory, slot.getSlotIndex(), slot.xPos, slot.yPos, world);
     }
 
     @Override
-    public void putStack(ItemStack stack) {
+    public void putStack(@Nonnull ItemStack stack) {
         if (!stack.isEmpty()) {
             InventoryForRecipe rec = ItemRecipe.getRecipeInventory(stack, this.world);
             if (rec != null) {

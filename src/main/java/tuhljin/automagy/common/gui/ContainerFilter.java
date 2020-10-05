@@ -18,10 +18,11 @@ public class ContainerFilter extends Container {
     public static final int CONTAINER_FILTER_BLACKLIST_ID = 2;
     public final boolean blacklist;
     public final int blockedSlotID;
+    @Nonnull
     private ItemStack modifyingStack = ItemStack.EMPTY;
     public InventoryWithFilterOptions filterInventory;
 
-    public ContainerFilter(boolean isBlacklist, EntityPlayer player) {
+    public ContainerFilter(boolean isBlacklist, @Nonnull EntityPlayer player) {
         this.blacklist = isBlacklist;
         InventoryPlayer inventoryPlayer = player.inventory;
         this.blockedSlotID = inventoryPlayer.currentItem;
@@ -32,7 +33,7 @@ public class ContainerFilter extends Container {
             this.addSlotToContainer(slot);
             if (i == this.blockedSlotID) {
                 ItemStack stack = slot.getStack();
-                if (!this.blacklist && ItemFilter.stackIsWhitelist(stack) || this.blacklist && ItemFilter.stackIsBlacklist(stack)) {
+                if (!this.blacklist && stack.getItem() instanceof ItemFilter) {
                     this.modifyingStack = stack;
                 }
             }
@@ -60,12 +61,12 @@ public class ContainerFilter extends Container {
 
     @Nonnull
     @Override
-    public ItemStack slotClick(int slot, int dragType, ClickType clickType, EntityPlayer player) {
+    public ItemStack slotClick(int slot, int dragType, ClickType clickType, @Nonnull EntityPlayer player) {
         return slot == this.blockedSlotID ? ItemStack.EMPTY : super.slotClick(slot, dragType, clickType, player);
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer player) {
+    public void onContainerClosed(@Nonnull EntityPlayer player) {
         super.onContainerClosed(player);
         if (!player.world.isRemote && !this.modifyingStack.isEmpty() && this.filterInventory != null) {
             boolean properActiveStack = ItemStack.areItemStacksEqual(this.modifyingStack, player.inventory.getStackInSlot(this.blockedSlotID));
@@ -78,7 +79,7 @@ public class ContainerFilter extends Container {
 
     }
 
-    public void receiveMessageFromClient(int type, String data) {
+    public void receiveMessageFromClient(int type, @Nonnull String data) {
         switch(type) {
             case 0:
                 this.filterInventory.useItemCount = !data.equals("1");

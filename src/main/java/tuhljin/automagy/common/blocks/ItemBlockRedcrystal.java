@@ -3,6 +3,8 @@ package tuhljin.automagy.common.blocks;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -12,12 +14,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystal;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalAmp;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalMerc;
@@ -26,13 +30,15 @@ import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileRedcrystalMerc;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ItemBlockRedcrystal extends ItemBlock {
-    public ItemBlockRedcrystal(Block block) {
+    public ItemBlockRedcrystal(@Nonnull Block block) {
         super(block);
     }
 
-    public boolean placeBlockAt(@Nonnull ItemStack stack, @Nonnull EntityPlayer player, World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull IBlockState newState) {
+    @Override
+    public boolean placeBlockAt(@Nonnull ItemStack stack, @Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull IBlockState newState) {
         if (!this.block.canPlaceBlockOnSide(world, pos, side)) {
             return false;
         } else {
@@ -51,20 +57,20 @@ public class ItemBlockRedcrystal extends ItemBlock {
                 if (blockRC instanceof BlockRedcrystalAmp) {
                     EnumFacing connectSide = TjUtil.getSideFromEntityFacing(player);
                     if (connectSide != null) {
-                        EnumFacing opposite = connectSide.func_176734_d();
-                        if (side.func_176745_a() > 1 && opposite == side) {
+                        EnumFacing opposite = connectSide.getOpposite();
+                        if (side.getIndex() > 1 && opposite == side) {
                             connectSide = TjUtil.isEntityLookingDown(player) ? EnumFacing.DOWN : EnumFacing.UP;
                         }
 
-                        blockRC.setConnection(world, pos, true, new EnumFacing[]{connectSide});
+                        blockRC.setConnection(world, pos, true, connectSide);
                     }
-                } else if (this.field_150939_a instanceof BlockRedcrystalMerc && stack.func_77942_o() && stack.func_77978_p().func_74764_b("mirrorX")) {
-                    TileEntity te = world.func_175625_s(pos);
+                } else if (this.block instanceof BlockRedcrystalMerc && stack.hasTagCompound() && stack.getTagCompound().hasKey("mirrorX")) {
+                    TileEntity te = world.getTileEntity(pos);
                     if (te instanceof TileRedcrystalMerc) {
-                        int mx = stack.func_77978_p().func_74762_e("mirrorX");
-                        int my = stack.func_77978_p().func_74762_e("mirrorY");
-                        int mz = stack.func_77978_p().func_74762_e("mirrorZ");
-                        int mdim = stack.func_77978_p().func_74762_e("mirrorDim");
+                        int mx = stack.getTagCompound().getInteger("mirrorX");
+                        int my = stack.getTagCompound().getInteger("mirrorY");
+                        int mz = stack.getTagCompound().getInteger("mirrorZ");
+                        int mdim = stack.getTagCompound().getInteger("mirrorDim");
                         ((TileRedcrystalMerc)te).setMirrorLink(mdim, mx, my, mz);
                     }
                 }
@@ -74,45 +80,52 @@ public class ItemBlockRedcrystal extends ItemBlock {
         }
     }
 
-    public EnumRarity func_77613_e(ItemStack stack) {
-        return stack.func_77973_b() == Item.func_150898_a(ModBlocks.redcrystalMerc) ? EnumRarity.UNCOMMON : EnumRarity.COMMON;
+    @Nonnull
+    @Override
+    public EnumRarity getRarity(@Nonnull ItemStack stack) {
+        return stack.getItem() == Item.getItemFromBlock(ModBlocks.redcrystalMerc) ? EnumRarity.UNCOMMON : EnumRarity.COMMON;
     }
 
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!world.field_72995_K && stack.func_77973_b() == Item.func_150898_a(ModBlocks.redcrystalMerc)) {
-            TileEntity te = world.func_175625_s(pos);
+    @Nonnull
+    @Override
+    public EnumActionResult onItemUseFirst(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (!world.isRemote && stack.getItem() == Item.getItemFromBlock(ModBlocks.redcrystalMerc)) {
+            TileEntity te = world.getTileEntity(pos);
             if (ThaumcraftExtension.tileIsMirror(te)) {
-                ItemStack newStack = stack.func_77946_l();
-                newStack.field_77994_a = 1;
-                int dim = world.field_73011_w.func_177502_q();
-                newStack.func_77983_a("mirrorX", new NBTTagInt(pos.func_177958_n()));
-                newStack.func_77983_a("mirrorY", new NBTTagInt(pos.func_177956_o()));
-                newStack.func_77983_a("mirrorZ", new NBTTagInt(pos.func_177952_p()));
-                newStack.func_77983_a("mirrorDim", new NBTTagInt(dim));
-                newStack.func_77983_a("mirrorDimName", new NBTTagString(DimensionManager.getProvider(dim).func_80007_l()));
-                world.func_72908_a((double)pos.func_177958_n(), (double)pos.func_177956_o(), (double)pos.func_177952_p(), "thaumcraft:jar", 1.0F, 2.0F);
-                if (!player.field_71071_by.func_70441_a(newStack) && !world.field_72995_K) {
-                    world.func_72838_d(new EntityItem(world, player.field_70165_t, player.field_70163_u, player.field_70161_v, newStack));
+                ItemStack newStack = stack.copy();
+                newStack.setCount(1);
+                int dim = world.provider.getDimension();
+                newStack.setTagInfo("mirrorX", new NBTTagInt(pos.getX()));
+                newStack.setTagInfo("mirrorY", new NBTTagInt(pos.getY()));
+                newStack.setTagInfo("mirrorZ", new NBTTagInt(pos.getZ()));
+                newStack.setTagInfo("mirrorDim", new NBTTagInt(dim));
+
+                newStack.setTagInfo("mirrorDimName", new NBTTagString(DimensionManager.getProviderType(dim).getName()));
+                world.playSound(null, pos, SoundsTC.jar, SoundCategory.BLOCKS, 1.0F, 2.0F);
+                if (!player.inventory.addItemStackToInventory(newStack)) {
+                    world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, newStack));
                 }
 
-                if (!player.field_71075_bZ.field_75098_d) {
-                    --stack.field_77994_a;
+                if (!player.capabilities.isCreativeMode) {
+                    stack.shrink(1);
                 }
 
-                player.field_71069_bz.func_75142_b();
+                player.inventoryContainer.detectAndSendChanges();
             }
         }
 
-        return super.onItemUseFirst(stack, player, world, pos, side, hitX, hitY, hitZ);
+        return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
     }
 
-    public void func_77624_a(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        if (stack.func_77942_o() && stack.func_77978_p().func_74764_b("mirrorX")) {
-            int x = stack.func_77978_p().func_74762_e("mirrorX");
-            int y = stack.func_77978_p().func_74762_e("mirrorY");
-            int z = stack.func_77978_p().func_74762_e("mirrorZ");
-            String dimName = stack.func_77978_p().func_74779_i("mirrorDimName");
-            tooltip.add(StatCollector.func_74837_a("Automagy.tip.redcrystalMerc.link", new Object[]{x, y, z, dimName}));
+    @Override
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("mirrorX")) {
+            int x = stack.getTagCompound().getInteger("mirrorX");
+            int y = stack.getTagCompound().getInteger("mirrorY");
+            int z = stack.getTagCompound().getInteger("mirrorZ");
+            String dimName = stack.getTagCompound().getString("mirrorDimName");
+            tooltip.add(I18n.format("automagy.tip.redcrystalMerc.link", x, y, z, dimName));
         }
 
     }

@@ -24,14 +24,16 @@ import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.network.MessageParticles;
 
+import javax.annotation.Nonnull;
+
 public class AutomagyCasterTriggerManager implements ICasterTriggerManager {
     private static final int REACT_OBSIDIAN = 0;
 
     public AutomagyCasterTriggerManager() {
-        CasterTriggerRegistry.registerWandBlockTrigger(this, 0, Blocks.OBSIDIAN.getDefaultState(), "Automagy");
+        CasterTriggerRegistry.registerWandBlockTrigger(this, 0, Blocks.OBSIDIAN.getDefaultState(), "automagy");
     }
 
-    public boolean performTrigger(World world, ItemStack caster, EntityPlayer player, BlockPos pos, EnumFacing side, int event) {
+    public boolean performTrigger(@Nonnull World world, ItemStack caster, EntityPlayer player, @Nonnull BlockPos pos, EnumFacing side, int event) {
         if (event == 0) {
             if (ThaumcraftExtension.isResearchComplete(player, "HUNGRYMAW") && this.transformObsidian(world, caster, player, pos)) {
                 return false;
@@ -40,7 +42,7 @@ public class AutomagyCasterTriggerManager implements ICasterTriggerManager {
         return false;
     }
 
-    public boolean transformObsidian(World world, ItemStack caster, EntityPlayer player, BlockPos pos) {
+    public boolean transformObsidian(@Nonnull World world, ItemStack caster, EntityPlayer player, @Nonnull BlockPos pos) {
         boolean hasRift = false;
         for (FocusEffect effect : ItemFocus.getPackage(caster).getFocusEffects()) {
             if (effect instanceof FocusEffectRift) {

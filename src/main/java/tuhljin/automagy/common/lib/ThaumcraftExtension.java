@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -39,6 +40,8 @@ import thaumcraft.common.tiles.misc.TileHole;
 import tuhljin.automagy.common.lib.struct.WorldSpecificCoordinates;
 import tuhljin.automagy.common.network.MessageSound;
 
+import javax.annotation.Nonnull;
+
 public class ThaumcraftExtension {
     public ThaumcraftExtension() {
     }
@@ -62,32 +65,29 @@ public class ThaumcraftExtension {
         ThaumcraftApi.internalMethods.addWarpToPlayer(player, amount, IPlayerWarp.EnumWarpType.NORMAL);
     }
 
-    public static void forceWarpCheck(EntityPlayer player) {
+    public static void forceWarpCheck(@Nonnull EntityPlayer player) {
         WarpEvents.checkWarpEvent(player);
     }
 
-    public static int getTemporaryWarp(EntityPlayer player) {
+    public static int getTemporaryWarp(@Nonnull EntityPlayer player) {
         return ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY);
     }
 
-    public static int getStickyWarp(EntityPlayer player) {
+    public static int getStickyWarp(@Nonnull EntityPlayer player) {
         return ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT);
     }
 
-    public static void resetWarpCounter(EntityPlayer player) {
+    public static void resetWarpCounter(@Nonnull EntityPlayer player) {
         IPlayerWarp wc = ThaumcraftCapabilities.getWarp(player);
         int total = wc.get(IPlayerWarp.EnumWarpType.TEMPORARY) + wc.get(IPlayerWarp.EnumWarpType.NORMAL) + wc.get(IPlayerWarp.EnumWarpType.PERMANENT);
         wc.setCounter(total);
     }
 
-    // Not disabled, maybe
-    /*
     public static boolean isMirrorResearchEnabled() {
-        return Config.allowMirrors;
+        return true; // .allowMirrors; TODO: Check config after first run
     }
-    */
 
-    public static boolean playerHasCasterEquipped(EntityPlayer player) {
+    public static boolean playerHasCasterEquipped(@Nonnull EntityPlayer player) {
         for (ItemStack stack : player.getHeldEquipment()) {
             if (stack.getItem() instanceof ICaster) {
                 return true;
@@ -97,7 +97,8 @@ public class ThaumcraftExtension {
     }
 
     // TODO: can the caster focus be null?
-    public static ItemFocus getCasterFocus(ItemStack caster) {
+    @Nullable
+    public static ItemFocus getCasterFocus(@Nonnull ItemStack caster) {
         Item ci = caster.getItem();
         return ci instanceof ICaster ? (ItemFocus) ((ICaster)ci).getFocus(caster) : null;
     }
@@ -110,10 +111,11 @@ public class ThaumcraftExtension {
         return te instanceof TileMirror || te instanceof TileMirrorEssentia;
     }
 
-    public static boolean tileIsPortableHole(TileEntity te, IBlockState state) {
+    public static boolean tileIsPortableHole(TileEntity te, @Nullable IBlockState state) {
         return te instanceof TileHole && (state == null || ((TileHole)te).oldblock == state);
     }
 
+    @Nullable
     public static WorldSpecificCoordinates getLinkedMirrorCoordinates(TileEntity te) {
         if (te instanceof TileMirror) {
             TileMirror tem = (TileMirror)te;
@@ -130,7 +132,7 @@ public class ThaumcraftExtension {
         return null;
     }
 
-    public static boolean isResearchComplete(EntityPlayer player, String... keys) {
+    public static boolean isResearchComplete(@Nonnull EntityPlayer player, @Nonnull String... keys) {
         for (String key : keys) {
             if (!ThaumcraftCapabilities.getKnowledge(player).isResearchComplete(key)) {
                 return false;
@@ -151,15 +153,15 @@ public class ThaumcraftExtension {
     }
     */
 
-    public static void zapBlockInfusion(World world, BlockPos source, BlockPos target) {
+    public static void zapBlockInfusion(@Nonnull World world, @Nonnull BlockPos source, @Nonnull BlockPos target) {
         zapBlock(world, source, target, 0.3F - world.rand.nextFloat() * 0.1F, 0.0F, 0.3F - world.rand.nextFloat() * 0.1F, 1.0F);
     }
 
-    public static void zapBlock(World world, BlockPos source, BlockPos target) {
+    public static void zapBlock(@Nonnull World world, @Nonnull BlockPos source, @Nonnull BlockPos target) {
         zapBlock(world, source, target, 0.5F, 1.0F, 1.0F, 1.0F);
     }
 
-    public static void zapBlock(World world, BlockPos source, BlockPos target, Aspect aspect, float width) {
+    public static void zapBlock(@Nonnull World world, @Nonnull BlockPos source, @Nonnull BlockPos target, @Nullable Aspect aspect, float width) {
         float r = 1.0F;
         float g = 1.0F;
         float b = 1.0F;
@@ -173,11 +175,11 @@ public class ThaumcraftExtension {
         zapBlock(world, source, target, r, g, b, width);
     }
 
-    public static void zapBlock(World world, BlockPos source, BlockPos target, float r, float g, float b, float width) {
+    public static void zapBlock(@Nonnull World world, @Nonnull BlockPos source, @Nonnull BlockPos target, float r, float g, float b, float width) {
         FXDispatcher.INSTANCE.arcBolt((double)source.getX() + 0.5D, (double)source.getY() + 0.5D, (double)source.getZ() + 0.5D, (double)target.getX() + 0.25D + (double)(world.rand.nextFloat() / 2.0F), (double)target.getY() + 0.25D + (double)(world.rand.nextFloat() / 2.0F), (double)target.getZ() + 0.25D + (double)(world.rand.nextFloat() / 2.0F), r, g, b, width);
     }
 
-    public static void zapEntity(BlockPos pos, Entity target, Aspect aspect) {
+    public static void zapEntity(@Nonnull BlockPos pos, @Nonnull Entity target, @Nullable Aspect aspect) {
         float r = 1.0F;
         float g = 1.0F;
         float b = 1.0F;
@@ -191,15 +193,15 @@ public class ThaumcraftExtension {
         zapEntity(pos, target, r, g, b);
     }
 
-    public static void zapEntity(BlockPos pos, Entity target) {
+    public static void zapEntity(@Nonnull BlockPos pos, @Nonnull Entity target) {
         zapEntity(pos, target, 0.3F - target.world.rand.nextFloat() * 0.1F, 0.0F, 0.3F - target.world.rand.nextFloat() * 0.1F);
     }
 
-    public static void zapEntity(BlockPos pos, Entity target, float r, float g, float b) {
+    public static void zapEntity(@Nonnull BlockPos pos, @Nonnull Entity target, float r, float g, float b) {
         PacketHandler.INSTANCE.sendToAllAround(new PacketFXBlockArc(pos, target, r, g, b), new TargetPoint(target.world.provider.getDimension(), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 32.0D));
     }
 
-    public static void lightning(double sx, double sy, double sz, double dx, double dy, double dz, Aspect aspect) {
+    public static void lightning(double sx, double sy, double sz, double dx, double dy, double dz, @Nullable Aspect aspect) {
         float r = 1.0F;
         float g = 1.0F;
         float b = 1.0F;
@@ -219,20 +221,20 @@ public class ThaumcraftExtension {
 
 
     // TODO: Figure out correct FX
-    public static void taintSplash(BlockPos pos) {
+    public static void taintSplash(@Nonnull BlockPos pos) {
         FXDispatcher.INSTANCE.drawPollutionParticles(pos);
         // FXDispatcher.INSTANCE.fluxRainSplashFX(pos);
     }
 
-    public static void bamf(World world, double x, double y, double z) {
+    public static void bamf(@Nonnull World world, double x, double y, double z) {
         bamf(world, x, y, z, 5770890, true, false, null);
     }
 
-    public static void bamf(World world, double x, double y, double z, int color, boolean sound, boolean flair, EnumFacing side) {
+    public static void bamf(@Nonnull World world, double x, double y, double z, int color, boolean sound, boolean flair, EnumFacing side) {
         PacketHandler.INSTANCE.sendToAllAround(new PacketFXBlockBamf(x, y, z, color, sound, flair, side), new TargetPoint(world.provider.getDimension(), x, y, z, 32.0D));
     }
 
-    public static boolean isGolemCarryingNothing(IGolemAPI golem) {
+    public static boolean isGolemCarryingNothing(@Nonnull IGolemAPI golem) {
         NonNullList<ItemStack> carrying = golem.getCarrying();
         for (ItemStack stack : carrying) {
             if (!stack.isEmpty()) {
@@ -242,7 +244,7 @@ public class ThaumcraftExtension {
         return true;
     }
 
-    public static void golemMatchFakePlayerInventory(FakePlayer fp, IGolemAPI golem) {
+    public static void golemMatchFakePlayerInventory(@Nonnull FakePlayer fp, @Nonnull IGolemAPI golem) {
         int i;
         for(i = 0; i < fp.inventory.mainInventory.size(); ++i) {
             if (!fp.inventory.mainInventory.get(i).isEmpty()) {
@@ -275,13 +277,13 @@ public class ThaumcraftExtension {
 
     }
 
-    public static Task getGolemTask(World world, int id) {
+    public static Task getGolemTask(@Nonnull World world, int id) {
         return TaskHandler.getTask(world.provider.getDimension(), id);
     }
 
     // TODO: This is probably waaaaaaay different
 
-    public static enum ShardAspect {
+    public enum ShardAspect {
         AIR(0, "air", Aspect.AIR),
         FIRE(1, "fire", Aspect.FIRE),
         WATER(2, "water", Aspect.WATER),
@@ -316,6 +318,7 @@ public class ThaumcraftExtension {
             return this.aspect.getColor();
         }
 
+        @Nullable
         public static ThaumcraftExtension.ShardAspect byMetadata(int metadata) {
             return metadata >= 0 && metadata <= METADATA_LOOKUP.length ? METADATA_LOOKUP[metadata] : null;
         }

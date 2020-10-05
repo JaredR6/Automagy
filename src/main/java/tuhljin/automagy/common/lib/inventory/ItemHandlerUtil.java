@@ -8,12 +8,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import javax.annotation.Nullable;
 
 public class ItemHandlerUtil {
     public ItemHandlerUtil() {
     }
 
-    public static IItemHandler getHandler(TileEntity te, EnumFacing side) {
+    @Nullable
+    public static IItemHandler getHandler(@Nullable TileEntity te, @Nullable EnumFacing side) {
         if (te != null) {
             if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
                 return te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
@@ -35,7 +37,7 @@ public class ItemHandlerUtil {
         return null;
     }
 
-    public static boolean isValid(TileEntity te, EnumFacing side) {
+    public static boolean isValid(@Nullable TileEntity te, EnumFacing side) {
         if (te != null) {
             if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
                 return true;

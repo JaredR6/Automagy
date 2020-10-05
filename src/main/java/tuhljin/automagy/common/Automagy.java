@@ -13,19 +13,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tuhljin.automagy.common.lib.CreativeTabAutomagy;
 
-@Mod(modid = "Automagy", name = "Automagy", version = "3.0.0", dependencies = "required-after:Thaumcraft@[6.1.2,);after:Waila", acceptedMinecraftVersions = "[1.12.2]")
+import javax.annotation.Nonnull;
+
+@Mod(modid = "automagy", name = "automagy", version = "3.0.0", dependencies = "required-after:Thaumcraft@[6.1.2,);after:Waila", acceptedMinecraftVersions = "[1.12.2]")
 public class Automagy {
 
     @SidedProxy(clientSide = "tuhljin.automagy.client.ProxyClient", serverSide = "tuhljin.automagy.common.ProxyCommon")
     public static ProxyCommon proxy;
 
-    @Instance("Automagy")
+    @Instance("automagy")
     public static Automagy instance;
 
     public static final Logger log = LogManager.getLogger("FML");
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(@Nonnull FMLPreInitializationEvent event) {
         proxy.preInit(event);
     }
 
@@ -40,7 +42,8 @@ public class Automagy {
         proxy.postInit(event);
     }
 
-    public static CreativeTabs creativeTab = (CreativeTabs)new CreativeTabAutomagy(CreativeTabs.getNextID(), "Automagy");
+    @Nonnull
+    public static CreativeTabs creativeTab = (CreativeTabs)new CreativeTabAutomagy(CreativeTabs.getNextID(), "automagy");
 
     public static void logInfo(String s) {
         log.info("[Automagy] " + s, new Object[0]);
@@ -50,7 +53,7 @@ public class Automagy {
         log.debug("[Automagy DEBUG] " + s, new Object[0]);
     }
 
-    public static void logDebug(BlockPos pos, String s) {
+    public static void logDebug(@Nonnull BlockPos pos, String s) {
         log.debug("[Automagy DEBUG] [" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "] " + s, new Object[0]);
     }
 

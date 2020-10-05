@@ -16,7 +16,7 @@ public class GuiButtonScaledText extends GuiButton {
     private float scaleFactor;
     private boolean mouseIsHoveringOver;
 
-    public GuiButtonScaledText(int id, int x, int y, int width, int height, String text, float scaleFactor, boolean recolorTextures) {
+    public GuiButtonScaledText(int id, int x, int y, int width, int height, @Nonnull String text, float scaleFactor, boolean recolorTextures) {
         super(id, x, y, width, height, text);
         this.texturesRecolored = false;
         this.mouseIsHoveringOver = false;
@@ -24,20 +24,20 @@ public class GuiButtonScaledText extends GuiButton {
         this.texturesRecolored = recolorTextures;
     }
 
-    public GuiButtonScaledText(int id, int x, int y, int width, int height, String text, float scaleFactor) {
+    public GuiButtonScaledText(int id, int x, int y, int width, int height, @Nonnull String text, float scaleFactor) {
         this(id, x, y, width, height, text, scaleFactor, false);
     }
 
-    public GuiButtonScaledText(int id, int x, int y, String text, float scaleFactor, boolean recolorTextures) {
+    public GuiButtonScaledText(int id, int x, int y, @Nonnull String text, float scaleFactor, boolean recolorTextures) {
         this(id, x, y, 200, 20, text, scaleFactor, recolorTextures);
     }
 
-    public GuiButtonScaledText(int id, int x, int y, String text, float scaleFactor) {
+    public GuiButtonScaledText(int id, int x, int y, @Nonnull String text, float scaleFactor) {
         this(id, x, y, 200, 20, text, scaleFactor, false);
     }
 
     @Override
-    public void drawCenteredString(FontRenderer fontRenderer, @Nonnull String text, int x, int y, int color) {
+    public void drawCenteredString(@Nonnull FontRenderer fontRenderer, @Nonnull String text, int x, int y, int color) {
         GL11.glPushMatrix();
         GL11.glScalef(this.scaleFactor, this.scaleFactor, this.scaleFactor);
         super.drawCenteredString(fontRenderer, text, (int)((float)x / this.scaleFactor), (int)((float)y / this.scaleFactor), color);

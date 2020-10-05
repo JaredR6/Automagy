@@ -8,9 +8,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.RedstoneCalc;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
+
+import javax.annotation.Nonnull;
 
 public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
     public static int SIGNAL_OUTPUT = 50;
@@ -19,12 +22,14 @@ public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
     public BlockRedcrystalAmp() {
     }
 
-    protected PowerResult calculateRedstonePowerAt(World world, BlockPos pos, EnumFacing orientation) {
+    @Nullable
+    protected PowerResult calculateRedstonePowerAt(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing orientation) {
         PowerResult result = RedstoneCalc.getRedstonePowerAt(world, pos, orientation, true, orientation, true, 1, this.getRedstoneInputDirections(world, pos));
         return result != null && result.strength > 0 ? new PowerResult(Math.max(result.strength, SIGNAL_OUTPUT), result.sourceDirection) : null;
     }
 
-    public EnumFacing[] getRedstoneInputDirections(IBlockAccess blockaccess, BlockPos pos) {
+    @Nullable
+    public EnumFacing[] getRedstoneInputDirections(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos) {
         TileRedcrystal te;
         try {
             te = (TileRedcrystal)blockaccess.getTileEntity(pos);
@@ -129,7 +134,7 @@ public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
         return list.toArray(new EnumFacing[0]);
     }
 
-    public boolean canSendRedstoneSignalInDirection(IBlockAccess blockaccess, BlockPos pos, EnumFacing dir) {
+    public boolean canSendRedstoneSignalInDirection(@Nonnull IBlockAccess blockaccess, @Nonnull BlockPos pos, @Nonnull EnumFacing dir) {
         TileRedcrystal te;
         try {
             te = (TileRedcrystal)blockaccess.getTileEntity(pos);
@@ -216,7 +221,7 @@ public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
         return false;
     }
 
-    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         switch(side) {
             case NORTH:
                 side = EnumFacing.SOUTH;
@@ -242,7 +247,7 @@ public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
         return false;
     }
 
-    public boolean onBlockActivatedAdjustedSide(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side) {
+    public boolean onBlockActivatedAdjustedSide(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, EntityPlayer player, @Nonnull EnumFacing side) {
         TileRedcrystal te = null;
 
         try {

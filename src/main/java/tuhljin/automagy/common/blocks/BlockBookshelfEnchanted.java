@@ -13,9 +13,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
-public class BlockBookshelfEnchanted extends ModBlockMetaStates {
-    public static int ENCHANTPOWER_GREATWOOD = 4;
-    public static int ENCHANTPOWER_SILVERWOOD = 8;
+import javax.annotation.Nonnull;
+
+public class BlockBookshelfEnchanted extends ModBlockMetaStates<BlockBookshelfEnchanted.BookshelfVariants> {
+    public static final int ENCHANTPOWER_GREATWOOD = 4;
+    public static final int ENCHANTPOWER_SILVERWOOD = 8;
 
     public BlockBookshelfEnchanted() {
         super(Material.WOOD);
@@ -24,18 +26,19 @@ public class BlockBookshelfEnchanted extends ModBlockMetaStates {
     }
 
     @Override
-    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
         list.add(new ItemStack(this, 1, BookshelfVariants.GREATWOOD.meta));
         list.add(new ItemStack(this, 1, BookshelfVariants.SILVERWOOD.meta));
     }
 
+    @Nonnull
     @Override
     protected PropertyEnum<BlockBookshelfEnchanted.BookshelfVariants> createVariantProperty() {
         return PropertyEnum.create("type", BlockBookshelfEnchanted.BookshelfVariants.class);
     }
 
     @Override
-    public float getEnchantPowerBonus(World world, BlockPos pos) {
+    public float getEnchantPowerBonus(@Nonnull World world, @Nonnull BlockPos pos) {
         BlockBookshelfEnchanted.BookshelfVariants v = (BlockBookshelfEnchanted.BookshelfVariants)world.getBlockState(pos).getValue(this.VARIANT);
         return v == BlockBookshelfEnchanted.BookshelfVariants.SILVERWOOD ? ENCHANTPOWER_SILVERWOOD : ENCHANTPOWER_GREATWOOD;
     }
@@ -50,11 +53,13 @@ public class BlockBookshelfEnchanted extends ModBlockMetaStates {
             this.meta = meta;
         }
 
+        @Nonnull
         @Override
         public String getName() {
             return this.name().toLowerCase();
         }
 
+        @Nonnull
         @Override
         public String toString() {
             return this.getName();

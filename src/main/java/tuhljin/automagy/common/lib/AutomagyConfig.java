@@ -8,7 +8,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import javax.annotation.Nullable;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 
 public class AutomagyConfig {
@@ -23,7 +25,7 @@ public class AutomagyConfig {
     public static int milkingCooldownPerCow = 1200;
     private static int realWaterBottleAmount;
 
-    public static void load(File file) {
+    public static void load(@Nonnull File file) {
         config = new Configuration(file);
         config.load();
         versionChecking = loadBoolean("version_checking", "On startup, check whether a newer version of the mod exists", versionChecking);
@@ -38,7 +40,7 @@ public class AutomagyConfig {
             config.save();
     }
 
-    public static boolean loadBoolean(String category, String name, String desc, boolean def) {
+    public static boolean loadBoolean(String category, String name, @Nullable String desc, boolean def) {
         Property p = config.get(category, name, def);
         if (desc != null)
             p.setComment(desc);
@@ -49,7 +51,7 @@ public class AutomagyConfig {
         return loadBoolean("general", name, desc, def);
     }
 
-    public static int loadInteger(String category, String name, String desc, int def) {
+    public static int loadInteger(String category, String name, @Nullable String desc, int def) {
         Property p = config.get(category, name, def);
         if (desc != null)
             p.setComment(desc);

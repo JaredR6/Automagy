@@ -11,19 +11,18 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import thaumcraft.client.lib.obj.AdvancedModelLoader;
 import thaumcraft.client.lib.obj.IModelCustom;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileRemoteComparator;
 
 public class TileRemoteComparatorRenderer extends TileEntitySpecialRenderer<TileRemoteComparator> {
-    private final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation("automagy".toLowerCase(), "models/obj/comparator.obj"));
+    private final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation(References.MOD_ID, "models/obj/comparator.obj"));
     public static final String OBJ_MODEL = "models/obj/comparator.obj";
     public static final String TEXTURE_STANDARD = "textures/models/comparator.png";
     public static final String TEXTURE_READING = "textures/models/comparatorReading.png";
     public static final String TEXTURE_SIGNALING = "textures/models/comparatorSignaling.png";
 
-    public TileRemoteComparatorRenderer() {
-    }
-
-    public void renderTileEntityAt(TileRemoteComparator te, double x, double y, double z, float partialTicks, int destroyStage) {
+    @Override
+    public void render(TileRemoteComparator te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         boolean renderingItem = ItemBlockSpecialRenderer.isRendering;
         ItemStack stack = renderingItem ? null : te.getFloatingDisplayItem();
         String texture;
@@ -60,7 +59,7 @@ public class TileRemoteComparatorRenderer extends TileEntitySpecialRenderer<Tile
                 GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
         }
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("automagy".toLowerCase(), texture));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(References.MOD_ID, texture));
         this.model.renderAll();
         GL11.glPopMatrix();
         if (stack != null) {

@@ -14,11 +14,8 @@ import tuhljin.automagy.common.gui.ContainerRecipe;
 
 import javax.annotation.Nonnull;
 
-public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRecipe, IMessage> {
+public class MessageGUIRecipe implements IMessage {
     protected NonNullList<ItemStack> stacks;
-
-    public MessageGUIRecipe() {
-    }
 
     public MessageGUIRecipe(@Nonnull ItemStack[] stacksRecipe) {
         this.stacks = NonNullList.create();
@@ -29,6 +26,7 @@ public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRec
 
     }
 
+    @Override
     public void fromBytes(ByteBuf buf) {
         this.stacks = NonNullList.create();
 
@@ -38,6 +36,7 @@ public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRec
 
     }
 
+    @Override
     public void toBytes(ByteBuf buf) {
         for(int i = 0; i < 9; ++i) {
             ByteBufUtils.writeItemStack(buf, this.stacks.get(i));
@@ -45,17 +44,20 @@ public class MessageGUIRecipe implements IMessage, IMessageHandler<MessageGUIRec
 
     }
 
-    @Nullable
-    public IMessage onMessage(@Nonnull MessageGUIRecipe message, @Nonnull MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().player;
-        if (player != null) {
-            Container container = player.openContainer;
-            if (container instanceof ContainerRecipe) {
-                ((ContainerRecipe)container).receiveMessageFromClient(message.stacks);
-            }
-        }
+    public static class Handler implements IMessageHandler<MessageGUIRecipe, IMessage> {
 
-        return null;
+        @Override
+        public IMessage onMessage(@Nonnull MessageGUIRecipe message, @Nonnull MessageContext ctx) {
+            EntityPlayer player = ctx.getServerHandler().player;
+            if (player != null) {
+                Container container = player.openContainer;
+                if (container instanceof ContainerRecipe) {
+                    ((ContainerRecipe) container).receiveMessageFromClient(message.stacks);
+                }
+            }
+
+            return null;
+        }
     }
 
     public static void sendToServer(@Nonnull ItemStack[] stacks) {

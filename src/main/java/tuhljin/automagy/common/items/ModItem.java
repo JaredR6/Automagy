@@ -6,8 +6,8 @@ import tuhljin.automagy.common.lib.References;
 
 public class ModItem extends Item {
     public ModItem(String registryName) {
-        setCreativeTab(Automagy.creativeTab);
+        setTranslationKey(registryName);
         setRegistryName(References.MOD_ID, registryName);
-        setUnlocalizedName(registryName);
+        setCreativeTab(Automagy.creativeTab);
     }
 }

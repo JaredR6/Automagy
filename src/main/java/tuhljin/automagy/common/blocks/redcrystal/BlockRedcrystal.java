@@ -25,7 +25,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.casters.ICaster;
@@ -79,14 +79,18 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
     private RayTracer rayTracer = new RayTracer();
 
     public BlockRedcrystal() {
-        super(Material.CIRCUITS);
+        this(References.BLOCK_REDCRYSTAL);
+    }
+
+    public BlockRedcrystal(String name) {
+        super(Material.CIRCUITS, name);
         this.setHardness(0.1F);
         this.setSoundType(SoundType.STONE);
         this.disableStats();
         this.setDefaultState(this.getBlockState().getBaseState().withProperty(POWER, 0));
 
         try {
-            this.redstonedustAllowingPowerCheck = ObfuscationReflectionHelper.findField(Blocks.REDSTONE_WIRE.getClass(), "canProvidePower");
+            this.redstonedustAllowingPowerCheck = ReflectionHelper.findField(Blocks.REDSTONE_WIRE.getClass(), "canProvidePower");
         } catch (Exception ex) {
             Automagy.logSevereError("Failed to access redstone dust's signal-checking field. Improper signal strengths may result when redstone wire is placed next to redcrystal.");
         }

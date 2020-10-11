@@ -5,6 +5,8 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.common.lib.SoundsTC;
@@ -16,17 +18,16 @@ public class MessageSound extends MessageToClient<MessageSound> {
     public static final short WHISPERS = 0;
     protected short id;
 
-    public MessageSound() {
-    }
-
     public MessageSound(short id) {
         this.id = id;
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         this.id = buf.readShort();
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeShort(this.id);
     }
@@ -49,6 +50,7 @@ public class MessageSound extends MessageToClient<MessageSound> {
         } else {
             Automagy.logError("Could not send sound packet to client. Player object was the wrong type!");
         }
-
     }
+
+    public static class Handler extends MessageToClient.Handler<MessageSound> {}
 }

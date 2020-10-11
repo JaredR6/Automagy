@@ -22,6 +22,7 @@ import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.lib.NeighborNotifier;
 import tuhljin.automagy.common.lib.RedstoneCalc;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.tiles.TileHourglass;
@@ -34,13 +35,14 @@ public class BlockHourglass extends ModTileRenderedBlockWithFacing implements IB
     public static final int TIMER_INCREMENTS = 5;
     public static final AxisAlignedBB DEFAULT_BOUNDS = new AxisAlignedBB(0.35F, 0.0F, 0.35F, 0.65F, 0.4F, 0.65F);
 
-    public BlockHourglass(Material material, MapColor mapColor) {
-        super(material, mapColor);
+
+    public BlockHourglass(Material material, MapColor mapColor, String name) {
+        super(material, mapColor, name);
         this.setHardness(1.0F);
     }
 
     public BlockHourglass() {
-        this(Material.WOOD, Material.WOOD.getMaterialMapColor());
+        this(Material.WOOD, Material.WOOD.getMaterialMapColor(), References.BLOCK_HOURGLASS);
         this.setSoundType(SoundType.WOOD);
     }
 

@@ -6,6 +6,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import javax.annotation.Nullable;
+
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.lib.struct.BlockWithPos;
@@ -19,6 +21,7 @@ public class BlockRedcrystalRes extends BlockRedcrystalLarge {
     private static final int MAX_DISTANCE = 15;
 
     public BlockRedcrystalRes() {
+        super(References.BLOCK_REDCRYSTAL_RES);
     }
 
     @Nullable

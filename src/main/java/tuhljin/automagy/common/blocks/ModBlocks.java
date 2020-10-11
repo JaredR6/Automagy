@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,6 +17,7 @@ import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalDense;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalDim;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalMerc;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalRes;
+import tuhljin.automagy.common.items.ModItems;
 import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileGolemWorkbench;
 import tuhljin.automagy.common.tiles.TileHourglass;
@@ -46,8 +48,8 @@ public class ModBlocks {
     public static final Block redcrystalRes = new BlockRedcrystalAmp();
     public static final Block redcrystalMerc = new BlockRedcrystalMerc();
     public static final Block enchantedBookshelf = new BlockBookshelfEnchanted();
-    public static final Block torchInversion_on = new BlockTorchInversion(true);
-    public static final Block torchInversion_off = new BlockTorchInversion(false);
+    public static final Block torchInversion_on = new BlockTorchInversion(true, References.BLOCK_TORCH_INVERSION_ON);
+    public static final Block torchInversion_off = new BlockTorchInversion(false, References.BLOCK_TORCH_INVERSION_OFF);
     public static final Block hourglass = new BlockHourglass();
     public static final Block hourglassMagic = new BlockHourglassMagic();
     public static final Block golemWorkbench = new BlockGolemWorkbench();
@@ -64,10 +66,6 @@ public class ModBlocks {
     public static final ModBlockFluid mushroomSoup = new BlockMushroomSoup();
     public static final ModBlockFluid vishroomSoup = new BlockVishroomSoup();
 
-    @SubscribeEvent
-    public static void registerFluids(@Nonnull RegistryEvent.Register<Block> evt) {
-        ModBlockFluid.registerFluids();
-    }
 
     @SubscribeEvent
     public static void registerBlocks(@Nonnull RegistryEvent.Register<Block> evt) {
@@ -93,9 +91,9 @@ public class ModBlocks {
         r.register(spittingMaw);
         r.register(specialProcess);
         r.register(thirstyTank);
-        r.register(milk);
-        r.register(mushroomSoup);
-        r.register(vishroomSoup);
+        //r.register(milk);
+        //r.register(mushroomSoup);
+        //r.register(vishroomSoup);
     }
 
     @SubscribeEvent
@@ -122,28 +120,28 @@ public class ModBlocks {
         r.register(new ItemBlock(spittingMaw).setRegistryName(References.BLOCK_MAW_SPITTING));
         r.register(new ItemBlock(specialProcess).setRegistryName(References.BLOCK_PROCESS));
         r.register(new ItemBlockTankThirsty(thirstyTank).setRegistryName(References.BLOCK_TANK_THIRSTY));
-        r.register(new ItemBlock(milk).setRegistryName(References.BLOCK_MILK));
-        r.register(new ItemBlock(mushroomSoup).setRegistryName(References.BLOCK_MUSHROOMSOUP));
-        r.register(new ItemBlock(vishroomSoup).setRegistryName(References.BLOCK_VISHROOMSOUP));
+        //r.register(new ItemBlock(milk).setRegistryName(References.BLOCK_MILK));
+        //r.register(new ItemBlock(mushroomSoup).setRegistryName(References.BLOCK_MUSHROOMSOUP));
+        //r.register(new ItemBlock(vishroomSoup).setRegistryName(References.BLOCK_VISHROOMSOUP));
 
         registerTileEntities();
     }
 
     public static void registerTileEntities() {
-        GameRegistry.registerTileEntity(TileRedcrystal.class, References.MOD_PREFIX + "TileRedcrystal");
-        GameRegistry.registerTileEntity(TileRedcrystalMerc.class, "TileRedcrystalMerc");
-        GameRegistry.registerTileEntity(TileHourglass.class, "TileHourglass");
-        GameRegistry.registerTileEntity(TileHourglassMagic.class, "TileHourglassMagic");
-        GameRegistry.registerTileEntity(TileTorchInversion.class, "TileTorchInversion");
-        GameRegistry.registerTileEntity(TileRemoteComparator.class, "TileRemoteComparator");
-        GameRegistry.registerTileEntity(TileTally.class, "TileTally");
-        GameRegistry.registerTileEntity(TileTallyWorld.class, "TileTallyWorld");
-        GameRegistry.registerTileEntity(TileTallyDrops.class, "TileTallyDrops");
-        GameRegistry.registerTileEntity(TileGolemWorkbench.class, "TileGolemWorkbench");
-        GameRegistry.registerTileEntity(TileMawHungry.class, "TileMawHungry");
-        GameRegistry.registerTileEntity(TileMawFinical.class, "TileMawFinical");
-        GameRegistry.registerTileEntity(TileMawSpitting.class, "TileMawSpitting");
-        GameRegistry.registerTileEntity(TileProcess.class, "TileProcess");
-        GameRegistry.registerTileEntity(TileTankThirsty.class, "TileTankThirsty");
+        GameRegistry.registerTileEntity(TileRedcrystal.class, new ResourceLocation(References.MOD_ID, "tileredcrystal"));
+        GameRegistry.registerTileEntity(TileRedcrystalMerc.class, new ResourceLocation(References.MOD_ID, "tileredcrystalmerc"));
+        GameRegistry.registerTileEntity(TileHourglass.class, new ResourceLocation(References.MOD_ID, "tilehourglass"));
+        GameRegistry.registerTileEntity(TileHourglassMagic.class, new ResourceLocation(References.MOD_ID, "tilehourglassmagic"));
+        GameRegistry.registerTileEntity(TileTorchInversion.class, new ResourceLocation(References.MOD_ID, "tiletorchinversion"));
+        GameRegistry.registerTileEntity(TileRemoteComparator.class, new ResourceLocation(References.MOD_ID, "tileremotecomparator"));
+        GameRegistry.registerTileEntity(TileTally.class, new ResourceLocation(References.MOD_ID, "tiletally"));
+        GameRegistry.registerTileEntity(TileTallyWorld.class, new ResourceLocation(References.MOD_ID, "tiletallyworld"));
+        GameRegistry.registerTileEntity(TileTallyDrops.class, new ResourceLocation(References.MOD_ID, "tiletallydrops"));
+        GameRegistry.registerTileEntity(TileGolemWorkbench.class, new ResourceLocation(References.MOD_ID, "tilegolemworkbench"));
+        GameRegistry.registerTileEntity(TileMawHungry.class, new ResourceLocation(References.MOD_ID, "tilemawhungry"));
+        GameRegistry.registerTileEntity(TileMawFinical.class, new ResourceLocation(References.MOD_ID, "tilemawfinical"));
+        GameRegistry.registerTileEntity(TileMawSpitting.class, new ResourceLocation(References.MOD_ID, "tilemawspitting"));
+        GameRegistry.registerTileEntity(TileProcess.class, new ResourceLocation(References.MOD_ID, "tileprocess"));
+        GameRegistry.registerTileEntity(TileTankThirsty.class, new ResourceLocation(References.MOD_ID, "tiletankthirsty"));
     }
 }

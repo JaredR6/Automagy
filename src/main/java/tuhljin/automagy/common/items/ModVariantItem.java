@@ -11,10 +11,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
-public class ModVariantItem extends Item implements IItemVariants {
+public class ModVariantItem extends ModItem implements IItemVariants {
     protected final ImmutableMap<Integer, String> variants;
 
-    public ModVariantItem(ImmutableMap<Integer, String> variants) {
+    public ModVariantItem(ImmutableMap<Integer, String> variants, String name) {
+        super(name);
         this.variants = variants;
         this.setHasSubtypes(true);
     }
@@ -32,13 +33,13 @@ public class ModVariantItem extends Item implements IItemVariants {
 
     @Override
     @Nonnull
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         int d = stack.getItemDamage();
         String name = this.variants.get(d);
         if (name == null) {
-            return super.getUnlocalizedName() + "." + d;
+            return super.getTranslationKey() + "." + d;
         } else {
-            return name.isEmpty() ? super.getUnlocalizedName(stack) : super.getUnlocalizedName() + "." + name;
+            return name.isEmpty() ? super.getTranslationKey(stack) : super.getTranslationKey() + "." + name;
         }
     }
 }

@@ -84,9 +84,9 @@ public abstract class TileTallyBase extends ModTileEntityWithFilterMainInventory
                 }
             }
 
-            this.targetX = this.pos.getX() + orientation.getFrontOffsetX();
-            this.targetY = this.pos.getY() + orientation.getFrontOffsetY();
-            this.targetZ = this.pos.getZ() + orientation.getFrontOffsetZ();
+            this.targetX = this.pos.getX() + orientation.getXOffset();
+            this.targetY = this.pos.getY() + orientation.getYOffset();
+            this.targetZ = this.pos.getZ() + orientation.getZOffset();
             if (lastX != this.targetX || lastY != this.targetY || lastZ != this.targetZ) {
                 this.foundNewDirectTarget();
             }

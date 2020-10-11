@@ -10,12 +10,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tuhljin.automagy.common.Automagy;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileMawSpitting;
 
 import javax.annotation.Nonnull;
 
 public class BlockMawSpitting extends BlockMawFinical {
+
     public BlockMawSpitting() {
+        super(References.BLOCK_MAW_FINICAL);
     }
 
     @Override
@@ -108,6 +111,6 @@ public class BlockMawSpitting extends BlockMawFinical {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
     }
 }

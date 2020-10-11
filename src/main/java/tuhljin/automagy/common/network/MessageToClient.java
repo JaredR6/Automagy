@@ -10,15 +10,14 @@ import javax.annotation.Nullable;
 
 import javax.annotation.Nonnull;
 
-public abstract class MessageToClient<T extends MessageToClient> implements IMessage, IMessageHandler<T, IMessage> {
-    public MessageToClient() {
-    }
+public abstract class MessageToClient<T> implements IMessage {
 
-    @Nullable
-    @SideOnly(Side.CLIENT)
-    public IMessage onMessage(@Nonnull final T message, MessageContext ctx) {
-        Minecraft.getMinecraft().addScheduledTask(message::processMessage);
-        return null;
+    public abstract static class Handler<T extends MessageToClient> implements IMessageHandler<T, IMessage> {
+        @Nullable
+        public IMessage onMessage(@Nonnull final T message, MessageContext ctx) {
+            Minecraft.getMinecraft().addScheduledTask(message::processMessage);
+            return null;
+        }
     }
 
     public abstract void processMessage();

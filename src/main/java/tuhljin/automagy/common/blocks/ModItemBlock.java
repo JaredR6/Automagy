@@ -20,7 +20,7 @@ public class ModItemBlock extends ItemBlock {
 
     @Nonnull
     @Override
-    public String getUnlocalizedName(@Nonnull ItemStack stack) {
-        return super.getUnlocalizedName() + "." + stack.getUnlocalizedName();
+    public String getTranslationKey(@Nonnull ItemStack stack) {
+        return super.getTranslationKey() + "." + stack.getTranslationKey();
     }
 }

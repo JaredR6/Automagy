@@ -15,9 +15,6 @@ public abstract class BlockTiedMessageToClient<T extends BlockTiedMessageToClien
     protected int y;
     protected int z;
 
-    public BlockTiedMessageToClient() {
-    }
-
     public BlockTiedMessageToClient(int dim, int x, int y, int z) {
         this.dim = dim;
         this.x = x;
@@ -25,6 +22,7 @@ public abstract class BlockTiedMessageToClient<T extends BlockTiedMessageToClien
         this.z = z;
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         this.dim = buf.readInt();
         this.x = buf.readInt();
@@ -32,6 +30,7 @@ public abstract class BlockTiedMessageToClient<T extends BlockTiedMessageToClien
         this.z = buf.readInt();
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeInt(this.dim);
         buf.writeInt(this.x);

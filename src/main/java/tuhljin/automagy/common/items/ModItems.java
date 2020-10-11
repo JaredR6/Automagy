@@ -33,9 +33,9 @@ public class ModItems {
     public static Item recipe = new ItemRecipe();
     public static Item food = new ItemFoodstuff();
     public static Item crystalEye = new ItemCrystalEye();
-    public static Item avaricePearl = new ItemAvaricePearl().setRegistryName(References.ITEM_AVARICEPEARL);
-    public static Item tallyLens = new ItemTallyLens().setRegistryName(References.ITEM_TALLYLENS);
-    public static ItemGlyph tankGlyph = (ItemGlyph) new ItemGlyph().setRegistryName(References.ITEM_TANKGLYPH);
+    public static Item avaricePearl = new ItemAvaricePearl();
+    public static Item tallyLens = new ItemTallyLens();
+    public static ItemGlyph tankGlyph = new ItemGlyph();
 
     public ModItems() {
     }
@@ -54,6 +54,9 @@ public class ModItems {
         r.register(avaricePearl);
         r.register(tallyLens);
         r.register(tankGlyph);
+
+        initFluidContainers();
+        registerDispenserBehaviors();
     }
 
     public static ItemStack getSealStack(String partialKey) {
@@ -61,7 +64,6 @@ public class ModItems {
     }
 
     public static void initFluidContainers() {
-        FluidRegistry.enableUniversalBucket();
         FluidRegistry.addBucketForFluid(ModBlocks.mushroomSoup.getFluid());
         FluidRegistry.addBucketForFluid(ModBlocks.vishroomSoup.getFluid());
     }

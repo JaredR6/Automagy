@@ -7,6 +7,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import javax.annotation.Nullable;
+
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
@@ -16,6 +18,10 @@ import javax.annotation.Nonnull;
 public class BlockRedcrystalDim extends BlockRedcrystalLarge {
     public static final int MAX_CAP = 14;
     public static final int MIN_CAP = 1;
+
+    public BlockRedcrystalDim() {
+        super(References.BLOCK_REDCRYSTAL_DIM);
+    }
 
     @Nullable
     @Override

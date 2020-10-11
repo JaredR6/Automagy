@@ -102,12 +102,12 @@ public class TileMawSpitting extends TileMawBase implements IContainsFilter, ITi
 
     public void spawnItem(@Nonnull ItemStack stack) {
         EnumFacing facing = this.getFacing().getOpposite();
-        double x = this.getPos().getX() + 0.5D - facing.getFrontOffsetX() * 0.3D;
-        double y = this.getPos().getY() + 0.25D - facing.getFrontOffsetY() * 0.3D;
-        double z = this.getPos().getZ() + 0.5D - facing.getFrontOffsetZ() * 0.3D;
-        double motionX = facing.getFrontOffsetX() * 0.15F;
-        double motionY = facing.getFrontOffsetY() * 0.15F;
-        double motionZ = facing.getFrontOffsetZ() * 0.15F;
+        double x = this.getPos().getX() + 0.5D - facing.getXOffset() * 0.3D;
+        double y = this.getPos().getY() + 0.25D - facing.getYOffset() * 0.3D;
+        double z = this.getPos().getZ() + 0.5D - facing.getZOffset() * 0.3D;
+        double motionX = facing.getXOffset() * 0.15F;
+        double motionY = facing.getYOffset() * 0.15F;
+        double motionZ = facing.getZOffset() * 0.15F;
         TjUtil.dropItemIntoWorldWithMotion(stack, this.world, x, y, z, motionX, motionY, motionZ);
     }
 

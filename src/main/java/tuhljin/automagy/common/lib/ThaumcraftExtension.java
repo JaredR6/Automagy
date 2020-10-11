@@ -306,7 +306,7 @@ public class ThaumcraftExtension {
             return this.metadata;
         }
 
-        public String getUnlocalizedName() {
+        public String getTranslationKey() {
             return this.unlocalizedName;
         }
 

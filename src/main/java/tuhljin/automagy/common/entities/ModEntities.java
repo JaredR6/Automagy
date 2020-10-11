@@ -1,6 +1,11 @@
 package tuhljin.automagy.common.entities;
 
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 import thaumcraft.api.golems.GolemHelper;
 import tuhljin.automagy.common.Automagy;
 import tuhljin.automagy.common.entities.golems.SealCraft;
@@ -11,10 +16,8 @@ import tuhljin.automagy.common.entities.golems.SealSupply;
 import tuhljin.automagy.common.lib.References;
 
 public class ModEntities {
-    public ModEntities() {
-    }
 
-    public static void register() {
+    public static void init() {
         byte id = 0;
         EntityRegistry.registerModEntity(References.ENTITY_AVARICEPEARL_REGISTRY, EntityAvaricePearl.class, References.ENTITY_AVARICEPEARL, id, Automagy.instance, 80, 3, true);
     }

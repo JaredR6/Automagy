@@ -1,11 +1,9 @@
 package tuhljin.automagy.common.lib.inventory;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +42,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
         NBTBase base = nbttagcompound.getTag("FilterOptions");
         if (base instanceof NBTTagCompound) {
             NBTTagCompound nbtsub = (NBTTagCompound)base;
-            if (!nbtsub.hasNoTags()) {
+            if (!nbtsub.isEmpty()) {
                 this.useItemCount = nbtsub.getBoolean("useItemCount");
                 this.ignoreNBT = nbtsub.getBoolean("ignoreNBT");
                 this.ignoreMetadata = nbtsub.getBoolean("ignoreMetadata");
@@ -74,7 +72,7 @@ public class InventoryWithFilterOptions extends InventoryForLargeItemStacks {
             nbtsub.setString("nameFilter", this.nameFilter);
         }
 
-        if (!nbtsub.hasNoTags()) {
+        if (!nbtsub.isEmpty()) {
             nbttagcompound.setTag("FilterOptions", nbtsub);
         } else if (nbttagcompound.hasKey("FilterOptions")) {
             nbttagcompound.removeTag("FilterOptions");

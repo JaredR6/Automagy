@@ -22,6 +22,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tuhljin.automagy.common.Automagy;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
@@ -36,6 +37,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
     private WorldSpecificCoordinates lastCoord = null;
 
     public BlockRedcrystalMerc() {
+        super(References.BLOCK_REDCRYSTAL_MERC);
         //this.func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 0.32F, 1.0F);
         this.setSoundType(SoundType.STONE);
         this.setHardness(2.5F);

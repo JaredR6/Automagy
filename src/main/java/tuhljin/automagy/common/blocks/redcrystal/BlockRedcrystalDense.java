@@ -7,6 +7,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import javax.annotation.Nullable;
+
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
@@ -16,6 +18,10 @@ import javax.annotation.Nonnull;
 public class BlockRedcrystalDense extends BlockRedcrystalLarge {
     public static final int MAX_MINIMUM = 15;
     public static final int MIN_MINIMUM = 2;
+
+    public BlockRedcrystalDense() {
+        super(References.BLOCK_REDCRYSTAL_DENSE);
+    }
 
     @Nullable
     @Override

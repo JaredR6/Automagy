@@ -15,7 +15,7 @@ public class CreativeTabAutomagy extends CreativeTabs {
 
     @Nonnull
     @Override
-    public ItemStack getTabIconItem() {
+    public ItemStack createIcon() {
         return new ItemStack(ModBlocks.redcrystal);
     }
 }

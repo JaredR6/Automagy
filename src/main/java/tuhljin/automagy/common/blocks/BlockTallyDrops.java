@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tuhljin.automagy.common.items.ModItems;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileRemoteComparator;
 import tuhljin.automagy.common.tiles.TileTallyDrops;
 
@@ -16,6 +17,7 @@ import javax.annotation.Nonnull;
 
 public class BlockTallyDrops extends BlockTallyBase {
     public BlockTallyDrops() {
+        super(References.BLOCK_TALLY_DROPS);
     }
 
     @Override

@@ -18,9 +18,6 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
     protected int targetY;
     protected int targetZ;
 
-    public MessageParticlesTargeted() {
-    }
-
     public MessageParticlesTargeted(short id, int dim, int x, int y, int z, int targetX, int targetY, int targetZ) {
         super(dim, x, y, z);
         this.id = id;
@@ -29,6 +26,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         this.targetZ = targetZ;
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.id = buf.readShort();
@@ -37,6 +35,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
         this.targetZ = buf.readInt();
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeShort(this.id);
@@ -46,13 +45,11 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
     }
 
     public void onReceived(@Nonnull World world, BlockPos pos) {
-        switch(this.id) {
-            case BOLT_BLACK:
-                this.zapBlock(7, world, 0.1F, 0.0F, 0.8F);
-                world.playSound(this.x + 0.5D, this.y + 0.5D, this.z + 0.5D, SoundsTC.zap, SoundCategory.BLOCKS, 0.2F, world.rand.nextFloat() * 0.5F + 0.4F, false);
-                world.playSound(this.x + 0.5D, this.y + 0.5D, this.z + 0.5D, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.BLOCKS, 0.7F, world.rand.nextFloat() * 0.5F + 0.1F, false);
-                world.playSound(this.x + 0.5D, this.y + 0.5D, this.z + 0.5D, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.5F + 1.0F, false);
-            default:
+        if (this.id == BOLT_BLACK) {
+            this.zapBlock(7, world, 0.1F, 0.0F, 0.8F);
+            world.playSound(this.x + 0.5D, this.y + 0.5D, this.z + 0.5D, SoundsTC.zap, SoundCategory.BLOCKS, 0.2F, world.rand.nextFloat() * 0.5F + 0.4F, false);
+            world.playSound(this.x + 0.5D, this.y + 0.5D, this.z + 0.5D, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.BLOCKS, 0.7F, world.rand.nextFloat() * 0.5F + 0.1F, false);
+            world.playSound(this.x + 0.5D, this.y + 0.5D, this.z + 0.5D, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.5F + 1.0F, false);
         }
     }
 
@@ -77,5 +74,7 @@ public class MessageParticlesTargeted extends BlockTiedMessageToClient<MessagePa
     public static void sendToClients(short id, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockPos targetPos) {
         sendToClients(id, world, pos.getX(), pos.getY(), pos.getZ(), targetPos.getX(), targetPos.getY(), targetPos.getZ());
     }
+
+    public static class Handler extends MessageToClient.Handler<MessageParticlesTargeted> {}
 }
 

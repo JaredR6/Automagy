@@ -14,6 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thaumcraft.common.golems.seals.ItemSealPlacer;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileGolemWorkbench;
 
 import javax.annotation.Nonnull;
@@ -22,7 +23,7 @@ public class BlockGolemWorkbench extends ModTileEntityBlock {
     public static final AxisAlignedBB AABB_SLAB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
 
     BlockGolemWorkbench() {
-        super(Material.WOOD);
+        super(Material.WOOD, References.BLOCK_GOLEMWORKBENCH);
         this.setHardness(2.5F);
         this.setSoundType(SoundType.WOOD);
     }

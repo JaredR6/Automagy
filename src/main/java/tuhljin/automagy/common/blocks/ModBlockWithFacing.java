@@ -20,16 +20,16 @@ import javax.annotation.Nullable;
 
 import javax.annotation.Nonnull;
 
-public abstract class ModBlockWithFacing<T extends Enum<T> & IStringSerializable & IEnumWithMetadata> extends ModBlock {
+public abstract class ModBlockWithFacing extends ModBlock {
     public PropertyDirection FACING;
 
-    public ModBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor) {
-        super(material, mapColor);
+    public ModBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor, String name) {
+        super(material, mapColor, name);
         this.setDefaultState(this.getDefaultState().withProperty(this.FACING, EnumFacing.NORTH));
     }
 
-    public ModBlockWithFacing(@Nonnull Material material) {
-        this(material, material.getMaterialMapColor());
+    public ModBlockWithFacing(@Nonnull Material material, String name) {
+        this(material, material.getMaterialMapColor(), name);
     }
 
     // may not be necessary

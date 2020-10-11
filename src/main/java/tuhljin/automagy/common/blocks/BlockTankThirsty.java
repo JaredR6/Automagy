@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.items.ModItems;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileTankThirsty;
 
@@ -38,7 +39,7 @@ public class BlockTankThirsty extends BlockFillableByBucket {
     private int[] lastGlyphs = null;
 
     public BlockTankThirsty() {
-        super(Material.ROCK, true);
+        super(Material.ROCK, References.BLOCK_TANK_THIRSTY, true);
         this.setHardness(3.0F);
         this.setResistance(10.0F);
         this.setHarvestLevel("pickaxe", 0);
@@ -64,7 +65,7 @@ public class BlockTankThirsty extends BlockFillableByBucket {
     @Nonnull
     @SideOnly(Side.CLIENT)
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 

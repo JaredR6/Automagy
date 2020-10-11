@@ -18,9 +18,6 @@ public class MessageZap extends MessageToClient<MessageZap> {
     protected double dy;
     protected double dz;
 
-    public MessageZap() {
-    }
-
     public MessageZap(int dim, double sx, double sy, double sz, double dx, double dy, double dz) {
         this.dim = dim;
         this.sx = sx;
@@ -31,6 +28,7 @@ public class MessageZap extends MessageToClient<MessageZap> {
         this.dz = dz;
     }
 
+    @Override
     public void fromBytes(ByteBuf buf) {
         this.dim = buf.readInt();
         this.sx = buf.readDouble();
@@ -41,6 +39,7 @@ public class MessageZap extends MessageToClient<MessageZap> {
         this.dz = buf.readDouble();
     }
 
+    @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.dim);
         buf.writeDouble(this.sx);
@@ -67,4 +66,6 @@ public class MessageZap extends MessageToClient<MessageZap> {
             PacketHandler.INSTANCE.sendToAllAround(new MessageZap(dim, sx, sy, sz, dx, dy, dz), point);
         }
     }
+
+    public static class Handler extends MessageToClient.Handler<MessageZap> {}
 }

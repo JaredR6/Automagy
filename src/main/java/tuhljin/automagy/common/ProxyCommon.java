@@ -31,18 +31,15 @@ public class ProxyCommon {
 
     public void preInit(@Nonnull FMLPreInitializationEvent event) {
         AutomagyConfig.load(event.getSuggestedConfigurationFile());
-        ModItems.initFluidContainers();
-        ModItems.registerDispenserBehaviors();
-        ModBlocks.registerTileEntities();
-        ModEntities.registerSeals();
         PacketHandler.registerMessages();
-        MinecraftForge.EVENT_BUS.register(new AutomagyEventHandler());
+        ModEntities.init();
+        ModEntities.registerSeals();
         this.casterTriggerManager = new AutomagyCasterTriggerManager();
     }
 
     public void init(FMLInitializationEvent event) {
-        ModEntities.register();
         CompatibilityManager.init();
+        MinecraftForge.EVENT_BUS.register(new AutomagyEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(Automagy.instance, (IGuiHandler)new AutomagyGUIHandler());
     }
 

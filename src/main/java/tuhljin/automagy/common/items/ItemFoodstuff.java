@@ -26,7 +26,7 @@ public class ItemFoodstuff extends ItemFood {
     public ItemFoodstuff() {
         super(6, false);
         setRegistryName(References.MOD_ID, References.BLOCK_VISHROOMSOUP);
-        setUnlocalizedName(References.BLOCK_VISHROOMSOUP);
+        setTranslationKey(References.BLOCK_VISHROOMSOUP);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         this.setAlwaysEdible();
@@ -34,8 +34,8 @@ public class ItemFoodstuff extends ItemFood {
 
     @Nonnull
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName() + ".vishroomStew";
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey() + ".vishroomStew";
     }
 
     @Nonnull

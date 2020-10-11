@@ -144,7 +144,7 @@ public class SealShear extends ModSealFiltered implements ISealConfigToggles, IS
         if (builtInShears || !carrying.isEmpty() && carrying.getItem() instanceof ItemShears) {
             if (this.fp == null) {
                 this.fp = FakePlayerFactory.get((WorldServer)world, new GameProfile(null, "FakeAutomagyGolem"));
-                this.fp.connection = new FakeNetHandlerPlayServer(this.fp.mcServer, new NetworkManager(EnumPacketDirection.CLIENTBOUND), this.fp);
+                this.fp.connection = new FakeNetHandlerPlayServer(this.fp.server, new NetworkManager(EnumPacketDirection.CLIENTBOUND), this.fp);
             }
 
             this.fp.setPositionAndRotation(golem.getGolemEntity().posX, golem.getGolemEntity().posY, golem.getGolemEntity().posZ, golem.getGolemEntity().rotationYaw, golem.getGolemEntity().rotationPitch);

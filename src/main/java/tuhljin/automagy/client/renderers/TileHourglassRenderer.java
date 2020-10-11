@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 import thaumcraft.client.lib.obj.AdvancedModelLoader;
 import thaumcraft.client.lib.obj.IModelCustom;
 import tuhljin.automagy.common.blocks.ModBlocks;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileHourglass;
 import tuhljin.automagy.common.tiles.TileHourglassMagic;
 
@@ -23,12 +24,10 @@ public class TileHourglassRenderer extends TileEntitySpecialRenderer<TileHourgla
     public static final String TEXTURE_GLASS = "textures/models/hourglass-glass.png";
     public static final String TEXTURE_SAND = "textures/models/hourglass-sand.png";
     public static final String TEXTURE_REDSTONE = "textures/models/hourglass-redstone.png";
-    protected final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation("automagy".toLowerCase(), "models/obj/hourglass.obj"));
+    protected final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation(References.MOD_ID, "models/obj/hourglass.obj"));
 
-    public TileHourglassRenderer() {
-    }
-
-    public void renderTileEntityAt(TileHourglass te, double x, double y, double z, float partialTicks, int destroyStage) {
+    @Override
+    public void render(TileHourglass te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         boolean renderingItem = ItemBlockSpecialRenderer.isRendering;
         boolean isMagic = renderingItem ? ItemBlockSpecialRenderer.currentBlock == ModBlocks.hourglassMagic : te instanceof TileHourglassMagic;
         String texture = isMagic ? "textures/models/hourglass-gold.png" : "textures/models/hourglass.png";
@@ -56,7 +55,7 @@ public class TileHourglassRenderer extends TileEntitySpecialRenderer<TileHourgla
             case EAST:
         }
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("automagy".toLowerCase(), texture));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(References.MOD_ID, texture));
         this.model.renderOnly("Right_Pillar_group", "group_Bottom", "group_Left_Pillar", "group_Top");
         if (!isMagic) {
             this.model.renderOnly("group_Left_Turner", "group_Right_Turner");
@@ -67,12 +66,12 @@ public class TileHourglassRenderer extends TileEntitySpecialRenderer<TileHourgla
                 GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.9F);
             }
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("automagy".toLowerCase(), "textures/models/hourglass-redstone.png"));
+            Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(References.MOD_ID, "textures/models/hourglass-redstone.png"));
             this.model.renderOnly("group_Redstone");
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("automagy".toLowerCase(), "textures/models/hourglass-sand.png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(References.MOD_ID, "textures/models/hourglass-sand.png"));
         if (renderingItem) {
             this.model.renderOnly("sandbtm0");
         } else {
@@ -87,7 +86,7 @@ public class TileHourglassRenderer extends TileEntitySpecialRenderer<TileHourgla
             this.renderSandState(te, (double)rotation < 1.0D);
         }
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("automagy".toLowerCase(), "textures/models/hourglass-glass.png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(References.MOD_ID, "textures/models/hourglass-glass.png"));
         this.model.renderOnly("Group_glass");
         GL11.glPopMatrix();
     }

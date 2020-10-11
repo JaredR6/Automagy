@@ -25,9 +25,6 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
     protected short id;
     protected short count;
 
-    public MessageParticles() {
-    }
-
     public MessageParticles(short id, short count, int dim, int x, int y, int z) {
         super(dim, x, y, z);
         this.id = id;
@@ -38,18 +35,21 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
         this(id, (short)0, dim, x, y, z);
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.id = buf.readShort();
         this.count = buf.readShort();
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeShort(this.id);
         buf.writeShort(this.count);
     }
 
+    @Override
     public void onReceived(@Nonnull World world, @Nonnull BlockPos pos) {
         int i;
         switch(this.id) {
@@ -129,4 +129,6 @@ public class MessageParticles extends BlockTiedMessageToClient<MessageParticles>
     public static void sendToClients(short id, @Nonnull World world, @Nonnull BlockPos pos) {
         sendToClients(id, world, pos.getX(), pos.getY(), pos.getZ());
     }
+
+    public static class Handler extends MessageToClient.Handler<MessageParticles> {}
 }

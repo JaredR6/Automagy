@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import tuhljin.automagy.common.lib.RedstoneCalc;
 import tuhljin.automagy.common.lib.RedstoneCalc.PowerResult;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
 
 import javax.annotation.Nonnull;
@@ -20,6 +21,7 @@ public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
     private final boolean ACCEPT_POWER_FROM_ATTACHED_DIRECTION = true;
 
     public BlockRedcrystalAmp() {
+        super(References.BLOCK_REDCRYSTAL_AMP);
     }
 
     @Nullable
@@ -37,7 +39,7 @@ public class BlockRedcrystalAmp extends BlockRedcrystalLarge {
             return null;
         }
 
-        List<EnumFacing> list = new ArrayList();
+        List<EnumFacing> list = new ArrayList<>();
         EnumFacing orientation = te.orientation;
         if (orientation == null) {
             orientation = EnumFacing.UP;

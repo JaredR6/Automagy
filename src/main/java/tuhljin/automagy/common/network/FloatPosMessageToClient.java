@@ -14,9 +14,6 @@ public abstract class FloatPosMessageToClient<T extends FloatPosMessageToClient>
     protected float y;
     protected float z;
 
-    public FloatPosMessageToClient() {
-    }
-
     public FloatPosMessageToClient(int dim, float x, float y, float z) {
         this.dim = dim;
         this.x = x;
@@ -24,6 +21,7 @@ public abstract class FloatPosMessageToClient<T extends FloatPosMessageToClient>
         this.z = z;
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         this.dim = buf.readInt();
         this.x = buf.readFloat();
@@ -31,6 +29,7 @@ public abstract class FloatPosMessageToClient<T extends FloatPosMessageToClient>
         this.z = buf.readFloat();
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeInt(this.dim);
         buf.writeFloat(this.x);

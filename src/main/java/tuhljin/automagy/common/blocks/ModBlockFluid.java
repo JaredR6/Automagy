@@ -26,13 +26,10 @@ public class ModBlockFluid extends BlockFluidClassic {
         this(fluid, Material.WATER);
     }
 
-    public void register() {
-        FluidRegistry.registerFluid(fluid);
-    }
-
     public static class ModFluid extends Fluid {
         public ModFluid(@Nonnull String fluidName, ResourceLocation still, ResourceLocation flowing) {
             super(fluidName, still, flowing);
+            FluidRegistry.registerFluid(this);
         }
 
         public ModFluid(@Nonnull String fluidName, ResourceLocation still) {
@@ -51,12 +48,6 @@ public class ModBlockFluid extends BlockFluidClassic {
     @SideOnly(Side.CLIENT)
     void render() {
         ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
-    }
-
-    public static void registerFluids() {
-        ModBlocks.milk.register();
-        ModBlocks.mushroomSoup.register();
-        ModBlocks.vishroomSoup.register();
     }
 
     public static void renderFluids() {

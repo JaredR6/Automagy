@@ -12,7 +12,7 @@ import tuhljin.automagy.common.gui.ContainerFilter;
 
 import javax.annotation.Nonnull;
 
-public class MessageGUIFilter implements IMessage, IMessageHandler<MessageGUIFilter, IMessage> {
+public class MessageGUIFilter implements IMessage {
     private int type;
     private String data;
 
@@ -21,27 +21,32 @@ public class MessageGUIFilter implements IMessage, IMessageHandler<MessageGUIFil
         this.data = data;
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         this.type = buf.readByte();
         this.data = ByteBufUtils.readUTF8String(buf);
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         buf.writeByte(this.type);
         ByteBufUtils.writeUTF8String(buf, this.data);
     }
 
-    @Nullable
-    public IMessage onMessage(@Nonnull MessageGUIFilter message, @Nonnull MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().player;
-        if (player != null) {
-            Container container = player.openContainer;
-            if (container instanceof ContainerFilter) {
-                ((ContainerFilter)container).receiveMessageFromClient(message.type, message.data);
-            }
-        }
+    public static class Handler implements IMessageHandler<MessageGUIFilter, IMessage> {
 
-        return null;
+        @Override
+        public IMessage onMessage(@Nonnull MessageGUIFilter message, @Nonnull MessageContext ctx) {
+            EntityPlayer player = ctx.getServerHandler().player;
+            if (player != null) {
+                Container container = player.openContainer;
+                if (container instanceof ContainerFilter) {
+                    ((ContainerFilter)container).receiveMessageFromClient(message.type, message.data);
+                }
+            }
+
+            return null;
+        }
     }
 
     public static void sendToServer(int type, String data) {

@@ -1,5 +1,7 @@
 package tuhljin.automagy.client;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -16,7 +18,6 @@ import tuhljin.automagy.client.renderers.TileRedcrystalMercRenderer;
 import tuhljin.automagy.client.renderers.TileRedcrystalRenderer;
 import tuhljin.automagy.client.renderers.TileRemoteComparatorRenderer;
 import tuhljin.automagy.client.renderers.TileTankThirstyRenderer;
-import tuhljin.automagy.client.renderers.entities.ItemProjectileRenderFactory;
 import tuhljin.automagy.common.ProxyCommon;
 import tuhljin.automagy.common.entities.EntityAvaricePearl;
 import tuhljin.automagy.common.items.ModItems;
@@ -29,7 +30,6 @@ import tuhljin.automagy.common.tiles.TileRemoteComparator;
 import tuhljin.automagy.common.tiles.TileTankThirsty;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class ProxyClient extends ProxyCommon {
 
@@ -62,7 +62,10 @@ public class ProxyClient extends ProxyCommon {
     }
 
     private void registerEntityRendering() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityAvaricePearl.class, new ItemProjectileRenderFactory(ModItems.avaricePearl));
+        RenderingRegistry.registerEntityRenderingHandler(EntityAvaricePearl.class,
+                renderManager -> new RenderSnowball<>(renderManager,
+                        ModItems.avaricePearl,
+                        Minecraft.getMinecraft().getRenderItem()));
     }
 
     public void fxGhostlyBallStream(World worldObj, double posX, double posY, double posZ, double posX2, double posY2, double posZ2, float size, int type, boolean shrink, float gravity) {

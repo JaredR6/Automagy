@@ -1,0 +1,68 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube",
+    "textures": {
+        "down": "automagy:blocks/tally",
+        "up": "automagy:blocks/tally",
+        "north": "automagy:blocks/tally",
+        "south": "automagy:blocks/tally",
+        "west": "automagy:blocks/tally",
+        "east": "automagy:blocks/tally",
+        "particle": "automagy:blocks/tallyRedOff",
+        "face": "automagy:blocks/tallyLensUnbound",
+        "faceout": "automagy:blocks/tallyLensUnboundRedOff",
+        "faced": "#face",
+        "faceu": "#face",
+        "facen": "#face",
+        "faces": "#face",
+        "facew": "#face",
+        "facee": "#face"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "facing": {
+      "down":  { "textures": { "down": "#faced" } },
+      "up":    { "textures": { "up": "#faceu" } },
+      "north": { "textures": { "north": "#facen" } },
+      "south": { "textures": { "south": "#faces" } },
+      "west":  { "textures": { "west": "#facew" } },
+      "east":  { "textures": { "east": "#facee" } }
+    },
+    "outputd": {
+      "true": { "textures": { "down": "#particle", "faced": "#faceout" } },
+      "false": {}
+    },
+    "outputu": {
+      "true": { "textures": { "up": "#particle", "faceu": "#faceout" } },
+      "false": {}
+    },
+    "outputn": {
+      "true": { "textures": { "north": "#particle", "facen": "#faceout" } },
+      "false": {}
+    },
+    "outputs": {
+      "true": { "textures": { "south": "#particle", "faces": "#faceout" } },
+      "false": {}
+    },
+    "outputw": {
+      "true": { "textures": { "west": "#particle", "facew": "#faceout" } },
+      "false": {}
+    },
+    "outpute": {
+      "true": { "textures": { "east": "#particle", "facee": "#faceout" } },
+      "false": {}
+    },
+    "power": {
+      "true": { "textures": { "particle": "automagy:blocks/tallyRedOn", "faceout": "automagy:blocks/tallyLensUnboundRedOn" } },
+      "false": {}
+    },
+    "inventory": [{
+      "textures": {
+        "east": "#face",
+        "west": "#particle"
+      }
+    }]
+  }
+}

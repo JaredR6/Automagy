@@ -17,9 +17,6 @@ public class RenderingHelper {
     public static final float FLUID_OFFSET = 0.005F;
     protected static Minecraft mc = Minecraft.getMinecraft();
 
-    public RenderingHelper() {
-    }
-
     public static void renderFluidCuboid(FluidStack fluid, BlockPos pos, double x, double y, double z, double w, double h, double d) {
         double wd = (1.0D - w) / 2.0D;
         double hd = (1.0D - h) / 2.0D;

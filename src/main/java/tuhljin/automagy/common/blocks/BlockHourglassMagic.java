@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.tiles.TileHourglassMagic;
 
@@ -24,7 +25,7 @@ public class BlockHourglassMagic extends BlockHourglass {
     public static final int TIMER_MAGIC_MAXIMUM = 3600;
 
     public BlockHourglassMagic() {
-        super(Material.IRON, MapColor.IRON);
+        super(Material.IRON, MapColor.IRON, References.BLOCK_HOURGLASS_MAGIC);
         this.setSoundType(SoundType.METAL);
     }
 

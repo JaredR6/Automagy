@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tuhljin.automagy.common.items.IAutomagyLocationLink;
 import tuhljin.automagy.common.lib.NeighborNotifier;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.lib.TjUtil;
 import tuhljin.automagy.common.tiles.TileRemoteComparator;
@@ -26,7 +27,7 @@ import javax.annotation.Nonnull;
 
 public class BlockRemoteComparator extends ModTileRenderedBlockWithFacing implements IBlockFacesHorizontal {
     public BlockRemoteComparator() {
-        super(ModBlocks.materialWaterproofCircuit);
+        super(ModBlocks.materialWaterproofCircuit, References.BLOCK_REMOTECOMPARATOR);
         //this.func_149676_a(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         this.setSoundType(SoundType.STONE);
         this.setHardness(2.5F);

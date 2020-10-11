@@ -23,13 +23,13 @@ import tuhljin.automagy.common.lib.inventory.IContainsFilter;
 import javax.annotation.Nonnull;
 
 public abstract class ModTileEntityBlock extends ModBlock implements ITileEntityProvider {
-    public ModTileEntityBlock(@Nonnull Material material, @Nonnull MapColor mapColor) {
-        super(material, mapColor);
+    public ModTileEntityBlock(@Nonnull Material material, @Nonnull MapColor mapColor, String name) {
+        super(material, mapColor, name);
         this.hasTileEntity = true;
     }
 
-    public ModTileEntityBlock(@Nonnull Material material) {
-        this(material, material.getMaterialMapColor());
+    public ModTileEntityBlock(@Nonnull Material material, String name) {
+        this(material, material.getMaterialMapColor(), name);
     }
 
     @Override

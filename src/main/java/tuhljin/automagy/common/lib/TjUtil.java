@@ -167,10 +167,10 @@ public class TjUtil {
             Block block = state.getBlock();
             Item blockItem = Item.getItemFromBlock(block);
             if (blockItem == Items.AIR) {
-                name = block.getUnlocalizedName();
+                name = block.getTranslationKey();
             } else {
                 ItemStack blockStack = new ItemStack(blockItem, 1, block.getMetaFromState(state));
-                name = blockItem.getUnlocalizedName(blockStack);
+                name = blockItem.getTranslationKey(blockStack);
             }
 
             if (name.isEmpty()) {
@@ -634,7 +634,7 @@ public class TjUtil {
     }
 
     public static boolean isChunkLoaded(@Nonnull World world, @Nonnull BlockPos pos) {
-        return world.getChunkFromBlockCoords(pos).isLoaded();
+        return world.getChunk(pos).isLoaded();
     }
 
     public static boolean isChunkLoaded(@Nonnull World world, int blockX, int blockZ) {

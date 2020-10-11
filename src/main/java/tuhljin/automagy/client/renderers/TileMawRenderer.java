@@ -24,7 +24,8 @@ public class TileMawRenderer extends TileEntitySpecialRenderer<TileMawBase> {
     public TileMawRenderer() {
     }
 
-    public void renderTileEntityAt(TileMawBase te, double x, double y, double z, float partialTicks, int destroyStage) {
+    @Override
+    public void render(TileMawBase te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         EnumFacing facing;
         facing = te.getFacing();
         if (facing == null) {

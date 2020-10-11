@@ -12,15 +12,21 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
+import tuhljin.automagy.common.lib.References;
 
 import javax.annotation.Nonnull;
 
 public class BlockBookshelfEnchanted extends ModBlockMetaStates<BlockBookshelfEnchanted.BookshelfVariants> {
+    public static final PropertyEnum<BookshelfVariants> BookshelfProperty = PropertyEnum.create("type", BookshelfVariants.class);
     public static final int ENCHANTPOWER_GREATWOOD = 4;
     public static final int ENCHANTPOWER_SILVERWOOD = 8;
 
     public BlockBookshelfEnchanted() {
-        super(Material.WOOD);
+        this(References.BLOCK_BOOKSHELF_ENCHANTED);
+    }
+
+    public BlockBookshelfEnchanted(String name) {
+        super(Material.WOOD, name);
         this.setHardness(1.5F);
         this.setSoundType(SoundType.WOOD);
     }
@@ -33,13 +39,13 @@ public class BlockBookshelfEnchanted extends ModBlockMetaStates<BlockBookshelfEn
 
     @Nonnull
     @Override
-    protected PropertyEnum<BlockBookshelfEnchanted.BookshelfVariants> createVariantProperty() {
-        return PropertyEnum.create("type", BlockBookshelfEnchanted.BookshelfVariants.class);
+    protected PropertyEnum<BlockBookshelfEnchanted.BookshelfVariants> getVariant() {
+        return BookshelfProperty;
     }
 
     @Override
     public float getEnchantPowerBonus(@Nonnull World world, @Nonnull BlockPos pos) {
-        BlockBookshelfEnchanted.BookshelfVariants v = (BlockBookshelfEnchanted.BookshelfVariants)world.getBlockState(pos).getValue(this.VARIANT);
+        BlockBookshelfEnchanted.BookshelfVariants v = world.getBlockState(pos).getValue(this.getVariant());
         return v == BlockBookshelfEnchanted.BookshelfVariants.SILVERWOOD ? ENCHANTPOWER_SILVERWOOD : ENCHANTPOWER_GREATWOOD;
     }
 

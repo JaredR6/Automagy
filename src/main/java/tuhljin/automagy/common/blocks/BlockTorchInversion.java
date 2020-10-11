@@ -27,7 +27,8 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
     @Nonnull
     private static HashMap<World, ArrayList<Toggle>> toggles = new HashMap<>();
 
-    public BlockTorchInversion(boolean lit) {
+    public BlockTorchInversion(boolean lit, String name) {
+        super(name);
         this.isLit = lit;
         if (lit) {
             this.setLightLevel(0.5F);
@@ -188,9 +189,9 @@ public class BlockTorchInversion extends ModBlockTorchWithTE {
             if (enumfacing.getAxis().isHorizontal()) {
                 EnumFacing opp = enumfacing.getOpposite();
                 double ratio = 0.27D;
-                x += ratio * opp.getFrontOffsetX();
+                x += ratio * opp.getXOffset();
                 y += ratio;
-                z += ratio * opp.getFrontOffsetZ();
+                z += ratio * opp.getZOffset();
             }
 
             world.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 0.0D, 0.0D, 0.0D);

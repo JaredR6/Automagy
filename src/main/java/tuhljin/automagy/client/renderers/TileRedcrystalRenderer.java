@@ -14,10 +14,10 @@ import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalAmp;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalDense;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalDim;
 import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalRes;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
 
-public class TileRedcrystalRenderer extends TileEntitySpecialRenderer {
-    private final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation("automagy".toLowerCase(), "models/obj/redcrystal.obj"));
+public class TileRedcrystalRenderer extends TileEntitySpecialRenderer<TileRedcrystal> {
     public static final String OBJ_MODEL = "models/obj/redcrystal.obj";
     public static final String TEXTURE_STANDARD = "textures/models/redcrystalStandard.png";
     public static final String TEXTURE_ACTIVE = "textures/models/redcrystalActive.png";
@@ -29,9 +29,7 @@ public class TileRedcrystalRenderer extends TileEntitySpecialRenderer {
     public static final String TEXTURE_DENSE_ACTIVE = "textures/models/redcrystalDenseActive.png";
     public static final String TEXTURE_RES = "textures/models/redcrystalRes.png";
     public static final String TEXTURE_RES_ACTIVE = "textures/models/redcrystalResActive.png";
-
-    public TileRedcrystalRenderer() {
-    }
+    private final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation(References.MOD_ID, "models/obj/redcrystal.obj"));
 
     private void adjustRotateViaMeta(World world, int x, int y, int z) {
         int meta = 0;
@@ -40,13 +38,13 @@ public class TileRedcrystalRenderer extends TileEntitySpecialRenderer {
         GL11.glPopMatrix();
     }
 
-    public void func_180535_a(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-        TileRedcrystal ter = (TileRedcrystal)te;
+    @Override
+    public void render(TileRedcrystal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         boolean renderingItem = ItemBlockSpecialRenderer.isRendering;
-        EnumFacing orientation = ter.orientation;
+        EnumFacing orientation = te.orientation;
         Block block = null;
         if (orientation != null && !renderingItem) {
-            block = ter.getBlockType();
+            block = te.getBlockType();
         } else {
             renderingItem = true;
             orientation = EnumFacing.UP;
@@ -89,31 +87,31 @@ public class TileRedcrystalRenderer extends TileEntitySpecialRenderer {
             GL11.glScaled(0.25D, 0.25D, 0.25D);
         }
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("automagy".toLowerCase(), texture));
+        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(References.MOD_ID, texture));
         this.model.renderPart("primary_Plane001");
         if (orientation == EnumFacing.DOWN) {
-            if (ter.connectN) {
+            if (te.connectN) {
                 this.model.renderPart("adjunctC_PlaneC");
             }
 
-            if (ter.connectS) {
+            if (te.connectS) {
                 this.model.renderPart("adjunctA_PlaneA");
             }
         } else {
-            if (ter.connectN) {
+            if (te.connectN) {
                 this.model.renderPart("adjunctA_PlaneA");
             }
 
-            if (ter.connectS) {
+            if (te.connectS) {
                 this.model.renderPart("adjunctC_PlaneC");
             }
         }
 
-        if (ter.connectE) {
+        if (te.connectE) {
             this.model.renderPart("adjunctB_PlaneB");
         }
 
-        if (ter.connectW) {
+        if (te.connectW) {
             this.model.renderPart("adjunctD_PlaneD");
         }
 

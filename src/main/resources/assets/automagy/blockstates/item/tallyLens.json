@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "builtin/generated",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "type": {
+      "clear": {
+        "textures": {
+          "layer0": "automagy:items/tallyLens"
+        }
+      },
+      "unbound": {
+        "textures": {
+          "layer0": "automagy:items/tallyLensUnbound"
+        }
+      },
+      "yield": {
+        "textures": {
+          "layer0": "automagy:items/tallyLensYield"
+        }
+      }
+    }
+  }
+}

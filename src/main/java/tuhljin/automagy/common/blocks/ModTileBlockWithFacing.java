@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 public abstract class ModTileBlockWithFacing extends ModBlockWithFacing implements ITileEntityProvider {
-    public ModTileBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor) {
-        super(material, mapColor);
+    public ModTileBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor, String name) {
+        super(material, mapColor, name);
         this.hasTileEntity = true;
     }
 
-    public ModTileBlockWithFacing(@Nonnull Material material) {
-        this(material, material.getMaterialMapColor());
+    public ModTileBlockWithFacing(@Nonnull Material material, String name) {
+        this(material, material.getMaterialMapColor(), name);
     }
 
     @Override

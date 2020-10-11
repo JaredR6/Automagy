@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import tuhljin.automagy.common.Automagy;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.inventory.ItemHandlerUtil;
 import tuhljin.automagy.common.tiles.TileMawHungry;
 
@@ -38,7 +39,11 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
     private static AxisAlignedBB AABB_WEST = new AxisAlignedBB(0.0F, 0.25F, 0.25F, 0.0625F, 0.75F, 0.75F);
 
     public BlockMawHungry() {
-        super(Material.CORAL);
+        this(References.BLOCK_MAW_HUNGRY);
+    }
+
+    public BlockMawHungry(String name) {
+        super(Material.CORAL, name);
         this.setHardness(1.5F);
         this.setResistance(2000.0F);
     }
@@ -192,7 +197,7 @@ public class BlockMawHungry extends ModTileRenderedBlockWithFacing {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, Entity entity) {
         if (!world.isRemote && entity instanceof EntityItem && !entity.isDead) {
             EntityItem item = (EntityItem)entity;
             TileEntity te = world.getTileEntity(pos);

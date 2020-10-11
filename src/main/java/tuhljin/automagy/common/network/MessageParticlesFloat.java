@@ -16,24 +16,24 @@ public class MessageParticlesFloat extends FloatPosMessageToClient<MessagePartic
     public static final short GRABLIQUID = 2;
     protected short id;
 
-    public MessageParticlesFloat() {
-    }
-
     public MessageParticlesFloat(short id, int dim, float x, float y, float z) {
         super(dim, x, y, z);
         this.id = id;
     }
 
+    @Override
     public void fromBytes(@Nonnull ByteBuf buf) {
         super.fromBytes(buf);
         this.id = buf.readShort();
     }
 
+    @Override
     public void toBytes(@Nonnull ByteBuf buf) {
         super.toBytes(buf);
         buf.writeShort(this.id);
     }
 
+    @Override
     public void onReceived(@Nonnull World world, float x, float y, float z) {
         if (this.id == GRABLIQUID) {
             int color = 7;
@@ -62,4 +62,6 @@ public class MessageParticlesFloat extends FloatPosMessageToClient<MessagePartic
     public static void sendToClients(short id, @Nonnull World world, double x, double y, double z) {
         sendToClients(id, world, (float)x, (float)y, (float)z);
     }
+
+    public static class Handler extends MessageToClient.Handler<MessageParticlesFloat> {}
 }

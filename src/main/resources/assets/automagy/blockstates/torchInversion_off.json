@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "facing=up":  { "model": "automagy:torchInversion_unlit" },
+        "facing=east":  { "model": "automagy:torchInversion_unlit_wall" },
+        "facing=south":  { "model": "automagy:torchInversion_unlit_wall", "y": 90 },
+        "facing=west":  { "model": "automagy:torchInversion_unlit_wall", "y": 180 },
+        "facing=north":  { "model": "automagy:torchInversion_unlit_wall", "y": 270 }
+    }
+}

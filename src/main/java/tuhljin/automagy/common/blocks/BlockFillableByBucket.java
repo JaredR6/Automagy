@@ -32,13 +32,13 @@ import javax.annotation.Nonnull;
 public abstract class BlockFillableByBucket extends ModTileRenderedBlock {
     public boolean useWaterBottles;
 
-    public BlockFillableByBucket(@Nonnull Material material, @Nonnull MapColor mapColor, boolean useWaterBottles) {
-        super(material, mapColor);
+    public BlockFillableByBucket(@Nonnull Material material, @Nonnull MapColor mapColor, String name, boolean useWaterBottles) {
+        super(material, mapColor, name);
         this.useWaterBottles = useWaterBottles && AutomagyConfig.waterBottleAmount != -1;
     }
 
-    public BlockFillableByBucket(@Nonnull Material material, boolean useWaterBottles) {
-        this(material, material.getMaterialMapColor(), useWaterBottles);
+    public BlockFillableByBucket(@Nonnull Material material, String name, boolean useWaterBottles) {
+        this(material, material.getMaterialMapColor(), name, useWaterBottles);
     }
 
     @Override

@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import tuhljin.automagy.common.gui.AutomagyGUIHandler;
 import tuhljin.automagy.common.items.ItemFilter;
+import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.ThaumcraftExtension;
 import tuhljin.automagy.common.tiles.TileMawFinical;
 
@@ -18,6 +19,11 @@ import javax.annotation.Nonnull;
 public class BlockMawFinical extends BlockMawHungry {
 
     public BlockMawFinical() {
+        this(References.BLOCK_MAW_FINICAL);
+    }
+
+    public BlockMawFinical(String name) {
+        super(name);
     }
 
     @Nullable

@@ -36,8 +36,8 @@ public abstract class BlockTallyBase extends ModTileBlockWithFacing implements I
     public FacingPropertyBool outputProp;
     public PropertyBool HASPOWER;
 
-    public BlockTallyBase() {
-        super(Material.WOOD);
+    public BlockTallyBase(String name) {
+        super(Material.WOOD, name);
         this.setHardness(2.5F);
         this.setResistance(10.0F);
         this.setSoundType(SoundType.WOOD);

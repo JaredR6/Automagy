@@ -57,7 +57,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(@Nonnull World world, @Nonnull BlockPos pos, IBlockState state, Entity entity) {
         if (!world.isRemote) {
             NBTTagCompound data;
             long t;
@@ -209,7 +209,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
                 boolean didSpread = false;
                 int r = rand.nextInt(10);
                 if (r < 6) {
-                    EnumFacing dir = EnumFacing.getFront(r);
+                    EnumFacing dir = EnumFacing.byIndex(r);
                     BlockPos pos2 = pos.offset(dir);
                     didSpread = this.doSpread(world, pos2.getX(), pos2.getY(), pos2.getZ(), world.rand, 0);
                 } else {
@@ -276,7 +276,7 @@ public class BlockVishroomSoup extends ModBlockFluid {
                 return false;
             } else {
                 int r = rand.nextInt(10);
-                EnumFacing dir = EnumFacing.getFront(r < 6 ? r : r - 4);
+                EnumFacing dir = EnumFacing.byIndex(r < 6 ? r : r - 4);
                 BlockPos pos2 = pos.offset(dir);
                 return r < 6 ? this.doSpread(world, pos2.getX(), pos2.getY(), pos2.getZ(), world.rand, count + 1) : this.doSpread(world, pos2.getX() + (rand.nextInt(3) - 1), pos2.getY(), pos2.getZ() + (rand.nextInt(3) - 1), world.rand, count + 1);
             }

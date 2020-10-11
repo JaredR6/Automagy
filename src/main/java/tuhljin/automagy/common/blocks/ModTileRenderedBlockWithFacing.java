@@ -11,12 +11,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 public abstract class ModTileRenderedBlockWithFacing extends ModTileBlockWithFacing {
-    public ModTileRenderedBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor) {
-        super(material, mapColor);
+    public ModTileRenderedBlockWithFacing(@Nonnull Material material, @Nonnull MapColor mapColor, String name) {
+        super(material, mapColor, name);
     }
 
-    public ModTileRenderedBlockWithFacing(@Nonnull Material material) {
-        super(material);
+    public ModTileRenderedBlockWithFacing(@Nonnull Material material, String name) {
+        super(material, name);
     }
 
     @Nonnull
@@ -28,7 +28,7 @@ public abstract class ModTileRenderedBlockWithFacing extends ModTileBlockWithFac
     @Nonnull
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 

@@ -6,6 +6,7 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
+import tuhljin.automagy.common.lib.References;
 
 import javax.annotation.Nonnull;
 
@@ -33,7 +34,8 @@ public class ItemGlyph extends ModVariantItem {
                 .put(7, "g")
                 .put(8, "r")
                 .put(9, "b")
-                .build());
+                .build(),
+                References.ITEM_TANKGLYPH);
     }
 
     @Nonnull

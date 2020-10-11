@@ -12,6 +12,6 @@
   "credits": "Special thanks and much credit go to Azanor.",
   "logoFile": "automagyLogo256.png",
   "screenshots": [],
-  "dependencies": ["Thaumcraft"]
+  "dependencies": ["thaumcraft"]
 }
 ]

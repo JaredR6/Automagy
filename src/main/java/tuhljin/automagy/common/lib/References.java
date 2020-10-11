@@ -60,7 +60,7 @@ public class References {
     public static final String SEAL_SHEAR = "shear";
     public static final String SEAL_SHEAR_ADV = "shear_advanced";
     public static final String SEAL_SUPPLY = "supply";
-public static final String PREFIX_GUI = MOD_PREFIX + "textures/gui/";
+    public static final String PREFIX_GUI = MOD_PREFIX + "textures/gui/";
     public static final String GUI_CHECKBOXABLE = PREFIX_GUI + "guiCheckboxable.png";
     public static final String GUI_WIDGETS_RECOLOR = PREFIX_GUI + "widgetsRecolor.png";
     public static final String GUI_FILTERHOLDER = PREFIX_GUI + "filterHolder.png";

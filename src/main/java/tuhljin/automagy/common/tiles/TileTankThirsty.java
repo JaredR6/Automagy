@@ -71,7 +71,6 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
     protected int cooldownConsume;
     protected int cooldownSiphon;
     protected int ticksSinceDrink;
-    @Nullable
     public int[] glyphs;
     public boolean voids;
     public boolean redstoneControlled;
@@ -373,7 +372,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
                         int amtTaken;
                         for(amtTaken = 0; amtTaken < this.glyphs.length; ++amtTaken) {
                             if (this.glyphs[amtTaken] == 3) {
-                                dir = EnumFacing.getFront(amtTaken);
+                                dir = EnumFacing.byIndex(amtTaken);
                                 if (this.siphonInto(dir, 1, false) > 0) {
                                     siphonDirs.add(dir);
                                 }
@@ -440,7 +439,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
                         }
 
                         if (this.glyphs[dirTry] != 3) {
-                            dir = EnumFacing.getFront(dirTry);
+                            dir = EnumFacing.byIndex(dirTry);
                             thePos = this.pos.offset(dir);
                             if (this.glyphs[dirTry] == 4) {
                                 TileEntity te = this.world.getTileEntity(thePos);
@@ -737,7 +736,7 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
             if (!world.isRemote) {
                 int glyph = this.removeGlyph(side);
                 if (glyph > 0) {
-                    TjUtil.dropItemIntoWorldSimple(new ItemStack(ModItems.tankGlyph, 1, glyph), world, pos.getX() + 0.5D + side.getFrontOffsetX() * 0.6D, pos.getY() + 0.5D + side.getFrontOffsetY() * 0.6D, pos.getZ() + 0.5D + side.getFrontOffsetZ() * 0.6D);
+                    TjUtil.dropItemIntoWorldSimple(new ItemStack(ModItems.tankGlyph, 1, glyph), world, pos.getX() + 0.5D + side.getXOffset() * 0.6D, pos.getY() + 0.5D + side.getYOffset() * 0.6D, pos.getZ() + 0.5D + side.getZOffset() * 0.6D);
                     world.playSound(null, player.getPosition(), SoundsTC.zap, SoundCategory.BLOCKS, 0.5F, 1.0F);
                 } else if (glyph == -1) {
                     long currentTime = System.currentTimeMillis();

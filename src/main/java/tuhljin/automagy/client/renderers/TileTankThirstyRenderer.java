@@ -22,10 +22,9 @@ import tuhljin.automagy.common.items.ItemGlyph;
 import tuhljin.automagy.common.tiles.TileTankThirsty;
 
 public class TileTankThirstyRenderer extends TileEntitySpecialRenderer<TileTankThirsty> {
-    public TileTankThirstyRenderer() {
-    }
 
-    public void renderTileEntityAt(TileTankThirsty te, double x, double y, double z, float partialTicks, int destroyStage) {
+    @Override
+    public void render(TileTankThirsty te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         FluidStack fluidStack = te.tank.getFluid();
         if (fluidStack != null) {
             this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

@@ -4,6 +4,7 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -13,6 +14,12 @@ import tuhljin.automagy.common.lib.References;
 import javax.annotation.Nonnull;
 
 public abstract class ModBlockTorchWithTE extends BlockTorch implements ITileEntityProvider {
+
+    public ModBlockTorchWithTE(String name) {
+        super();
+        setTranslationKey(name);
+        setRegistryName(new ResourceLocation(References.MOD_ID, name));
+    }
 
     @Override
     public boolean eventReceived(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, int eventID, int eventParam) {

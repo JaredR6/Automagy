@@ -18,23 +18,21 @@ import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
 public abstract class ModBlockMetaStates<T extends Enum<T> & IStringSerializable & IEnumWithMetadata> extends ModBlock {
-    public final PropertyEnum<T> VARIANT;
     private Map<Integer, T> statesFromMetaEnumLookup;
 
-    public ModBlockMetaStates(@Nonnull Material material, @Nonnull MapColor mapColor) {
-        super(material, mapColor);
+    public ModBlockMetaStates(@Nonnull Material material, @Nonnull MapColor mapColor, String name) {
+        super(material, mapColor, name);
         this.statesFromMetaEnumLookup = null;
-        this.VARIANT = createVariantProperty();
-        this.setDefaultState(this.blockState.getBaseState().withProperty(this.VARIANT, Iterables.get(this.VARIANT.getAllowedValues(), 0)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(this.getVariant(), Iterables.get(this.getVariant().getAllowedValues(), 0)));
     }
 
-    public ModBlockMetaStates(@Nonnull Material material) {
-        this(material, material.getMaterialMapColor());
+    public ModBlockMetaStates(@Nonnull Material material, String name) {
+        this(material, material.getMaterialMapColor(), name);
     }
 
     @Nonnull
     public Map<String, Integer> getVariantNamesAndMetadata() {
-        Collection<? extends T> values = this.VARIANT.getAllowedValues();
+        Collection<? extends T> values = this.getVariant().getAllowedValues();
         Map<String, Integer> map = new HashMap<>();
 
         for (T value : values) {
@@ -58,7 +56,7 @@ public abstract class ModBlockMetaStates<T extends Enum<T> & IStringSerializable
     @Override
     public IBlockState getStateFromMeta(int meta) {
         if (this.statesFromMetaEnumLookup == null) {
-            Collection<? extends T> values = this.VARIANT.getAllowedValues();
+            Collection<? extends T> values = this.getVariant().getAllowedValues();
             this.statesFromMetaEnumLookup = new HashMap<>();
 
             for (T value : values) {
@@ -67,19 +65,19 @@ public abstract class ModBlockMetaStates<T extends Enum<T> & IStringSerializable
         }
 
         T theVariant = (T) this.statesFromMetaEnumLookup.get(meta);
-        return theVariant != null ? this.getDefaultState().withProperty(this.VARIANT, theVariant) : this.getDefaultState();
+        return theVariant != null ? this.getDefaultState().withProperty(this.getVariant(), theVariant) : this.getDefaultState();
     }
 
     @Override
     public int getMetaFromState(@Nonnull IBlockState state) {
-        return state.getValue(this.VARIANT).getMetadata();
+        return state.getValue(this.getVariant()).getMetadata();
     }
 
     @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, this.VARIANT);
+        return new BlockStateContainer(this, this.getVariant());
     }
 
-    protected abstract PropertyEnum<T> createVariantProperty();
+    protected abstract PropertyEnum<T> getVariant();
 }

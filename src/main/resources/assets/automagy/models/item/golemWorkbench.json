@@ -1,5 +1,5 @@
 {
-  "parent": "automagy:block/golemWorkbench",
+  "parent": "automagy:block/golemworkbench",
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],

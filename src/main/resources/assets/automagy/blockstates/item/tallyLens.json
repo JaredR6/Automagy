@@ -8,17 +8,17 @@
     "type": {
       "clear": {
         "textures": {
-          "layer0": "automagy:items/tallyLens"
+          "layer0": "automagy:items/tallylens"
         }
       },
       "unbound": {
         "textures": {
-          "layer0": "automagy:items/tallyLensUnbound"
+          "layer0": "automagy:items/tallylensUnbound"
         }
       },
       "yield": {
         "textures": {
-          "layer0": "automagy:items/tallyLensYield"
+          "layer0": "automagy:items/tallylensYield"
         }
       }
     }

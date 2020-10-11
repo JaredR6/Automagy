@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:items/enchantedPaper"
+        "layer0": "automagy:items/enchantedpaper"
     },
     "display": {
         "thirdperson": {

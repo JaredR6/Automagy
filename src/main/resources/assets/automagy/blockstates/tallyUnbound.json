@@ -10,8 +10,8 @@
         "west": "automagy:blocks/tally",
         "east": "automagy:blocks/tally",
         "particle": "automagy:blocks/tallyRedOff",
-        "face": "automagy:blocks/tallyLensUnbound",
-        "faceout": "automagy:blocks/tallyLensUnboundRedOff",
+        "face": "automagy:blocks/tallylensUnbound",
+        "faceout": "automagy:blocks/tallylensUnboundRedOff",
         "faced": "#face",
         "faceu": "#face",
         "facen": "#face",
@@ -55,7 +55,7 @@
       "false": {}
     },
     "power": {
-      "true": { "textures": { "particle": "automagy:blocks/tallyRedOn", "faceout": "automagy:blocks/tallyLensUnboundRedOn" } },
+      "true": { "textures": { "particle": "automagy:blocks/tallyRedOn", "faceout": "automagy:blocks/tallylensUnboundRedOn" } },
       "false": {}
     },
     "inventory": [{

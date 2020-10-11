@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "automagy:mawFinical"
+    "model": "automagy:mawfinical"
   },
   "variants": {
     "facing=down": [{ "x": 90 }],

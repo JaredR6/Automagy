@@ -1,8 +1,8 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "automagy:blocks/mawHungry",
-        "particle":"automagy:items/mawHungry"
+        "0": "automagy:blocks/mawhungry",
+        "particle":"automagy:items/mawhungry"
     },
     "elements": [
         {

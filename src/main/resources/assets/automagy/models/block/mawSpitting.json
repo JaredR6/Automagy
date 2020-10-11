@@ -1,8 +1,8 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "automagy:blocks/mawSpitting",
-        "particle":"automagy:items/mawSpitting"
+        "0": "automagy:blocks/mawspitting",
+        "particle":"automagy:items/mawspitting"
     },
     "elements": [
         {

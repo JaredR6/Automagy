@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:items/vishroomStew"
+        "layer0": "automagy:items/vishroomstew"
     },
     "display": {
         "thirdperson": {

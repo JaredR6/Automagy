@@ -10,7 +10,7 @@
   "authors": ["Tuhljin"],
   "authorList":  ["Tuhljin (programming, art)", "Draanor (art)"],
   "credits": "Special thanks and much credit go to Azanor.",
-  "logoFile": "automagyLogo256.png",
+  "logoFile": "automagylogo256.png",
   "screenshots": [],
   "dependencies": ["thaumcraft"]
 }

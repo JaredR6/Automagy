@@ -1,6 +1,6 @@
 {
     "parent": "block/torch_wall",
     "textures": {
-        "torch": "automagy:blocks/torchInversion"
+        "torch": "automagy:blocks/torchinversion"
     }
 }

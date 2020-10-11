@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:blocks/torchInversion_off"
+        "layer0": "automagy:blocks/torchinversion_off"
     },
     "display": {
         "thirdperson": {

@@ -1,9 +1,9 @@
 {
     "variants": {
-        "facing=up":  { "model": "automagy:torchInversion_lit" },
-        "facing=east":  { "model": "automagy:torchInversion_lit_wall" },
-        "facing=south":  { "model": "automagy:torchInversion_lit_wall", "y": 90 },
-        "facing=west":  { "model": "automagy:torchInversion_lit_wall", "y": 180 },
-        "facing=north":  { "model": "automagy:torchInversion_lit_wall", "y": 270 }
+        "facing=up":  { "model": "automagy:torchinversion_lit" },
+        "facing=east":  { "model": "automagy:torchinversion_lit_wall" },
+        "facing=south":  { "model": "automagy:torchinversion_lit_wall", "y": 90 },
+        "facing=west":  { "model": "automagy:torchinversion_lit_wall", "y": 180 },
+        "facing=north":  { "model": "automagy:torchinversion_lit_wall", "y": 270 }
     }
 }

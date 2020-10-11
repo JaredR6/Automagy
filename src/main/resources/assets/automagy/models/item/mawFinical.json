@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:items/mawFinical"
+        "layer0": "automagy:items/mawfinical"
     },
     "display": {
         "thirdperson": {

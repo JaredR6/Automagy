@@ -1,11 +1,11 @@
 {
     "textures": {
-        "0": "automagy:blocks/tankThirstySide",
-        "1": "automagy:blocks/tankThirstyBtm",
-        "2": "automagy:blocks/tankThirstyBtmU",
-        "3": "automagy:blocks/tankThirstySide",
-        "4": "automagy:blocks/tankThirstyTop",
-        "particle":"automagy:blocks/tankThirstyBtm"
+        "0": "automagy:blocks/tankthirstySide",
+        "1": "automagy:blocks/tankthirstyBtm",
+        "2": "automagy:blocks/tankthirstyBtmU",
+        "3": "automagy:blocks/tankthirstySide",
+        "4": "automagy:blocks/tankthirstyTop",
+        "particle":"automagy:blocks/tankthirstyBtm"
     },
     "elements": [
         {

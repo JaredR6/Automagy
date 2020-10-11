@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:items/mawSpitting"
+        "layer0": "automagy:items/mawspitting"
     },
     "display": {
         "thirdperson": {

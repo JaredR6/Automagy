@@ -1,5 +1,5 @@
 {
-  "parent": "automagy:block/tankThirsty",
+  "parent": "automagy:block/tankthirsty",
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],

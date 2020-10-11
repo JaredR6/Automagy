@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:items/crystalEye"
+        "layer0": "automagy:items/crystaleye"
     },
     "display": {
         "thirdperson": {

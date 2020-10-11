@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "automagy:items/avaricePearl"
+        "layer0": "automagy:items/avaricepearl"
     },
     "display": {
         "thirdperson": {

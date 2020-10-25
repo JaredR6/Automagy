@@ -16,7 +16,7 @@ Localization sources:
 Feel free to support the project with fixes, updates or anything related to porting functionality! New features are unplanned, for now.  
 I only ask that you preserve as much as the current code as you can, and that large modifications have full compatibility.
 
-### *Original README*
+### *Original README Notes*
 
 These files MUST be encoded as UTF-8 without BOM.
 

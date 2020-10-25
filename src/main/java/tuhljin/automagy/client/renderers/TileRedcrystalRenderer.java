@@ -17,7 +17,7 @@ import tuhljin.automagy.common.blocks.redcrystal.BlockRedcrystalRes;
 import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.tiles.TileRedcrystal;
 
-public class TileRedcrystalRenderer extends TileEntitySpecialRenderer<TileRedcrystal> {
+public class    TileRedcrystalRenderer extends TileEntitySpecialRenderer<TileRedcrystal> {
     public static final String OBJ_MODEL = "models/obj/redcrystal.obj";
     public static final String TEXTURE_STANDARD = "textures/models/redcrystalStandard.png";
     public static final String TEXTURE_ACTIVE = "textures/models/redcrystalActive.png";

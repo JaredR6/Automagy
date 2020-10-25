@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "thaumcraft:blocks/plank_greatwood",
+        "side": "automagy:blocks/bookshelfenchanted"
+    }
+}

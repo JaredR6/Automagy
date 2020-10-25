@@ -3,9 +3,13 @@ package tuhljin.automagy.common.items;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,9 +29,10 @@ public class ModVariantItem extends ModItem implements IItemVariants {
     }
 
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
         for (Integer metadata : this.variants.keySet()) {
-            subItems.add(new ItemStack(itemIn, 1, metadata));
+            subItems.add(new ItemStack(this, 1, metadata));
         }
     }
 
@@ -39,7 +44,7 @@ public class ModVariantItem extends ModItem implements IItemVariants {
         if (name == null) {
             return super.getTranslationKey() + "." + d;
         } else {
-            return name.isEmpty() ? super.getTranslationKey(stack) : super.getTranslationKey() + "." + name;
+                return name.isEmpty() ? super.getTranslationKey(stack) : super.getTranslationKey() + "." + name;
         }
     }
 }

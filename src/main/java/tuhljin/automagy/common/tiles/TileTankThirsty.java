@@ -255,31 +255,31 @@ public class TileTankThirsty extends ModTileEntity implements ITileWithTank, IIn
         float drinkRate = DRINK_FREQUENCY_DEFAULT;
 
         for (int glyph : this.glyphs) {
-            switch (glyph) {
-                case ItemGlyph.VOID:
+            switch (ItemGlyph.EnumGlyph.values()[glyph]) {
+                case VOID:
                     this.voids = true;
                     break;
-                case ItemGlyph.CONSUMPTION:
+                case CONSUMPTION:
                     this.consumeAmt += CONSUME_AMT_PER_UPGRADE;
                     break;
-                case ItemGlyph.SIPHONING:
+                case SIPHONING:
                     this.siphons = true;
-                case ItemGlyph.ENVY:
+                case ENVY:
                 default:
                     break;
-                case ItemGlyph.TEMPERANCE:
+                case TEMPERANCE:
                     this.redstoneControlled = true;
                     break;
-                case ItemGlyph.PRESERVATION:
+                case PRESERVATION:
                     this.preserves = true;
                     break;
-                case ItemGlyph.GUZZLER:
+                case GUZZLER:
                     drinkRate *= DRINK_FREQUENCY_UPGRADE_MULTIPLIER;
                     break;
-                case ItemGlyph.RESERVOIR:
+                case RESERVOIR:
                     capacity += MAX_STEPS;
                     break;
-                case ItemGlyph.BOVINE:
+                case BOVINE:
                     this.milks = true;
             }
         }

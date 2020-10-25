@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 public class BlockMawSpitting extends BlockMawFinical {
 
     public BlockMawSpitting() {
-        super(References.BLOCK_MAW_FINICAL);
+        super(References.BLOCK_MAW_SPITTING);
     }
 
     @Override

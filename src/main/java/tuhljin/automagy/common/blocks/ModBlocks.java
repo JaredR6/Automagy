@@ -45,7 +45,7 @@ public class ModBlocks {
     public static final Block redcrystalAmp = new BlockRedcrystalAmp();
     public static final Block redcrystalDim = new BlockRedcrystalDim();
     public static final Block redcrystalDense = new BlockRedcrystalDense();
-    public static final Block redcrystalRes = new BlockRedcrystalAmp();
+    public static final Block redcrystalRes = new BlockRedcrystalRes();
     public static final Block redcrystalMerc = new BlockRedcrystalMerc();
     public static final Block enchantedBookshelf = new BlockBookshelfEnchanted();
     public static final Block torchInversion_on = new BlockTorchInversion(true, References.BLOCK_TORCH_INVERSION_ON);
@@ -56,7 +56,7 @@ public class ModBlocks {
     public static final Block remoteComparator = new BlockRemoteComparator();
     public static final BlockTallyBase tallyBox = new BlockTally();
     public static final BlockTallyBase tallyBlockWorld = new BlockTallyWorld();
-    public static final BlockTallyBase tallyBlockDrops = new BlockTallyWorld();
+    public static final BlockTallyBase tallyBlockDrops = new BlockTallyDrops();
     public static final Block hungryMaw = new BlockMawHungry();
     public static final Block finicalMaw = new BlockMawFinical();
     public static final Block spittingMaw = new BlockMawSpitting();

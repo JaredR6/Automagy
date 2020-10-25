@@ -3,10 +3,13 @@ package tuhljin.automagy.common.items;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -14,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.lib.References;
 import tuhljin.automagy.common.lib.TjUtil;
@@ -27,7 +31,10 @@ public class ItemCrystalEye extends ModItem implements IAutomagyLocationLink {
         super(References.ITEM_CRYSTALEYE);
     }
 
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    @Nonnull
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote) {
             int dim = world.provider.getDimension();
             if (!stack.hasTagCompound()) {
@@ -42,10 +49,12 @@ public class ItemCrystalEye extends ModItem implements IAutomagyLocationLink {
             world.playSound(player, pos, SoundsTC.wand, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
 
-        return true;
+        return EnumActionResult.PASS;
     }
 
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+    @Override
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+        EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("lookX")) {
             int x = stack.getTagCompound().getInteger("lookX");
             int y = stack.getTagCompound().getInteger("lookY");
@@ -53,11 +62,11 @@ public class ItemCrystalEye extends ModItem implements IAutomagyLocationLink {
             int dim = stack.getTagCompound().getInteger("lookDim");
             String dimName = stack.getTagCompound().getString("lookDimName");
             tooltip.add(I18n.format("automagy.tip.crystalEye.link", x, y, z, dimName));
-            if (player.world.provider.getDimension() == dim) {
+            if (world.provider.getDimension() == dim) {
                 float distance = TjUtil.getDistanceBetweenPoints(MathHelper.floor(player.posX), MathHelper.floor(player.posY), MathHelper.floor(player.posZ), x, y, z);
                 String s = String.format("%.2f", distance);
                 s = I18n.format("automagy.tip.crystalEye.linkDistance", s);
-                String name = TjUtil.getBlockNameAt(player.world, new BlockPos(x, y, z));
+                String name = TjUtil.getBlockNameAt(world, new BlockPos(x, y, z));
                 if (name != null) {
                     s = s + "  " + TextFormatting.DARK_AQUA + "[" + name + "]";
                 }
@@ -68,11 +77,12 @@ public class ItemCrystalEye extends ModItem implements IAutomagyLocationLink {
 
     }
 
+    @Override
     public boolean hasEffect(ItemStack stack) {
         return stack.hasTagCompound() && stack.getTagCompound().hasKey("lookX");
     }
 
-    @Nonnull
+    @Override
     public WorldSpecificCoordinates getLinkLocation(ItemStack stack) {
         if (stack != null && stack.hasTagCompound() && stack.getTagCompound().hasKey("lookX")) {
             int x = stack.getTagCompound().getInteger("lookX");

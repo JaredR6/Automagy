@@ -1,65 +1,71 @@
 package tuhljin.automagy.common.items;
 
-import com.google.common.collect.ImmutableMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
+
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import tuhljin.automagy.common.lib.References;
 
 import javax.annotation.Nonnull;
 
-public class ItemGlyph extends ModVariantItem {
-    public static final int VOID = 1;
-    public static final int CONSUMPTION = 2;
-    public static final int SIPHONING = 3;
-    public static final int ENVY = 4;
-    public static final int TEMPERANCE = 5;
-    public static final int PRESERVATION = 6;
-    public static final int GUZZLER = 7;
-    public static final int RESERVOIR = 8;
-    public static final int BOVINE = 9;
-    private static String[] sprites = {"automagy:items/glyph-overlay/void", "automagy:items/glyph-overlay/consume", "automagy:items/glyph-overlay/siphon", "automagy:items/glyph-overlay/envy", "automagy:items/glyph-overlay/temperance", "automagy:items/glyph-overlay/preserve", "automagy:items/glyph-overlay/guzzler", "automagy:items/glyph-overlay/reservoir", "automagy:items/glyph-overlay/bovine"};
+public class ItemGlyph extends ModItem {
+    public static final PropertyEnum<EnumGlyph> GlyphProperty = PropertyEnum.create("glyph", EnumGlyph.class);
 
     public ItemGlyph() {
-        super(ImmutableMap.<Integer, String>builder()
-                .put(0, "ink")
-                .put(1, "v")
-                .put(2, "c")
-                .put(3, "s")
-                .put(4, "e")
-                .put(5, "t")
-                .put(6, "p")
-                .put(7, "g")
-                .put(8, "r")
-                .put(9, "b")
-                .build(),
-                References.ITEM_TANKGLYPH);
-    }
-
-    @Nonnull
-    public Map<Integer, String> getVariantMetadataAndNames() {
-        Map<Integer, String> map = new HashMap<>(super.getVariantMetadataAndNames());
-        map.put(21, "ov");
-        map.put(22, "oc");
-        map.put(23, "os");
-        map.put(24, "oe");
-        map.put(25, "ot");
-        map.put(26, "op");
-        map.put(27, "og");
-        map.put(28, "or");
-        map.put(29, "ob");
-        return map;
+        super(References.ITEM_TANKGLYPH);
+        setHasSubtypes(true);
     }
 
     @Nonnull
     public String getLocalizedGlyphName(int id) {
-        return I18n.format("item.automagy.tankGlyph." + this.variants.get(id) + ".name");
+        return I18n.format("item.automagy.tankGlyph." + EnumGlyph.getNameById(id) + ".name");
     }
 
     @Nonnull
     public static TextureAtlasSprite getGlyphTexture(int id) {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(sprites[id - 1]);
+        String sprite = "automagy:items/glyph-overlay/" + EnumGlyph.getNameById(id);
+        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(sprite);
+    }
+
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> stacks) {
+        if (isInCreativeTab(tab)) {
+            for (EnumGlyph glyph : EnumGlyph.values()) {
+                stacks.add(new ItemStack(this, 1, glyph.ordinal()));
+            }
+        }
+    }
+
+    @Nonnull
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey(stack) + EnumGlyph.getNameById(stack.getItemDamage());
+    }
+    
+    public enum EnumGlyph implements IStringSerializable {
+        INK,
+        VOID,
+        CONSUMPTION,
+        SIPHONING,
+        ENVY,
+        TEMPERANCE,
+        PRESERVATION,
+        GUZZLER,
+        RESERVOIR,
+        BOVINE;
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+
+        public static String getNameById(int id) { return values()[id].getName(); }
+
     }
 }

@@ -15,10 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,6 +30,7 @@ import thaumcraft.codechicken.lib.raytracer.ExtendedMOP;
 import thaumcraft.codechicken.lib.raytracer.IndexedCuboid6;
 import thaumcraft.codechicken.lib.raytracer.RayTracer;
 import thaumcraft.codechicken.lib.vec.BlockCoord;
+import thaumcraft.codechicken.lib.vec.Cuboid6;
 import thaumcraft.codechicken.lib.vec.Vector3;
 import thaumcraft.common.lib.SoundsTC;
 import tuhljin.automagy.common.Automagy;
@@ -88,6 +86,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         this.setSoundType(SoundType.STONE);
         this.disableStats();
         this.setDefaultState(this.getBlockState().getBaseState().withProperty(POWER, 0));
+        this.setCreativeTab(Automagy.creativeTab);
 
         try {
             this.redstonedustAllowingPowerCheck = ReflectionHelper.findField(Blocks.REDSTONE_WIRE.getClass(), "canProvidePower");
@@ -777,6 +776,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                 list.add(EnumFacing.EAST);
                 list.add(EnumFacing.WEST);
                 break;
+            case UP:
             default:
                 if (te.connectN) {
                     list.add(EnumFacing.NORTH);
@@ -871,23 +871,19 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
 
     @Override
     public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote && player.getHeldItem(hand).getItem() instanceof ICaster) {
+            if (!world.isRemote && player.getHeldItem(hand).getItem() instanceof ICaster) {
             RayTraceResult hit = RayTracer.retraceBlock(world, player, pos);
             if (hit != null) {
-                int calcSide = hit.subHit;
-                if (calcSide == 6) {
+                TileRedcrystal.CrystalHit calcSide = TileRedcrystal.CrystalHit.fromVal(hit.subHit);
+                if (calcSide == TileRedcrystal.CrystalHit.HITCENTER) {
                     return this.onBlockActivatedCenter(world, pos, state, player);
                 }
 
-                if (calcSide == 1) {
-                    calcSide = this.getOrientation(world, pos).getOpposite().getIndex();
-                } else if (calcSide == 0) {
-                    calcSide = this.getOrientation(world, pos).getIndex();
-                } else if (calcSide == 7 || calcSide == -1) {
+                if (!TileRedcrystal.CrystalHit.isDir(calcSide)) {
                     return false;
                 }
 
-                return this.onBlockActivatedAdjustedSide(world, pos, state, player, EnumFacing.VALUES[calcSide]);
+                return this.onBlockActivatedAdjustedSide(world, pos, state, player, calcSide.toFacing());
             }
         }
 
@@ -985,6 +981,7 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
                 }
             }
 
+            te.markDirty();
             return true;
         }
     }
@@ -1001,44 +998,47 @@ public class BlockRedcrystal extends ModTileRenderedBlock implements IOrientable
         if (block != this) {
             return super.collisionRayTrace(blockState, world, pos, start, end);
         }
-        TileRedcrystal tile;
-        try {
-            tile = (TileRedcrystal)world.getTileEntity(pos);
-        } catch (Exception ex) {
-            return super.collisionRayTrace(blockState, world, pos, start, end);
-        }
         List<IndexedCuboid6> cuboids = new LinkedList<>();
-        tile.addTraceableCuboids(cuboids, pos, false);
+        addTraceableCuboids(cuboids, world, pos);
         BlockCoord bc = new BlockCoord(pos);
         ArrayList<ExtendedMOP> list = new ArrayList<>();
         this.rayTracer.rayTraceCuboids(new Vector3(start), new Vector3(end), cuboids, bc, this, list);
-        return list.size() > 0 ? list.get(0) : super.collisionRayTrace(blockState, world, pos, start, end);
+        if (list.size() > 0) {
+
+        }
+        return list.size() > 0 ? list.get(0) : this.rayTrace(pos, start, end, this.getNoCasterBlockBounds(world, pos));
     }
 
     @Nonnull
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
         EntityPlayer player = Minecraft.getMinecraft().player;
-        if (!ThaumcraftExtension.playerHasCasterEquipped(player)) {
-            return this.getNoCasterBlockBounds(source, pos);
-        }
+        if (player != null && ThaumcraftExtension.playerHasCasterEquipped(player)) {
+            RayTraceResult hit = RayTracer.retraceBlock((World)source, player, pos);
+            List<IndexedCuboid6> cuboids = new LinkedList<>();
+            addTraceableCuboids(cuboids, source, pos);
+            if (hit != null && hit.subHit >= 0 && hit.subHit <= 6) {
 
-        RayTraceResult hit = RayTracer.retraceBlock((World)source, player, pos);
-        List<IndexedCuboid6> cuboids = new LinkedList<>();
-        ((TileRedcrystal)source.getTileEntity(pos)).addTraceableCuboids(cuboids, pos, false);
-        if (hit != null && hit.subHit >= 0 && hit.subHit <= 6) {
-
-            for (IndexedCuboid6 cc : cuboids) {
-                if ((Integer) cc.data == hit.subHit) {
-                    return cc.aabb();
+                for (IndexedCuboid6 cc : cuboids) {
+                    if ((Integer) cc.data == hit.subHit) {
+                        Automagy.logInfo("" + hit.subHit);
+                        return cc.sub(new Vector3(pos)).aabb();
+                    }
                 }
             }
         }
-        return super.getBoundingBox(state, source, pos);
+        return this.getNoCasterBlockBounds(source, pos);
+    }
+
+    @Override
+    @Nullable
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess world, @Nonnull BlockPos pos)
+    {
+        return this.getNoCasterBlockBounds(world, pos);
     }
 
     protected void addTraceableCuboids(@Nonnull List<IndexedCuboid6> cuboids, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
-        ((TileRedcrystal)source.getTileEntity(pos)).addTraceableCuboids(cuboids, pos, false);
+        ((TileRedcrystal)source.getTileEntity(pos)).addTraceableCuboids(cuboids, new Vector3(pos), false);
     }
 
     protected AxisAlignedBB getNoCasterBlockBounds(@Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos) {

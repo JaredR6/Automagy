@@ -3,8 +3,8 @@
   "defaults": {
     "model": "minecraft:cube_column",
     "textures": {
-      "end": "thaumcraft:blocks/greatwood_plank",
-      "side": "automagy:blocks/bookshelfEnchanted"
+      "end": "thaumcraft:blocks/plank_greatwood",
+      "side": "automagy:blocks/bookshelfenchanted"
     },
     "transform": "forge:default-block"
   },
@@ -13,8 +13,8 @@
     "type=silverwood": {
         "model": "minecraft:cube_column",
         "textures": {
-          "end": "thaumcraft:blocks/silverwood_plank",
-          "side": "automagy:blocks/bookshelfEnchantedSilverwood"
+          "end": "thaumcraft:blocks/plank_silverwood",
+          "side": "automagy:blocks/bookshelfenchantedSilverwood"
         }
     }
   }

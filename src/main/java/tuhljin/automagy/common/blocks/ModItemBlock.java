@@ -18,9 +18,10 @@ public class ModItemBlock extends ItemBlock {
         return damage;
     }
 
+    /*
     @Nonnull
     @Override
     public String getTranslationKey(@Nonnull ItemStack stack) {
         return super.getTranslationKey() + "." + stack.getTranslationKey();
-    }
+    }*/
 }

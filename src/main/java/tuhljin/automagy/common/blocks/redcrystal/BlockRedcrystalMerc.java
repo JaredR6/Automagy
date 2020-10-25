@@ -58,7 +58,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
     }
 
     @Override
-    public boolean canPlaceBlockOnSide(@Nonnull World world, @Nonnull BlockPos pos, EnumFacing side) {
+    public boolean canPlaceBlockOnSide(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
         return TjUtil.isAcceptableSurfaceBelowPos(world, pos, true, true, false);
     }
 
@@ -216,7 +216,7 @@ public class BlockRedcrystalMerc extends BlockRedcrystalLarge {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess world, @Nonnull BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();

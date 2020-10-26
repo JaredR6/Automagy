@@ -1,0 +1,5 @@
+A while ago I was having trouble adding botania for its api. I cannot find a maven for it, so I just download it.
+
+BOTANIA
+Named "Botania r1.10-363.jar"
+https://www.curseforge.com/minecraft/mc-mods/botania/files/2846950
